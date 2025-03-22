@@ -10,12 +10,22 @@ Base = declarative_base()
 
 class Profile(Base):
     __tablename__ = 'profile'
-    user_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id :Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer)
     social_media: Mapped[str] = mapped_column(String)
     bio: Mapped[str] = mapped_column(String)
     profile_picture: Mapped[str] = mapped_column(String)
     ranking: Mapped[int] = mapped_column(Integer)
-
+    def serialize(self):
+        return{
+            "id":self.id,
+            "user_id":self.user_id,
+            "social_media":self.user_media,
+            "bio":self.bio,
+            "profile_picture":self.profile_picture,
+            "ranking":self.ranking
+        }
+    
 class Review(Base):
     __tablename__ = 'review'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -24,6 +34,15 @@ class Review(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
     tattooer_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
     created_at: Mapped[DateTime] = mapped_column(DateTime)
+    def serialize(self):
+        return{
+            "id":self.id,
+            "description":self.description,
+            "rating":self.rating,
+            "user_id":self.user_id,
+            "tattooer_id":self.tattooer_id,
+            "created_at":self.created_at
+        }
 
 class Post(Base):
     __tablename__ = 'post'
@@ -33,6 +52,16 @@ class Post(Base):
     likes: Mapped[int] = mapped_column(Integer)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
     created_at: Mapped[DateTime] = mapped_column(DateTime)
+    def serialize(self):
+        return{
+            "id":self.id,
+            "image":self.image,
+            "description":self.description,
+            "likes":self.likes,
+            "user_id":self.user_id,
+            "created_at":self.created_at
+                            }
+
 
 class Notification(Base):
     __tablename__ = 'notification'
@@ -44,6 +73,19 @@ class Notification(Base):
     message: Mapped[str] = mapped_column(Text)
     type: Mapped[str] = mapped_column(String)
     created_at: Mapped[DateTime] = mapped_column(DateTime)
+    def serialize(self):
+        return{
+            "id":self.id,
+            "user_id":self.user_id,
+            "sender_id":self.sender_id,
+            "date":self.date,
+            "is_read":self.is_read,
+            "message":self.message,
+            "type":self.type,
+            "create_at":self.created_at
+        }
+
+
 
 class User(Base):
     __tablename__ = 'user'
@@ -58,13 +100,17 @@ class User(Base):
     reviews: Mapped[list['Review']] = relationship('Review', back_populates='user')
     posts: Mapped[list['Post']] = relationship('Post', back_populates='user')
     notifications: Mapped[list['Notification']] = relationship('Notification', back_populates='user')
-
-    def __repr__(self):
-        return f'<User {self.email}>'
-
     def serialize(self):
-        return {
-            "id": self.id,
-            "email": self.email,
-            # do not serialize the password, its a security breach
+        return{
+            "id":self.id,
+            "name":self.name,
+            "username":self.username,
+            "email":self.email,
+            "notification_enabled":self.notification_enabled,
+            "user_type":self.user_type,
+            "created_at":self.created_at,
+            "reviews":self.reviews,
+            "posts":self.posts,
+            "notifications":self.notifications
         }
+    
