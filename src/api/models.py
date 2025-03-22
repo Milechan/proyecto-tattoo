@@ -1,10 +1,12 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, ForeignKey, Boolean, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
+from flask_sqlalchemy import SQLAlchemy
 
-Base = declarative_base()
 
-class Profile(Base):
+db = SQLAlchemy()
+
+class Profile(db.Model):
     __tablename__ = 'profile'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'), unique=True)
@@ -25,7 +27,7 @@ class Profile(Base):
             "ranking": self.ranking
         }
 
-class Review(Base):
+class Review(db.Model):
     __tablename__ = 'review'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     description: Mapped[str] = mapped_column(String)
@@ -47,7 +49,7 @@ class Review(Base):
             "created_at": self.created_at
         }
 
-class Post(Base):
+class Post(db.Model):
     __tablename__ = 'post'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     image: Mapped[str] = mapped_column(String)
@@ -68,7 +70,7 @@ class Post(Base):
             "created_at": self.created_at
         }
 
-class Notification(Base):
+class Notification(db.Model):
     __tablename__ = 'notification'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
@@ -94,7 +96,7 @@ class Notification(Base):
             "created_at": self.created_at  # Corregido el typo aquí
         }
 
-class User(Base):
+class User(db.Model):
     __tablename__ = 'user'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String)
