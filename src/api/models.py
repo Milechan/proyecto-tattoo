@@ -13,7 +13,7 @@ class Profile(Base):
     user_id: Mapped[int] = mapped_column(Integer, primary_key=True)
     social_media: Mapped[str] = mapped_column(String)
     bio: Mapped[str] = mapped_column(String)
-    profile_picture: Mapped[str] = mapped_column(String)
+    profile_picture: Mapped[str] = mapped_column(String) 
     ranking: Mapped[int] = mapped_column(Integer)
 
 class Review(Base):

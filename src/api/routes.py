@@ -2,11 +2,11 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, User, Post, Profile, Review, Notification
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
-api = Blueprint('api', __name__)
+api = Blueprint('api', __name__) 
 
 # Allow CORS requests to this API
 CORS(api)
@@ -20,3 +20,9 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+@api.route('/home', methods=['GET'])
+def ger_home():
+    posts = db.session.query(Post).order_by(Post.created_at.desc()).all()
+    result = [post.serialize() for post in posts]
+    return jsonify(result), 200
