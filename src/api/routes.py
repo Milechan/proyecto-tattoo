@@ -21,8 +21,24 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-@api.route('/post', methods=['GET'])
-def ger_home():
+@api.route('/posts', methods=['GET'])  #Ruta para obtener todos los post
+def get_all_posts():
     posts = db.session.query(Post).order_by(Post.created_at.desc()).all()
     result = [post.serialize() for post in posts]
     return jsonify(result), 200
+
+@api.route('/posts', methods=['POST']) #Crear nuevo post
+def create_post():
+    data = request.json
+    new_post = Post(
+        image=data['image'],
+        description=data['description'],
+        likes=0,
+        user_id=data['user_id'],
+        created_at=datetime.utcnow()
+    )
+    db.session.add(new_post)
+    db.session.commit()
+    return jsonify(new_post.serialize()), 201
+
+
