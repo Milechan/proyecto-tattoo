@@ -21,7 +21,7 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-@api.route('/home', methods=['GET'])
+@api.route('/post', methods=['GET'])
 def ger_home():
     posts = db.session.query(Post).order_by(Post.created_at.desc()).all()
     result = [post.serialize() for post in posts]
