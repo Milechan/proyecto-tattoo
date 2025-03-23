@@ -21,6 +21,8 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+"""POSTS"""
+
 @api.route('/posts', methods=['GET'])  #Ruta para obtener todos los post
 def get_all_posts():
     posts = db.session.query(Post).order_by(Post.created_at.desc()).all()
@@ -42,3 +44,20 @@ def create_post():
     return jsonify(new_post.serialize()), 201
 
 
+
+"""USUARIO"""
+
+
+"""PERFIL"""
+
+
+"""REVIEWS"""
+
+
+"""NOTIFICACIONES"""
+
+
+"""HOME"""
+
+
+"""BUSCADOR"""
