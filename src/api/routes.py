@@ -7,7 +7,7 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
 from datetime import datetime
-from flask_jwt_extended import jwt_required , get_jwt_identity
+from flask_jwt_extended import jwt_required , get_jwt_identity, create_access_token
 api = Blueprint('api', __name__) 
 
 # Allow CORS requests to this API
@@ -132,7 +132,7 @@ def register():
         email=data['email'],
         password=data['password'], #Falta hashear
         name=data.get('name'),
-        last_name=data.get('last_name'),
+        username=data.get('username'),
         created_at=datetime.utcnow()
     )
     
