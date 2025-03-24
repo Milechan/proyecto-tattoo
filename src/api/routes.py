@@ -6,6 +6,8 @@ from api.models import db, User, Post, Profile, Review, Notification
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
+from datetime import datetime
+from flask_jwt_extended import jwt_required
 api = Blueprint('api', __name__) 
 
 # Allow CORS requests to this API
@@ -23,25 +25,38 @@ def handle_hello():
 
 """POSTS"""
 
-@api.route('/posts', methods=['GET'])  #Ruta para obtener todos los post
+#Ruta para obtener todos los post
+@api.route('/posts', methods=['GET'])  
 def get_all_posts():
     posts = db.session.query(Post).order_by(Post.created_at.desc()).all()
     result = [post.serialize() for post in posts]
     return jsonify(result), 200
 
-@api.route('/posts', methods=['POST']) #Crear nuevo post
+
+#Ruta crear nuevo post
+@api.route('/posts', methods=['POST'])
 def create_post():
-    data = request.json
-    new_post = Post(
-        image=data['image'],
-        description=data['description'],
-        likes=0,
-        user_id=data['user_id'],
-        created_at=datetime.utcnow()
-    )
-    db.session.add(new_post)
-    db.session.commit()
-    return jsonify(new_post.serialize()), 201
+    data = request.get_json()
+
+    #Validar que la imagen, descripcion y id este presente antes de continuar
+    if not data.get('image') or not data.get('description') or not data.get('user_id'):
+        return jsonify({"msg": "Faltan campos requeridos"}), 400
+    #Se crea la instancia con los datos de Post
+    try:
+        new_post = Post(
+            image=data['image'],
+            description=data['description'],
+            likes=0,
+            user_id=data['user_id'],
+            created_at=datetime.utcnow()
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        return jsonify(new_post.serialize()), 201
+    #Manejo de errores
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 
 
