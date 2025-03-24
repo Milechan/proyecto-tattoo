@@ -52,9 +52,32 @@ def create_post():
 
 
 """REVIEWS"""
+@api.route('/review/<int:tattoer_id>', methods=['GET']) 
+def get_review_by_tattoer(tattooer_id):
+    pass
 
+
+
+@api.route('/review',methods=['POST'])
+def create_review():
+    pass
 
 """NOTIFICACIONES"""
+@api.route('/notifications',methods=['GET'])
+def get_all_notifications():
+    pass
+
+@api.route('/notification/<int:notification_id>',methods= ['GET'])
+def get_notification_by_id(notification_id):
+    pass
+
+@api.route('/notifcation/<int:notification_id>/readed',methods=['PUT'])
+def set_notification_readed(notification_id):
+    pass
+@api.route('/notification',methods=['POST'])
+def create_notification():
+    pass
+
 
 
 """HOME"""
