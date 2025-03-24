@@ -59,6 +59,60 @@ def create_post():
         return jsonify({"error": str(e)}), 500
 
 
+#Ruta eliminar un post
+@api.route('/posts/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    # Buscar el post en la bd
+    post = Post.query.get(post_id)
+
+    # Si no se encuentra el post muestra error 404
+    if not post:
+        return jsonify({"msg": "Post no encontrado"}), 404
+
+    try:
+        # Eliminar el post y confirmar
+        db.session.delete(post)
+        db.session.commit()
+        return jsonify({"msg": "Post eliminado correctamente"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+#Ruta editar post
+@api.route('/posts/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
+    data = request.get_json()
+
+    # Buscar el post por su ID
+    post = Post.query.get(post_id)
+    if not post:
+        return jsonify({"msg": "Post no encontrado"}), 404
+
+    # Validar los campos antes de actualizar
+    if not data.get('image') or not data.get('description'):
+        return jsonify({"msg": "Faltan campos requeridos"}), 400
+
+    try:
+        post.image = data['image']
+        post.description = data['description']
+        db.session.commit()
+        return jsonify(post.serialize()), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+#Ruta para ver un post por su id
+@api.route('/posts/<int:post_id>', methods=['GET'])
+def get_post_by_id(post_id):
+    post = Post.query.get(post_id)
+    
+    if not post:
+        return jsonify({"msg": "Post no encontrado"}), 404
+
+    return jsonify(post.serialize()), 200
+
 
 """USUARIO"""
 
