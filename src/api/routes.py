@@ -7,7 +7,7 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
 from datetime import datetime
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required , get_jwt_identity
 api = Blueprint('api', __name__) 
 
 # Allow CORS requests to this API
@@ -305,19 +305,63 @@ def create_review():
 
 """NOTIFICACIONES"""
 @api.route('/notifications',methods=['GET'])
+@jwt_required()
 def get_all_notifications():
-    pass
+        current_user = get_jwt_identity()
+        notifications = db.session.query(Notification).filter_by(user_id=current_user).all()
+         # Si no hay notificaciones, devolver un mensaje vacío
+        if not notifications:
+            return jsonify({"mensaje": "No hay notificaciones disponibles",'notifications':[]}), 404
+    # Convertir la lista de notificaciones en JSON
+        notifications_json = [notification.serialize() for notification in notifications]
+        return jsonify({"success": True, "notifications": notifications_json}), 200
 
 @api.route('/notification/<int:notification_id>',methods= ['GET'])
+@jwt_required()
 def get_notification_by_id(notification_id):
-    pass
+        current_user= get_jwt_identity()
+        notification = db.session.query(Notification).filter_by(id=notification_id,user_id=current_user).one_or_none()
+    # Si no se encuentra, devolver un error 404
+        if notification is None:
+            return jsonify({"mensaje": f"No se encontró la notificación con el ID {notification_id}"}), 404
+    # Si se encuentra, devolver la notificación en formato JSON
+        return jsonify(notification), 200
 
 @api.route('/notifcation/<int:notification_id>/readed',methods=['PUT'])
+@jwt_required()
 def set_notification_readed(notification_id):
-    pass
+    current_id = get_jwt_identity()
+    notification = db.session.query(Notification).filter_by(id=notification_id,user_id=current_id).one_or_none()
+        # Si la notificación no existe, devolver un error 404
+    if notification is None:
+        return jsonify({"mensaje": f"No se encontró la notificación con el ID {notification_id}"}), 404
+    # Marcar la notificación como leída (suponiendo que tiene un campo `readed`)
+    notification.is_read = True
+    db.session.commit()
+    return jsonify({"success": True, "mensaje": "Notificación marcada como leída"}), 200
+
+
 @api.route('/notification',methods=['POST'])
+@jwt_required()
 def create_notification():
-    pass
+    current_user= get_jwt_identity()
+    # Obtener datos del cuerpo de la petición
+    data = request.json
+    # Validar que los datos requeridos estén presentes
+    if "mensaje" not in data or "user_id" not in data:
+        return jsonify({"mensaje": "Faltan datos requeridos (mensaje, user_id)"}), 400
+    # Crear una nueva instancia de Notificación
+    new_notification = Notification(
+        menssage=data["mensaje"],
+        user_id=data["user_id"],
+        is_read=False, # Inicialmente la notificación no está leída
+        date =datetime.utcnow(),
+        sender_id =current_user
+    )
+    # Guardar en la base de datos
+    db.session.add(new_notification)
+    db.session.commit()
+    return jsonify({"success": True, "mensaje": "Notificación creada con éxito", "notification": new_notification.to_dict()}), 201
 
 
 
