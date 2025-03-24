@@ -54,8 +54,12 @@ def create_post():
 """REVIEWS"""
 @api.route('/review/<int:tattoer_id>', methods=['GET']) 
 def get_review_by_tattoer(tattooer_id):
-    pass
-
+#validar que exista un usuario con el tattooer_id que es el parametro que nos entregan
+    tattooer= db.session.query(User).filter_by(id=tattooer_id).one_or_none() #consulta si existe un usuario o no y lo guarda en la variable tattooer
+    if tattooer is None :
+        return jsonify({'mensaje':f'no se encontro un usuario con el user_id {tattooer_id}'}),404
+    reviews = db.session.query(Review).filter_by(tattooer_id=tattooer_id).all() 
+    return jsonify(reviews),200
 
 
 @api.route('/review',methods=['POST'])
