@@ -386,10 +386,10 @@ def create_review():
     data=request.json #del request(peticion) obtengo el json que me mandan del body
     user= db.session.query(User).filter_by(id=data['user_id']).one_or_none() #en la db se consulta(query)en la tabla user,filtramos por el id con el parametro 'user_id' que viene del body.nos obtiene uno o ninguno
     if user is None :
-        return jsonify({'mensaje':f'no se encontro un usuario con el user_id {data['user_id']}'}),404
+        return jsonify({'mensaje': f"no se encontro un usuario con el user_id {data['user_id']}"}), 404
     tattooer= db.session.query(User).filter_by(id=data['tattooer_id']).one_or_none()
     if tattooer is None:
-        return jsonify({"mensaje": f'no se encontro un usuario con el tattooer_id {data['tattooer_id']}'}),404
+        return jsonify({"mensaje": f"no se encontró un usuario con el tattooer_id {data['tattooer_id']}"}), 404
     
     #creo nueva instacia del review
     new_review=Review(
