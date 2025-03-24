@@ -14,15 +14,6 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
-
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
-
-    return jsonify(response_body), 200
-
 """POSTS"""
 
 #Ruta para obtener todos los post
@@ -35,11 +26,14 @@ def get_all_posts():
 
 #Ruta crear nuevo post
 @api.route('/posts', methods=['POST'])
+@jwt_required()
 def create_post():
+    current_user = get_jwt_identity()
     data = request.get_json()
 
+
     #Validar que la imagen, descripcion y id este presente antes de continuar
-    if not data.get('image') or not data.get('description') or not data.get('user_id'):
+    if not data.get('image') or not data.get('description'):
         return jsonify({"msg": "Faltan campos requeridos"}), 400
     #Se crea la instancia con los datos de Post
     try:
@@ -47,7 +41,7 @@ def create_post():
             image=data['image'],
             description=data['description'],
             likes=0,
-            user_id=data['user_id'],
+            user_id=current_user,
             created_at=datetime.utcnow()
         )
         db.session.add(new_post)
@@ -369,6 +363,8 @@ def delete_tattooer_profile(tattooer_id):
 
 
 """REVIEWS"""
+
+#obtener las reviews de un tatuador
 @api.route('/review/<int:tattoer_id>', methods=['GET']) 
 def get_review_by_tattoer(tattooer_id):
 #validar que exista un usuario con el tattooer_id que es el parametro que nos entregan
@@ -378,7 +374,7 @@ def get_review_by_tattoer(tattooer_id):
     reviews = db.session.query(Review).filter_by(tattooer_id=tattooer_id).all() 
     return jsonify(reviews),200
 
-
+#para que un usuario cree una  review a un tatuador
 @api.route('/review',methods=['POST'])
 @jwt_required()
 def create_review():
@@ -411,6 +407,8 @@ def create_review():
     
 
 """NOTIFICACIONES"""
+
+#para obtener todas las notificaciones
 @api.route('/notifications',methods=['GET'])
 @jwt_required()
 def get_all_notifications():
@@ -423,6 +421,7 @@ def get_all_notifications():
         notifications_json = [notification.serialize() for notification in notifications]
         return jsonify({"success": True, "notifications": notifications_json}), 200
 
+#obtener una notificacion por id 
 @api.route('/notification/<int:notification_id>',methods= ['GET'])
 @jwt_required()
 def get_notification_by_id(notification_id):
@@ -434,6 +433,7 @@ def get_notification_by_id(notification_id):
     # Si se encuentra, devolver la notificación en formato JSON
         return jsonify(notification), 200
 
+#para marcar como leida una notificacion
 @api.route('/notifcation/<int:notification_id>/readed',methods=['PUT'])
 @jwt_required()
 def set_notification_readed(notification_id):
@@ -447,7 +447,7 @@ def set_notification_readed(notification_id):
     db.session.commit()
     return jsonify({"success": True, "mensaje": "Notificación marcada como leída"}), 200
 
-
+#para crear una notificacion, asignandola al usuario que se especifica en el body
 @api.route('/notification',methods=['POST'])
 @jwt_required()
 def create_notification():
@@ -468,7 +468,7 @@ def create_notification():
     # Guardar en la base de datos
     db.session.add(new_notification)
     db.session.commit()
-    return jsonify({"success": True, "mensaje": "Notificación creada con éxito", "notification": new_notification.to_dict()}), 201
+    return jsonify({"success": True, "mensaje": "Notificación creada con éxito", "notification": new_notification.serialize()}), 201
 
 
 
