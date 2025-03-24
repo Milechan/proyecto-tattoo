@@ -35,7 +35,6 @@ class Review(db.Model):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
     tattooer_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
     created_at: Mapped[DateTime] = mapped_column(DateTime)
-
     user: Mapped['User'] = relationship('User', back_populates='reviews', foreign_keys=[user_id])
     tattooer: Mapped['User'] = relationship('User', foreign_keys=[tattooer_id])
 
@@ -126,3 +125,4 @@ class User(db.Model):
             "posts": [post.serialize() for post in self.posts],
             "notifications": [notification.serialize() for notification in self.notifications]
         }
+#agregar tabla type y relacionarla con el usuario
