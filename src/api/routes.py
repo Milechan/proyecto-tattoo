@@ -114,7 +114,114 @@ def get_post_by_id(post_id):
     return jsonify(post.serialize()), 200
 
 
-"""USUARIO"""
+"""AUTENTICACIÓN"""
+@api.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    
+    # Validar datos requeridos
+    if not data.get('email') or not data.get('password'):
+        return jsonify({"mensaje": "Email y contraseña son requeridos"}), 400
+    
+    # Verificar si el usuario ya existe
+    if db.session.query(User).filter_by(email=data['email']).first():
+        return jsonify({"mensaje": "El usuario ya existe"}), 400
+    
+    # Crear nuevo usuario
+    new_user = User(
+        email=data['email'],
+        password=data['password'], #Falta hashear
+        name=data.get('name'),
+        last_name=data.get('last_name'),
+        created_at=datetime.utcnow()
+    )
+    
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return jsonify({"success": True, "mensaje": "Usuario registrado con éxito"}), 201
+
+
+@api.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    
+    # Validar datos requeridos
+    if not data.get('email') or not data.get('password'):
+        return jsonify({"mensaje": "Email y contraseña son requeridos"}), 400
+    
+    # Buscar usuario
+    user = db.session.query(User).filter_by(email=data['email']).first()
+    
+    if not user or not user.check_password(data['password']):  # Falta método check_password
+        return jsonify({"mensaje": "Email o contraseña incorrectos"}), 401
+    
+    # Crear token de acceso
+    access_token = create_access_token(identity=user.id)
+    
+    return jsonify({
+        "success": True,
+        "token": access_token,
+        "user": user.serialize()  # Falta un método serialize
+    }), 200
+
+
+"""USUARIOS"""
+@api.route('/user', methods=['GET'])
+@jwt_required()
+def get_current_user():
+    current_user_id = get_jwt_identity()
+    user = db.session.query(User).get(current_user_id)
+    
+    if not user:
+        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+    
+    return jsonify({"success": True, "user": user.serialize()}), 200
+
+
+@api.route('/user', methods=['PUT'])
+@jwt_required()
+def update_user():
+    current_user_id = get_jwt_identity()
+    user = db.session.query(User).get(current_user_id)
+    
+    if not user:
+        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+    
+    data = request.json
+    
+    # Actualizar campos permitidos
+    if 'name' in data:
+        user.name = data['name']
+    if 'last_name' in data:
+        user.last_name = data['last_name']
+    if 'email' in data:
+        # Verificar si el nuevo email ya está en uso
+        if db.session.query(User).filter(User.email == data['email'], User.id != current_user_id).first():
+            return jsonify({"mensaje": "El email ya está en uso"}), 400
+        user.email = data['email']
+    if 'password' in data:
+        user.password = data['password']  # Debería hashear la nueva contraseña
+    
+    user.updated_at = datetime.utcnow()
+    db.session.commit()
+    
+    return jsonify({"success": True, "mensaje": "Usuario actualizado", "user": user.serialize()}), 200
+
+
+@api.route('/user', methods=['DELETE'])
+@jwt_required()
+def delete_user():
+    current_user_id = get_jwt_identity()
+    user = db.session.query(User).get(current_user_id)
+    
+    if not user:
+        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+    
+    db.session.delete(user)
+    db.session.commit()
+    
+    return jsonify({"success": True, "mensaje": "Usuario eliminado"}), 200
 
 
 """PERFIL"""
