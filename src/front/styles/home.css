@@ -1,7 +1,18 @@
-/*
-    home.css: This website contains selectors only used in home.css
-
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+body{
+    background-color: #f8f8f4;
+}
+.burdeo {
+    background-color: #6f2f2e;  
+    border-color: #6f2f2e;      
+    color: #fff;               
+  }
+  
+  .burdeo:hover {
+    background-color: #5c2424;
+    border-color: #5c2424;
+  }
+  .burdeo:active {
+    background-color: #4a1c1c;
+    border-color: #4a1c1c;
+  }
+  
