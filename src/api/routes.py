@@ -489,7 +489,7 @@ def get_profiles_by_category(category):
 @api.route('/posts/top-likes', methods=['GET'])
 def get_top_likes_posts():
     # Se obtienen los posts ordenados por likes en forma descendente
-    posts = db.session.query(Post).order_by(Post.likes.desc()).limit(5).all()
+    posts = db.session.query(Post).order_by(Post.likes.desc()).limit(10).all()
     result = [post.serialize() for post in posts]
     return jsonify(result), 200
 
