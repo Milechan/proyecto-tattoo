@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Post, Profile, Review, Notification
+from api.models import db, User, Post, Profile, Review, Notification, Category
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -599,7 +599,10 @@ def create_notification():
 @api.route('/profiles/category/<string:category>', methods=['GET'])
 def get_profiles_by_category(category):
 
-    profiles = db.session.query(Profile).filter_by(category=category).all()
+    categories = db.session.query(Category).filter_by(name= category).one_or_none()
+    if not categories:
+        return jsonify({"mensaje": f"No se encontró categoria para ese nombre'{category}'"}), 404
+    profiles = db.session.query(Profile).filter_by(category_id=categories.id).all()
     if not profiles:
         return jsonify({"mensaje": f"No se encontraron perfiles para la categoría '{category}'"}), 404
     result = [profile.serialize() for profile in profiles]
