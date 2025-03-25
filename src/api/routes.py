@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Post, Profile, Review, Notification, UserType
+from api.models import db, User, Post, Profile, Review, Notification, UserType, Category
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -613,7 +613,10 @@ def create_notification():
 @api.route('/profiles/category/<string:category>', methods=['GET'])
 def get_profiles_by_category(category):
 
-    profiles = db.session.query(Profile).filter_by(category=category).all()
+    categories = db.session.query(Category).filter_by(name= category).one_or_none()
+    if not categories:
+        return jsonify({"mensaje": f"No se encontró categoria para ese nombre'{category}'"}), 404
+    profiles = db.session.query(Profile).filter_by(category_id=categories.id).all()
     if not profiles:
         return jsonify({"mensaje": f"No se encontraron perfiles para la categoría '{category}'"}), 404
     result = [profile.serialize() for profile in profiles]
@@ -624,7 +627,7 @@ def get_profiles_by_category(category):
 @api.route('/posts/top-likes', methods=['GET'])
 def get_top_likes_posts():
     # Se obtienen los posts ordenados por likes en forma descendente
-    posts = db.session.query(Post).order_by(Post.likes.desc()).all()
+    posts = db.session.query(Post).order_by(Post.likes.desc()).limit(10).all()
     result = [post.serialize() for post in posts]
     return jsonify(result), 200
 
@@ -633,7 +636,7 @@ def get_top_likes_posts():
 @api.route('/profiles/top-tattooer', methods=['GET'])
 def get_top_tattooer():
     # Se obtienen los perfiles ordenados por ranking en forma descendente, limitando a 10 resultados
-    profiles = db.session.query(Profile).order_by(Profile.ranking.desc()).all()
+    profiles = db.session.query(Profile).order_by(Profile.ranking.desc()).limit(10).all()
     result = [profile.serialize() for profile in profiles]
     return jsonify(result), 200
 
