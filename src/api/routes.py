@@ -610,7 +610,7 @@ def get_profiles_by_category(category):
 @api.route('/posts/top-likes', methods=['GET'])
 def get_top_likes_posts():
     # Se obtienen los posts ordenados por likes en forma descendente
-    posts = db.session.query(Post).order_by(Post.likes.desc()).all()
+    posts = db.session.query(Post).order_by(Post.likes.desc()).limit(5).all()
     result = [post.serialize() for post in posts]
     return jsonify(result), 200
 
@@ -619,7 +619,7 @@ def get_top_likes_posts():
 @api.route('/profiles/top-tattooer', methods=['GET'])
 def get_top_tattooer():
     # Se obtienen los perfiles ordenados por ranking en forma descendente, limitando a 10 resultados
-    profiles = db.session.query(Profile).order_by(Profile.ranking.desc()).all()
+    profiles = db.session.query(Profile).order_by(Profile.ranking.desc()).limit(10).all()
     result = [profile.serialize() for profile in profiles]
     return jsonify(result), 200
 
