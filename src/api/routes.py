@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Post, Profile, Review, Notification, Category
+from api.models import db, User, Post, Profile, Review, Notification, UserType, Category
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -113,17 +113,31 @@ def get_post_by_id(post_id):
 def register():
     data = request.json
     
-    # Validar datos requeridos
-    if not data.get('email') or not data.get('password'):
-        return jsonify({"mensaje": "Email y contraseña son requeridos"}), 400
+    # Validar datos 
+    required_fields = ['username', 'password', 'email', 'is_tattooer']
+    if not all(field in data for field in required_fields):
+        return jsonify({"mensaje": "Faltan campos requeridos"}), 400
     
     # Verificar si el usuario ya existe
     if db.session.query(User).filter_by(email=data['email']).first():
-        return jsonify({"mensaje": "El usuario ya existe"}), 400
-    
+        return jsonify({"mensaje": "El email ya está registrado"}), 400
+    if db.session.query(User).filter_by(username=data['username']).first():
+        return jsonify({"mensaje": "El nombre de usuario ya existe"}), 400
+    is_tattooer = ""
+    if data['is_tattooer'] == True:
+        is_tattooer = "tattooer"
+    else:
+        is_tattooer= "user"
+
+    user_type = db.session.query(UserType).filter_by(name=is_tattooer).first()
     # Crear nuevo usuario
     new_user = User(
+        username=data['username'],
+        password=data['password'],  # hashear esto
         email=data['email'],
+
+        user_type_id=user_type.id,
+
         password=data['password'], #Falta hashear
         name=data.get('name'),
         last_name=data.get('last_name'),
@@ -133,7 +147,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
     
-    return jsonify({"success": True, "mensaje": "Usuario registrado con éxito"}), 201
+    return jsonify({"success": True, "mensaje": "Usuario registrado"}), 201
 
 
 @api.route('/login', methods=['POST'])
