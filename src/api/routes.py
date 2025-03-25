@@ -7,7 +7,7 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
 from datetime import datetime
-from flask_jwt_extended import jwt_required , get_jwt_identity, create_access_token
+from flask_jwt_extended import jwt_required , get_jwt_identity
 api = Blueprint('api', __name__) 
 
 # Allow CORS requests to this API
@@ -135,7 +135,12 @@ def register():
         username=data['username'],
         password=data['password'],  # hashear esto
         email=data['email'],
+
         user_type_id=user_type.id,
+
+        password=data['password'], #Falta hashear
+        name=data.get('name'),
+        last_name=data.get('last_name'),
         created_at=datetime.utcnow()
     )
     
@@ -512,10 +517,10 @@ def create_review():
     data=request.json #del request(peticion) obtengo el json que me mandan del body
     user= db.session.query(User).filter_by(id=data['user_id']).one_or_none() #en la db se consulta(query)en la tabla user,filtramos por el id con el parametro 'user_id' que viene del body.nos obtiene uno o ninguno
     if user is None :
-        return jsonify({'mensaje': f"no se encontro un usuario con el user_id {data['user_id']}"}), 404
+        return jsonify({'mensaje':f'no se encontro un usuario con el user_id {data['user_id']}'}),404
     tattooer= db.session.query(User).filter_by(id=data['tattooer_id']).one_or_none()
     if tattooer is None:
-        return jsonify({"mensaje": f"no se encontró un usuario con el tattooer_id {data['tattooer_id']}"}), 404
+        return jsonify({"mensaje": f'no se encontro un usuario con el tattooer_id {data['tattooer_id']}'}),404
     
     #creo nueva instacia del review
     new_review=Review(
@@ -603,6 +608,34 @@ def create_notification():
 
 
 """HOME"""
+
+# Categorías: obtiene todos los perfiles de una categoría determinada.
+@api.route('/profiles/category/<string:category>', methods=['GET'])
+def get_profiles_by_category(category):
+
+    profiles = db.session.query(Profile).filter_by(category=category).all()
+    if not profiles:
+        return jsonify({"mensaje": f"No se encontraron perfiles para la categoría '{category}'"}), 404
+    result = [profile.serialize() for profile in profiles]
+    return jsonify(result), 200
+
+
+# Top Likes: obtiene los posts con más likes.
+@api.route('/posts/top-likes', methods=['GET'])
+def get_top_likes_posts():
+    # Se obtienen los posts ordenados por likes en forma descendente
+    posts = db.session.query(Post).order_by(Post.likes.desc()).all()
+    result = [post.serialize() for post in posts]
+    return jsonify(result), 200
+
+
+# Top Tatuadores: obtiene los perfiles con mejores evaluaciones.
+@api.route('/profiles/top-tattooer', methods=['GET'])
+def get_top_tattooer():
+    # Se obtienen los perfiles ordenados por ranking en forma descendente, limitando a 10 resultados
+    profiles = db.session.query(Profile).order_by(Profile.ranking.desc()).all()
+    result = [profile.serialize() for profile in profiles]
+    return jsonify(result), 200
 
 
 """BUSCADOR"""
