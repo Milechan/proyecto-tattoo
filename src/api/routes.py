@@ -14,15 +14,6 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
-
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
-
-    return jsonify(response_body), 200
-
 """POSTS"""
 
 #Ruta para obtener todos los post
@@ -35,11 +26,14 @@ def get_all_posts():
 
 #Ruta crear nuevo post
 @api.route('/posts', methods=['POST'])
+@jwt_required()
 def create_post():
+    current_user = get_jwt_identity()
     data = request.get_json()
 
+
     #Validar que la imagen, descripcion y id este presente antes de continuar
-    if not data.get('image') or not data.get('description') or not data.get('user_id'):
+    if not data.get('image') or not data.get('description'):
         return jsonify({"msg": "Faltan campos requeridos"}), 400
     #Se crea la instancia con los datos de Post
     try:
@@ -47,7 +41,7 @@ def create_post():
             image=data['image'],
             description=data['description'],
             likes=0,
-            user_id=data['user_id'],
+            user_id=current_user,
             created_at=datetime.utcnow()
         )
         db.session.add(new_post)
@@ -209,6 +203,7 @@ def update_user():
     return jsonify({"success": True, "mensaje": "Usuario actualizado", "user": user.serialize()}), 200
 
 
+
 @api.route('/user', methods=['DELETE'])
 @jwt_required()
 def delete_user():
@@ -223,6 +218,126 @@ def delete_user():
     
     return jsonify({"success": True, "mensaje": "Usuario eliminado"}), 200
 
+
+"""AUTENTICACIÓN"""
+@api.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    
+    # Validar datos 
+    required_fields = ['username', 'password', 'email', 'user_type_id']
+    if not all(field in data for field in required_fields):
+        return jsonify({"mensaje": "Faltan campos requeridos"}), 400
+    
+    # Verificar si el usuario ya existe
+    if db.session.query(User).filter_by(email=data['email']).first():
+        return jsonify({"mensaje": "El email ya está registrado"}), 400
+    if db.session.query(User).filter_by(username=data['username']).first():
+        return jsonify({"mensaje": "El nombre de usuario ya existe"}), 400
+    
+    # Crear nuevo usuario
+    new_user = User(
+        username=data['username'],
+        password=data['password'],  # hashear esto
+        email=data['email'],
+        user_type_id=data['user_type_id'],
+        created_at=datetime.utcnow()
+    )
+    
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return jsonify({"success": True, "mensaje": "Usuario registrado"}), 201
+
+
+@api.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    
+    if not data.get('username') or not data.get('password'):
+        return jsonify({"mensaje": "Usuario y contraseña requeridos"}), 400
+    
+    user = db.session.query(User).filter_by(username=data['username']).first()
+    
+    # Comparación directa de password (sin check_password)
+    if not user or user.password != data['password']:
+        return jsonify({"mensaje": "Credenciales inválidas"}), 401
+    
+    access_token = create_access_token(identity=user.id)
+    
+    return jsonify({
+        "success": True,
+        "token": access_token,
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "user_type_id": user.user_type_id
+        }
+    }), 200
+
+
+"""USUARIOS"""
+@api.route('/user', methods=['GET'])
+@jwt_required()
+def get_current_user():
+    user = db.session.query(User).get(get_jwt_identity())
+    
+    if not user:
+        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+    
+    return jsonify({
+        "success": True,
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "user_type_id": user.user_type_id,
+            "created_at": user.created_at.isoformat() if user.created_at else None
+        }
+    }), 200
+
+
+@api.route('/user', methods=['PUT'])
+@jwt_required()
+def update_user():
+    user = db.session.query(User).get(get_jwt_identity())
+    
+    if not user:
+        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+    
+    data = request.json
+    
+    if 'username' in data:
+        if db.session.query(User).filter(User.username == data['username'], User.id != user.id).first():
+            return jsonify({"mensaje": "Nombre de usuario ya existe"}), 400
+        user.username = data['username']
+    
+    if 'email' in data:
+        if db.session.query(User).filter(User.email == data['email'], User.id != user.id).first():
+            return jsonify({"mensaje": "Email ya registrado"}), 400
+        user.email = data['email']
+    
+    if 'password' in data:
+        user.password = data['password']  # hashear
+    
+    db.session.commit()
+    
+    return jsonify({"success": True, "mensaje": "Usuario actualizado"}), 200
+
+
+@api.route('/user', methods=['DELETE'])
+@jwt_required()
+def delete_user():
+    user = db.session.query(User).get(get_jwt_identity())
+    
+    if not user:
+        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+    
+    db.session.delete(user)
+    db.session.commit()
+    
+    return jsonify({"success": True, "mensaje": "Usuario eliminado"}), 200
 
 """PERFIL"""
 #Ruta para ver perfil por ID:
@@ -369,6 +484,8 @@ def delete_tattooer_profile(tattooer_id):
 
 
 """REVIEWS"""
+
+#obtener las reviews de un tatuador
 @api.route('/review/<int:tattoer_id>', methods=['GET']) 
 def get_review_by_tattoer(tattooer_id):
 #validar que exista un usuario con el tattooer_id que es el parametro que nos entregan
@@ -378,7 +495,7 @@ def get_review_by_tattoer(tattooer_id):
     reviews = db.session.query(Review).filter_by(tattooer_id=tattooer_id).all() 
     return jsonify(reviews),200
 
-
+#para que un usuario cree una  review a un tatuador
 @api.route('/review',methods=['POST'])
 @jwt_required()
 def create_review():
@@ -411,6 +528,8 @@ def create_review():
     
 
 """NOTIFICACIONES"""
+
+#para obtener todas las notificaciones
 @api.route('/notifications',methods=['GET'])
 @jwt_required()
 def get_all_notifications():
@@ -423,6 +542,7 @@ def get_all_notifications():
         notifications_json = [notification.serialize() for notification in notifications]
         return jsonify({"success": True, "notifications": notifications_json}), 200
 
+#obtener una notificacion por id 
 @api.route('/notification/<int:notification_id>',methods= ['GET'])
 @jwt_required()
 def get_notification_by_id(notification_id):
@@ -434,6 +554,7 @@ def get_notification_by_id(notification_id):
     # Si se encuentra, devolver la notificación en formato JSON
         return jsonify(notification), 200
 
+#para marcar como leida una notificacion
 @api.route('/notifcation/<int:notification_id>/readed',methods=['PUT'])
 @jwt_required()
 def set_notification_readed(notification_id):
@@ -447,7 +568,7 @@ def set_notification_readed(notification_id):
     db.session.commit()
     return jsonify({"success": True, "mensaje": "Notificación marcada como leída"}), 200
 
-
+#para crear una notificacion, asignandola al usuario que se especifica en el body
 @api.route('/notification',methods=['POST'])
 @jwt_required()
 def create_notification():
@@ -468,7 +589,7 @@ def create_notification():
     # Guardar en la base de datos
     db.session.add(new_notification)
     db.session.commit()
-    return jsonify({"success": True, "mensaje": "Notificación creada con éxito", "notification": new_notification.to_dict()}), 201
+    return jsonify({"success": True, "mensaje": "Notificación creada con éxito", "notification": new_notification.serialize()}), 201
 
 
 
