@@ -60,8 +60,9 @@ class Profile(db.Model):
     bio: Mapped[str] = mapped_column(String)
     profile_picture: Mapped[str] = mapped_column(String)
     ranking: Mapped[int] = mapped_column(Integer)
-
+    category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'))
     user: Mapped['User'] = relationship('User', back_populates='profile')
+    category: Mapped['Category'] = relationship('Category', back_populates="profile")
 
     def serialize(self):
         return {
@@ -143,4 +144,18 @@ class Notification(db.Model):
             "message": self.message,
             "type": self.type,
             "created_at": self.created_at
+        }
+class Category(db.Model):
+    __tablename__ = 'category'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] =mapped_column(String, unique=True)
+    description: Mapped[str] =mapped_column(String)
+    image: Mapped[str] =mapped_column(String)
+    def serialize(self):
+        return{
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "image": self.image
+
         }
