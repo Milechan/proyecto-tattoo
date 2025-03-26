@@ -2,12 +2,12 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Post, Profile, Review, Notification, UserType, Category
+from api.models import db, User, Post, Profile, Review, Notification
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
 from datetime import datetime
-from flask_jwt_extended import jwt_required , get_jwt_identity
+from flask_jwt_extended import jwt_required , get_jwt_identity, create_access_token
 api = Blueprint('api', __name__) 
 
 # Allow CORS requests to this API
@@ -113,41 +113,27 @@ def get_post_by_id(post_id):
 def register():
     data = request.json
     
-    # Validar datos 
-    required_fields = ['username', 'password', 'email', 'is_tattooer']
-    if not all(field in data for field in required_fields):
-        return jsonify({"mensaje": "Faltan campos requeridos"}), 400
+    # Validar datos requeridos
+    if not data.get('email') or not data.get('password'):
+        return jsonify({"mensaje": "Email y contraseña son requeridos"}), 400
     
     # Verificar si el usuario ya existe
     if db.session.query(User).filter_by(email=data['email']).first():
-        return jsonify({"mensaje": "El email ya está registrado"}), 400
-    if db.session.query(User).filter_by(username=data['username']).first():
-        return jsonify({"mensaje": "El nombre de usuario ya existe"}), 400
-    is_tattooer = ""
-    if data['is_tattooer'] == True:
-        is_tattooer = "tattooer"
-    else:
-        is_tattooer= "user"
-
-    user_type = db.session.query(UserType).filter_by(name=is_tattooer).first()
+        return jsonify({"mensaje": "El usuario ya existe"}), 400
+    
     # Crear nuevo usuario
     new_user = User(
-        username=data['username'],
-        password=data['password'],  # hashear esto
         email=data['email'],
-
-        user_type_id=user_type.id,
-
         password=data['password'], #Falta hashear
         name=data.get('name'),
-        last_name=data.get('last_name'),
+        username=data.get('username'),
         created_at=datetime.utcnow()
     )
     
     db.session.add(new_user)
     db.session.commit()
     
-    return jsonify({"success": True, "mensaje": "Usuario registrado"}), 201
+    return jsonify({"success": True, "mensaje": "Usuario registrado con éxito"}), 201
 
 
 @api.route('/login', methods=['POST'])
@@ -354,7 +340,7 @@ def delete_user():
     return jsonify({"success": True, "mensaje": "Usuario eliminado"}), 200
 
 """PERFIL"""
-#Ruta para ver perfil por ID:
+#Ruta ver perfil por ID 
 @api.route('/profile/<int:tattooer_id>', methods=['GET'])
 def get_tattooer_profile(tattooer_id):
     # Buscar al usuario en la base de datos
@@ -517,10 +503,10 @@ def create_review():
     data=request.json #del request(peticion) obtengo el json que me mandan del body
     user= db.session.query(User).filter_by(id=data['user_id']).one_or_none() #en la db se consulta(query)en la tabla user,filtramos por el id con el parametro 'user_id' que viene del body.nos obtiene uno o ninguno
     if user is None :
-        return jsonify({'mensaje':f'no se encontro un usuario con el user_id {data['user_id']}'}),404
+        return jsonify({'mensaje': f"no se encontro un usuario con el user_id {data['user_id']}"}), 404
     tattooer= db.session.query(User).filter_by(id=data['tattooer_id']).one_or_none()
     if tattooer is None:
-        return jsonify({"mensaje": f'no se encontro un usuario con el tattooer_id {data['tattooer_id']}'}),404
+        return jsonify({"mensaje": f"no se encontró un usuario con el tattooer_id {data['tattooer_id']}"}), 404
     
     #creo nueva instacia del review
     new_review=Review(
@@ -613,10 +599,7 @@ def create_notification():
 @api.route('/profiles/category/<string:category>', methods=['GET'])
 def get_profiles_by_category(category):
 
-    categories = db.session.query(Category).filter_by(name= category).one_or_none()
-    if not categories:
-        return jsonify({"mensaje": f"No se encontró categoria para ese nombre'{category}'"}), 404
-    profiles = db.session.query(Profile).filter_by(category_id=categories.id).all()
+    profiles = db.session.query(Profile).filter_by(category=category).all()
     if not profiles:
         return jsonify({"mensaje": f"No se encontraron perfiles para la categoría '{category}'"}), 404
     result = [profile.serialize() for profile in profiles]
@@ -627,7 +610,7 @@ def get_profiles_by_category(category):
 @api.route('/posts/top-likes', methods=['GET'])
 def get_top_likes_posts():
     # Se obtienen los posts ordenados por likes en forma descendente
-    posts = db.session.query(Post).order_by(Post.likes.desc()).limit(10).all()
+    posts = db.session.query(Post).order_by(Post.likes.desc()).limit(5).all()
     result = [post.serialize() for post in posts]
     return jsonify(result), 200
 
