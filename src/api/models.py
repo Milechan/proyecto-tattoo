@@ -18,6 +18,22 @@ class UserType(db.Model):
             "name": self.name,
         }
 
+class Likes(db.Model):
+    __tablename__ = 'likes'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
+    post_id: Mapped[int] = mapped_column(Integer, ForeignKey('post.id'))
+
+    user: Mapped['User'] = relationship('User', backref='likes')
+    post: Mapped['Post'] = relationship('Post', backref='likes')
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "post_id": self.post_id
+        }
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -35,6 +51,7 @@ class User(db.Model):
     reviews: Mapped[list['Review']] = relationship('Review', back_populates='user', foreign_keys='Review.user_id')
     posts: Mapped[list['Post']] = relationship('Post', back_populates='user')
     notifications: Mapped[list['Notification']] = relationship('Notification', back_populates='user', foreign_keys='Notification.user_id')
+    likes: Mapped[list['Likes']] = relationship('Likes', backref='user', cascade="all, delete-orphan")
 
     def serialize(self):
         return {
@@ -108,6 +125,7 @@ class Post(db.Model):
     created_at: Mapped[DateTime] = mapped_column(DateTime)
 
     user: Mapped['User'] = relationship('User', back_populates='posts')
+    likes: Mapped[list['Likes']] = relationship('Likes', backref='post', cascade="all, delete-orphan")
 
     def serialize(self):
         return {
