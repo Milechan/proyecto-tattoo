@@ -35,7 +35,7 @@ def create_post():
     #Validar que la imagen, descripcion y id este presente antes de continuar
     if not data.get('image') or not data.get('description'):
         return jsonify({"msg": "Faltan campos requeridos"}), 400
-    #Se crea la instancia con los datos de Post
+
     try:
         new_post = Post(
             image=data['image'],
@@ -47,7 +47,7 @@ def create_post():
         db.session.add(new_post)
         db.session.commit()
         return jsonify(new_post.serialize()), 201
-    #Manejo de errores
+ 
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
@@ -55,6 +55,7 @@ def create_post():
 
 #Ruta eliminar un post
 @api.route('/posts/<int:post_id>', methods=['DELETE'])
+@jwt_required()
 def delete_post(post_id):
     # Buscar el post en la bd
     post = Post.query.get(post_id)
@@ -63,6 +64,10 @@ def delete_post(post_id):
     if not post:
         return jsonify({"msg": "Post no encontrado"}), 404
 
+    current_user_id = get_jwt_identity()
+    if post.user_id != current_user_id:
+        return jsonify({"msg": "No tienes permiso para eliminar este post"}), 403
+   
     try:
         # Eliminar el post y confirmar
         db.session.delete(post)
@@ -75,18 +80,22 @@ def delete_post(post_id):
 
 #Ruta editar post
 @api.route('/posts/<int:post_id>', methods=['PUT'])
+@jwt_required()
 def update_post(post_id):
     data = request.get_json()
 
-    # Buscar el post por su ID
+    #Buscar el post por su ID
     post = Post.query.get(post_id)
     if not post:
         return jsonify({"msg": "Post no encontrado"}), 404
 
-    # Validar los campos antes de actualizar
+    current_user_id = get_jwt_identity()
+    if post.user_id != current_user_id:
+        return jsonify({"msg": "No tienes permiso para editar este post"}), 403
+
     if not data.get('image') or not data.get('description'):
         return jsonify({"msg": "Faltan campos requeridos"}), 400
-
+    
     try:
         post.image = data['image']
         post.description = data['description']
