@@ -31,8 +31,10 @@ def create_post():
     current_user = get_jwt_identity()
     data = request.get_json()
 
+    user = User.query.get(current_user)
+    if not user:
+        return jsonify({"msg": "Usuario no válido o no encontrado"}), 404
 
-    #Validar que la imagen, descripcion y id este presente antes de continuar
     if not data.get('image') or not data.get('description'):
         return jsonify({"msg": "Faltan campos requeridos"}), 400
 
@@ -47,7 +49,7 @@ def create_post():
         db.session.add(new_post)
         db.session.commit()
         return jsonify(new_post.serialize()), 201
- 
+
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
@@ -60,7 +62,6 @@ def delete_post(post_id):
     # Buscar el post en la bd
     post = Post.query.get(post_id)
 
-    # Si no se encuentra el post muestra error 404
     if not post:
         return jsonify({"msg": "Post no encontrado"}), 404
 
