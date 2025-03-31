@@ -7,6 +7,7 @@ import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import { Category } from "./pages/Category.jsx";
+import TattooerProfile from "./pages/TattooerProfile.jsx";
 
 import injectContext from "./store/appContext";
 
@@ -31,6 +32,7 @@ const Layout = () => {
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Category />} path="/category/:categoryId" />
+                        <Route element={<TattooerProfile />} path="/tattooer/:id" />
                         <Route element={<h1>Not found!</h1>} />
                         
                     </Routes>
