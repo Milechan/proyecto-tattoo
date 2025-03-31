@@ -6,6 +6,11 @@ import { BackendURL } from "./component/backendURL";
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
+
+import LoginForm  from "./pages/LoginForm.jsx";
+import RegisterForm  from "./pages/RegisterForm.jsx";
+import ForgotPasswordForm from "./pages/ForgotPasswordForm.jsx";
+=======
 import { Category } from "./pages/Category.jsx";
 import TattooerProfile from "./pages/TattooerProfile.jsx";
 
@@ -31,8 +36,14 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
+
+                        <Route element={<LoginForm />} path="/login"/>
+                        <Route element={<RegisterForm />} path="/register"/>
+                        <Route element={<ForgotPasswordForm />} path="/login/forgotpass"/>
+=======
                         <Route element={<Category />} path="/category/:categoryId" />
                         <Route element={<TattooerProfile />} path="/tattooer/:id" />
+
                         <Route element={<h1>Not found!</h1>} />
                         
                     </Routes>
