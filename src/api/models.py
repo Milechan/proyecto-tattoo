@@ -171,7 +171,7 @@ class Category(db.Model):
     name: Mapped[str] =mapped_column(String, unique=True)
     description: Mapped[str] =mapped_column(String)
     image: Mapped[str] =mapped_column(String)
-
+    carousel: Mapped[str] = mapped_column(String)
     profiles: Mapped[list['Profile']] = relationship('Profile', back_populates="category")
 
 
