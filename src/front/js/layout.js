@@ -10,10 +10,12 @@ import { Single } from "./pages/single";
 import LoginForm  from "./pages/LoginForm.jsx";
 import RegisterForm  from "./pages/RegisterForm.jsx";
 import ForgotPasswordForm from "./pages/ForgotPasswordForm.jsx";
+
 import { Category } from "./pages/Category.jsx";
 import TattooerProfile from "./pages/TattooerProfile.jsx";
-
+import EditTattooerProfile from "./pages/EditTattooerProfile.jsx";
 import injectContext from "./store/appContext";
+
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
@@ -39,9 +41,11 @@ const Layout = () => {
                         <Route element={<LoginForm />} path="/login"/>
                         <Route element={<RegisterForm />} path="/register"/>
                         <Route element={<ForgotPasswordForm />} path="/login/forgotpass"/>
-=======
+
                         <Route element={<Category />} path="/category/:categoryId" />
                         <Route element={<TattooerProfile />} path="/tattooer/:id" />
+                        <Route element={<EditTattooerProfile />} path="/edit-profile" />
+
 
                         <Route element={<h1>Not found!</h1>} />
                         

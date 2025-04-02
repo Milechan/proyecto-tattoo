@@ -9,7 +9,6 @@ class UserType(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=True)
-
     users: Mapped[list['User']] = relationship('User', back_populates='user_type')
 
     def serialize(self):
@@ -74,7 +73,10 @@ class Profile(db.Model):
     __tablename__ = 'profile'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'), unique=True)
-    social_media: Mapped[str] = mapped_column(String)
+    social_media_insta: Mapped[str] = mapped_column(String)
+    social_media_wsp: Mapped[str] = mapped_column(String)
+    social_media_x: Mapped[str] = mapped_column(String)
+    social_media_facebook: Mapped[str] = mapped_column(String)
     bio: Mapped[str] = mapped_column(String)
     profile_picture: Mapped[str] = mapped_column(String)
     ranking: Mapped[int] = mapped_column(Integer)
@@ -87,7 +89,10 @@ class Profile(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "social_media": self.social_media,
+            "social_media_insta": self.social_media,
+            "social_media_wsp": self.social_media,
+            "social_media_x": self.social_media,
+            "social_media_facebook": self.social_media,
             "bio": self.bio,
             "profile_picture": self.profile_picture,
             "ranking": self.ranking
@@ -167,12 +172,12 @@ class Notification(db.Model):
         }
     
 class Category(db.Model):
-    __tablename__ = 'category'
+    __tablename__ = 'category' 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] =mapped_column(String, unique=True)
     description: Mapped[str] =mapped_column(String)
     image: Mapped[str] =mapped_column(String)
-
+    carousel: Mapped[str] = mapped_column(String)
     profiles: Mapped[list['Profile']] = relationship('Profile', back_populates="category")
 
 
