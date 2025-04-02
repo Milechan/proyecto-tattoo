@@ -270,36 +270,12 @@ def get_tattooer_profile(tattooer_id):
 
 #Ruta para crear perfil:
 @api.route('/profile', methods=['POST'])
+@jwt_required()
 def create_tattooer_profile():
     data = request.get_json()
 
-    required_fields = ['name', 'email', 'username', 'password', 'bio', 'social_media']
-    for field in required_fields:
-        if field not in data:
-            return jsonify({'msg': f'Falta el campo requerido: {field}'}), 400
-
-    # Verificar si el email o username ya está registrado
-    existing_user = db.session.query(User).filter(
-        (User.email == data['email']) | (User.username == data['username'])
-    ).first()
-    if existing_user:
-        return jsonify({'msg': 'El email o el username ya están registrados'}), 400
-
-    # Validar que `social_media` sea un objeto JSON válido
-    if not isinstance(data['social_media'], dict):
-        return jsonify({'msg': 'El campo social_media debe ser un objeto JSON válido'}), 400
-
-    # Crear nuevo usuario
-    new_user = User(
-        name=data['name'],
-        username=data['username'],
-        email=data['email'],
-        password=data['password'],
-        user_type='tattooer'
-    )
-
-    db.session.add(new_user)
-    db.session.commit()
+    user_id = get_jwt_identity()
+    
 
     # Crear perfil asociado
     new_profile = Profile(
