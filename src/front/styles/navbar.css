@@ -2,3 +2,14 @@
     border-radius: 100%;
     width: 70px;
 }
+.button-bg {
+    background-size: cover;
+    background-position: center;
+    width: 150px;
+    height: 50px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 5px;
+  }
