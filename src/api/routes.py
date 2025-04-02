@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Post, Profile, Review, Notification
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from api.models import db, User, Post, Profile, Review, Notification, UserType, Category
 
 from datetime import datetime
 import json
@@ -132,12 +133,21 @@ def register():
     if db.session.query(User).filter_by(email=data['email']).first():
         return jsonify({"msg": "El usuario ya existe"}), 400
     
+    if data.get("isTattooer") is True:
+        user_type = db.session.query(UserType).filter_by(name='tattooer').first()
+    else:
+        user_type = db.session.query(UserType).filter_by(name='usuario').first()
+
+    category = db.session.query(Category).filter_by(name=data.get('categoryName')).first()
+
     # Crear nuevo usuario
     new_user = User(
         email=data['email'],
         password=data['password'], #Falta hashear
         name=data.get('name'),
         username=data.get('username'),
+        user_type_id=user_type.id,
+        category_id=category.id,
         created_at=datetime.utcnow()
     )
     
