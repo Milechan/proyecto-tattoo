@@ -118,10 +118,35 @@ const TattooerProfile = () => {
           <h3>Ubicación</h3>
           <p>📍</p>
         </div>
-        <div className="comments">
-          <h3>Sección de comentarios</h3>
-          <p>💬</p>
+        <div className="reviews-section container mt-5">
+          <h3 className="text-center mb-4">Reseñas</h3>
+
+          {[...Array(3)].map((_, i) => (
+            <div className="card mb-3 shadow-sm" key={i}>
+              <div className="card-body d-flex">
+                <img
+                  src="https://via.placeholder.com/50"
+                  alt="User"
+                  className="rounded-circle me-3"
+                  style={{ width: "50px", height: "50px" }}
+                />
+                <div className="w-100">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <h6 className="mb-0">Usuario {i + 1}</h6>
+                    <small className="text-muted">Hace 2 días</small>
+                  </div>
+                  <div className="stars mb-2">
+                    {"⭐".repeat(4)}{"☆".repeat(1)} {/* Rating 4/5 como ejemplo */}
+                  </div>
+                  <p className="mb-0">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Genial experiencia con este tatuador.
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
+
       </div>
     </div>
   );
