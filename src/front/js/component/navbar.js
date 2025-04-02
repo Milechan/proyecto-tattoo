@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../styles/navbar.css";
+import profilePic from "../../img/foto_perfil.webp"; // Importa la imagen correctamente
 
 export const Navbar = () => {
   return (
@@ -12,7 +13,7 @@ export const Navbar = () => {
         <input type="text" className="form-control w-50" placeholder="Buscar..." aria-label="Buscar" />
         <div>
           <Link to="/demo">
-            <button className="btn btn-primary img-profile">foto perfil</button>
+            <img src={profilePic} className="img-profile" alt="Foto de perfil" />
           </Link>
         </div>
       </div>
