@@ -2,7 +2,20 @@
   font-family: 'Segoe UI', sans-serif;
   background-color: #f9f9f9;
   padding-bottom: 30px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
 }
+
+.container-central {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  
+}
+
 
 .banner {
   width: 100%;
@@ -13,10 +26,11 @@
   position: relative;
   padding-top: 40px;
   
+  
 }
 
 .banner-img {
-  width: 80%;
+  width: 90%;
   height: 400px;
   object-fit: cover;
   border-radius: 10px 10px 10px 10px;
@@ -28,7 +42,7 @@
 
 .profile-picture-container {
   position: absolute;
-  right: 152px;
+  right: 56px;
   bottom: -140px;
   transform: translateX(0%);
 }
@@ -43,6 +57,36 @@
   
 
 }
+.banner-overlay {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(100, 39, 45, 0.6);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.profile-picture-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(100, 39, 45, 0.7);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+
 
 .profile-details {
   display: flex;
@@ -53,7 +97,7 @@
   padding-bottom: 50px;
   flex-wrap: wrap;
   background-color: #D9D9D9;
-  width: 80%;             
+  width: 90%;          
   margin: 0 auto;         
   border-radius: 15px;    
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
@@ -89,28 +133,66 @@
 .instagram {
   background-color: #E1306C;
 }
-.twitter {
-  background-color: #1DA1F2;
+
+.x {
+  background-color: #000; /* negro para X/Twitter */
 }
+
+.whatsapp {
+  background-color: #25D366;
+}
+
+.facebook {
+  background-color: #3b5998;
+}
+
+.social-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 
 .contact-section {
   flex: 1;
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 20px;
+  flex-direction: column; 
+  align-items: flex-end;   
+  margin-top: 100px;
 }
+
 
 .contact-button {
   background-color: #64272D;
   color: white;
   border: none;
   padding: 10px 16px;
-  border-radius: 20px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
 }
+
+
+.edit-button {
+  margin-top: 10px;
+  background-color: #64272D;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-button:hover {
+  background-color: #4e1f22;
+}
+
 
 .card-img-top {
   height: 300px;
@@ -124,12 +206,16 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 30px;
-  padding: 60px;
+  gap: 40px; 
+  padding: 40px 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .tattoo-card {
-  width: calc(20% - 20px);
+  max-width: 250px;
+  width: 100%;
+  background-color: transparent;
   border: none;
   box-shadow: none;
   background-color: transparent;
@@ -137,8 +223,9 @@
 
 .tattoo-card img {
   width: 100%;
-  height: 350px;
+  height: 400px;
   object-fit: cover;
+  border-radius: 10px;
   border-bottom: 1px solid #D9D9D9;
 }
 
@@ -148,14 +235,6 @@
   text-align: center;
 }
 
-
-.gallery img {
-  width: 250px;
-  height: 500px;
-  border-radius: 10px;
-  object-fit: cover;
-  
-}
 
 
 
@@ -229,6 +308,7 @@
   justify-content: space-around;
   flex-wrap: wrap;
   padding: 20px;
+  width: 100%;
 }
 
 .location,
@@ -251,4 +331,70 @@
 .stars {
   color: #f1c40f;
   font-size: 18px;
+}
+
+.edit-button-container {
+  text-align: right;
+  padding: 10px 40px;
+}
+
+.edit-button {
+  padding: 8px 14px;
+  background-color: #64272D;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #4e1f22;
+}
+
+.edit-input, .edit-textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.edit-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.image-container {
+  position: relative;
+}
+
+.delete-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 0, 0, 0.6);
+  color: white;
+  padding: 5px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 2;
+}
+
+.add-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e3e3e3;
+  border: 2px dashed #ccc;
+  cursor: pointer;
+  height: 400px;
+}
+
+.add-image-label {
+  font-size: 40px;
+  color: #888;
+  cursor: pointer;
 }
