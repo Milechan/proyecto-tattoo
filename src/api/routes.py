@@ -127,11 +127,11 @@ def register():
     
     # Validar datos requeridos
     if not data.get('email') or not data.get('password'):
-        return jsonify({"mensaje": "Email y contraseña son requeridos"}), 400
+        return jsonify({"msg": "Email y contraseña son requeridos"}), 400
     
     # Verificar si el usuario ya existe
     if db.session.query(User).filter_by(email=data['email']).first():
-        return jsonify({"mensaje": "El usuario ya existe"}), 400
+        return jsonify({"msg": "El usuario ya existe"}), 400
     
     if data.get("isTattooer") is True:
         user_type = db.session.query(UserType).filter_by(name='tattooer').first()
@@ -154,7 +154,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
     
-    return jsonify({"success": True, "mensaje": "Usuario registrado con éxito"}), 201
+    return jsonify({"success": True, "msg": "Usuario registrado con éxito"}), 201
 
 
 @api.route('/login', methods=['POST'])
@@ -163,13 +163,13 @@ def login():
     
     # Validar datos requeridos
     if not data.get('email') or not data.get('password'):
-        return jsonify({"mensaje": "Email y contraseña son requeridos"}), 400
+        return jsonify({"msg": "Email y contraseña son requeridos"}), 400
     
     # Buscar usuario
     user = db.session.query(User).filter_by(email=data['email']).first()
     
     if not user or not user.check_password(data['password']):  # Falta método check_password
-        return jsonify({"mensaje": "Email o contraseña incorrectos"}), 401
+        return jsonify({"msg": "Email o contraseña incorrectos"}), 401
     
     # Crear token de acceso
     access_token = create_access_token(identity=user.id)
@@ -189,7 +189,7 @@ def get_current_user():
     user = db.session.query(User).get(current_user_id)
     
     if not user:
-        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+        return jsonify({"msg": "Usuario no encontrado"}), 404
     
     return jsonify({"success": True, "user": user.serialize()}), 200
 
@@ -201,7 +201,7 @@ def update_user():
     user = db.session.query(User).get(current_user_id)
     
     if not user:
-        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+        return jsonify({"msg": "Usuario no encontrado"}), 404
     
     data = request.json
     
@@ -213,7 +213,7 @@ def update_user():
     if 'email' in data:
         # Verificar si el nuevo email ya está en uso
         if db.session.query(User).filter(User.email == data['email'], User.id != current_user_id).first():
-            return jsonify({"mensaje": "El email ya está en uso"}), 400
+            return jsonify({"msg": "El email ya está en uso"}), 400
         user.email = data['email']
     if 'password' in data:
         user.password = data['password']  # Debería hashear la nueva contraseña
@@ -221,7 +221,7 @@ def update_user():
     user.updated_at = datetime.utcnow()
     db.session.commit()
     
-    return jsonify({"success": True, "mensaje": "Usuario actualizado", "user": user.serialize()}), 200
+    return jsonify({"success": True, "msg": "Usuario actualizado", "user": user.serialize()}), 200
 
 
 
@@ -232,12 +232,12 @@ def delete_user():
     user = db.session.query(User).get(current_user_id)
     
     if not user:
-        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+        return jsonify({"msg": "Usuario no encontrado"}), 404
     
     db.session.delete(user)
     db.session.commit()
     
-    return jsonify({"success": True, "mensaje": "Usuario eliminado"}), 200
+    return jsonify({"success": True, "msg": "Usuario eliminado"}), 200
 
 """PERFIL"""
 @api.route('/profile/<int:tattooer_id>', methods=['GET'])
@@ -246,15 +246,15 @@ def get_tattooer_profile(tattooer_id):
     tattooer = db.session.query(User).filter_by(id=tattooer_id).one_or_none()
 
     if tattooer is None:
-        return jsonify({'mensaje': f'No se encontró un usuario con el ID {tattooer_id}'}), 404
+        return jsonify({'msg': f'No se encontró un usuario con el ID {tattooer_id}'}), 404
 
     # Verificar que el usuario sea un tatuador
     if tattooer.user_type is None or tattooer.user_type.name.lower() != 'tattooer':
-        return jsonify({'mensaje': f'El usuario con ID {tattooer_id} no es un tatuador'}), 400
+        return jsonify({'msg': f'El usuario con ID {tattooer_id} no es un tatuador'}), 400
 
     # Verificar si el usuario tiene un perfil asociado
     if tattooer.profile is None:
-        return jsonify({'mensaje': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
+        return jsonify({'msg': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
 
     # Convertir `social_media` de string a JSON de forma segura
     try:
@@ -286,18 +286,18 @@ def create_tattooer_profile():
     required_fields = ['name', 'email', 'username', 'password', 'bio', 'social_media']
     for field in required_fields:
         if field not in data:
-            return jsonify({'mensaje': f'Falta el campo requerido: {field}'}), 400
+            return jsonify({'msg': f'Falta el campo requerido: {field}'}), 400
 
     # Verificar si el email o username ya está registrado
     existing_user = db.session.query(User).filter(
         (User.email == data['email']) | (User.username == data['username'])
     ).first()
     if existing_user:
-        return jsonify({'mensaje': 'El email o el username ya están registrados'}), 400
+        return jsonify({'msg': 'El email o el username ya están registrados'}), 400
 
     # Validar que `social_media` sea un objeto JSON válido
     if not isinstance(data['social_media'], dict):
-        return jsonify({'mensaje': 'El campo social_media debe ser un objeto JSON válido'}), 400
+        return jsonify({'msg': 'El campo social_media debe ser un objeto JSON válido'}), 400
 
     # Crear nuevo usuario
     new_user = User(
@@ -324,7 +324,7 @@ def create_tattooer_profile():
     db.session.commit()
 
     return jsonify({
-        'mensaje': 'Perfil creado exitosamente',
+        'msg': 'Perfil creado exitosamente',
         'user': new_user.serialize()
     }), 201
 
@@ -337,11 +337,11 @@ def update_tattooer_profile(tattooer_id):
     # Buscar al usuario en la base de datos
     tattooer = db.session.query(User).filter_by(id=tattooer_id).one_or_none()
     if tattooer is None:
-        return jsonify({'mensaje': f'No se encontró un tatuador con el ID {tattooer_id}'}), 404
+        return jsonify({'msg': f'No se encontró un tatuador con el ID {tattooer_id}'}), 404
 
     # Verificar si el usuario tiene un perfil
     if tattooer.profile is None:
-        return jsonify({'mensaje': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
+        return jsonify({'msg': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
 
     # Obtener el perfil asociado
     profile = tattooer.profile
@@ -351,7 +351,7 @@ def update_tattooer_profile(tattooer_id):
         profile.bio = data['bio']
     if 'social_media' in data:
         if not isinstance(data['social_media'], dict):
-            return jsonify({'mensaje': 'El campo social_media debe ser un objeto JSON válido'}), 400
+            return jsonify({'msg': 'El campo social_media debe ser un objeto JSON válido'}), 400
         profile.social_media = json.dumps(data['social_media'])  # Guardamos como JSON en la DB
     if 'profile_picture' in data:
         profile.profile_picture = data['profile_picture']
@@ -362,7 +362,7 @@ def update_tattooer_profile(tattooer_id):
     db.session.commit()
 
     return jsonify({
-        'mensaje': 'Perfil actualizado exitosamente',
+        'msg': 'Perfil actualizado exitosamente',
         'profile': profile.serialize()
     }), 200
 
@@ -372,11 +372,11 @@ def delete_tattooer_profile(tattooer_id):
     # Buscar al usuario en la base de datos
     tattooer = db.session.query(User).filter_by(id=tattooer_id).one_or_none()
     if tattooer is None:
-        return jsonify({'mensaje': f'No se encontró un tatuador con el ID {tattooer_id}'}), 404
+        return jsonify({'msg': f'No se encontró un tatuador con el ID {tattooer_id}'}), 404
 
     # Verificar si el usuario tiene un perfil
     if tattooer.profile is None:
-        return jsonify({'mensaje': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
+        return jsonify({'msg': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
 
     # Obtener el perfil asociado
     profile = tattooer.profile
@@ -385,7 +385,7 @@ def delete_tattooer_profile(tattooer_id):
     db.session.delete(profile)
     db.session.commit()
 
-    return jsonify({'mensaje': f'Perfil del usuario con ID {tattooer_id} eliminado exitosamente'}), 200
+    return jsonify({'msg': f'Perfil del usuario con ID {tattooer_id} eliminado exitosamente'}), 200
 
 
 """REVIEWS"""
@@ -396,7 +396,7 @@ def get_review_by_tattooer(tattooer_id):
 #validar que exista un usuario con el tattooer_id que es el parametro que nos entregan
     tattooer= db.session.query(User).filter_by(id=tattooer_id).one_or_none() #consulta si existe un usuario o no y lo guarda en la variable tattooer
     if tattooer is None :
-        return jsonify({'mensaje':f'no se encontro un usuario con el user_id {tattooer_id}'}),404
+        return jsonify({'msg':f'no se encontro un usuario con el user_id {tattooer_id}'}),404
     reviews = db.session.query(Review).filter_by(tattooer_id=tattooer_id).all() 
     return jsonify(reviews),200
 
@@ -408,10 +408,10 @@ def create_review():
     data=request.json #del request(peticion) obtengo el json que me mandan del body
     user= db.session.query(User).filter_by(id=data['user_id']).one_or_none() #en la db se consulta(query)en la tabla user,filtramos por el id con el parametro 'user_id' que viene del body.nos obtiene uno o ninguno
     if user is None :
-        return jsonify({'mensaje': f"no se encontro un usuario con el user_id {data['user_id']}"}), 404
+        return jsonify({'msg': f"no se encontro un usuario con el user_id {data['user_id']}"}), 404
     tattooer= db.session.query(User).filter_by(id=data['tattooer_id']).one_or_none()
     if tattooer is None:
-        return jsonify({"mensaje": f"no se encontró un usuario con el tattooer_id {data['tattooer_id']}"}), 404
+        return jsonify({"msg": f"no se encontró un usuario con el tattooer_id {data['tattooer_id']}"}), 404
     
     #creo nueva instacia del review
     new_review=Review(
@@ -442,7 +442,7 @@ def get_all_notifications():
         notifications = db.session.query(Notification).filter_by(user_id=current_user).all()
          # Si no hay notificaciones, devolver un mensaje vacío
         if not notifications:
-            return jsonify({"mensaje": "No hay notificaciones disponibles",'notifications':[]}), 404
+            return jsonify({"msg": "No hay notificaciones disponibles",'notifications':[]}), 404
     # Convertir la lista de notificaciones en JSON
         notifications_json = [notification.serialize() for notification in notifications]
         return jsonify({"success": True, "notifications": notifications_json}), 200
@@ -455,7 +455,7 @@ def get_notification_by_id(notification_id):
         notification = db.session.query(Notification).filter_by(id=notification_id,user_id=current_user).one_or_none()
     # Si no se encuentra, devolver un error 404
         if notification is None:
-            return jsonify({"mensaje": f"No se encontró la notificación con el ID {notification_id}"}), 404
+            return jsonify({"msg": f"No se encontró la notificación con el ID {notification_id}"}), 404
     # Si se encuentra, devolver la notificación en formato JSON
         return jsonify(notification), 200
 
@@ -467,11 +467,11 @@ def set_notification_readed(notification_id):
     notification = db.session.query(Notification).filter_by(id=notification_id,user_id=current_id).one_or_none()
         # Si la notificación no existe, devolver un error 404
     if notification is None:
-        return jsonify({"mensaje": f"No se encontró la notificación con el ID {notification_id}"}), 404
+        return jsonify({"msg": f"No se encontró la notificación con el ID {notification_id}"}), 404
     # Marcar la notificación como leída (suponiendo que tiene un campo `readed`)
     notification.is_read = True
     db.session.commit()
-    return jsonify({"success": True, "mensaje": "Notificación marcada como leída"}), 200
+    return jsonify({"success": True, "msg": "Notificación marcada como leída"}), 200
 
 #para crear una notificacion, asignandola al usuario que se especifica en el body
 @api.route('/notification',methods=['POST'])
@@ -481,11 +481,11 @@ def create_notification():
     # Obtener datos del cuerpo de la petición
     data = request.json
     # Validar que los datos requeridos estén presentes
-    if "mensaje" not in data or "user_id" not in data:
-        return jsonify({"mensaje": "Faltan datos requeridos (mensaje, user_id)"}), 400
+    if "msg" not in data or "user_id" not in data:
+        return jsonify({"msg": "Faltan datos requeridos (msg, user_id)"}), 400
     # Crear una nueva instancia de Notificación
     new_notification = Notification(
-        menssage=data["mensaje"],
+        menssage=data["msg"],
         user_id=data["user_id"],
         is_read=False, # Inicialmente la notificación no está leída
         date =datetime.utcnow(),
@@ -494,7 +494,7 @@ def create_notification():
     # Guardar en la base de datos
     db.session.add(new_notification)
     db.session.commit()
-    return jsonify({"success": True, "mensaje": "Notificación creada con éxito", "notification": new_notification.serialize()}), 201
+    return jsonify({"success": True, "msg": "Notificación creada con éxito", "notification": new_notification.serialize()}), 201
 
 
 
@@ -506,7 +506,7 @@ def get_profiles_by_category(category):
 
     profiles = db.session.query(Profile).filter_by(category=category).all()
     if not profiles:
-        return jsonify({"mensaje": f"No se encontraron perfiles para la categoría '{category}'"}), 404
+        return jsonify({"msg": f"No se encontraron perfiles para la categoría '{category}'"}), 404
     result = [profile.serialize() for profile in profiles]
     return jsonify(result), 200
 

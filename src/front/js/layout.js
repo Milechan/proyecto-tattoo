@@ -10,6 +10,7 @@ import { Single } from "./pages/single";
 import LoginForm  from "./pages/LoginForm.jsx";
 import RegisterForm  from "./pages/RegisterForm.jsx";
 import ForgotPasswordForm from "./pages/ForgotPasswordForm.jsx";
+
 import { Category } from "./pages/Category.jsx";
 import TattooerProfile from "./pages/TattooerProfile.jsx";
 
@@ -53,6 +54,7 @@ const ContentWrapper = () => {
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
   
     return (
+
       <div className="h-100">
         <BrowserRouter>
           <ScrollToTop>
@@ -61,6 +63,7 @@ const ContentWrapper = () => {
           </ScrollToTop>
         </BrowserRouter>
       </div>
+
     );
   };
   
