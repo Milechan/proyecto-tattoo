@@ -47,7 +47,7 @@ class User(db.Model):
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'))
     created_at: Mapped[DateTime] = mapped_column(DateTime)
 
-    category: Mapped['Category'] = relationship('Category', back_populates="user")
+    category: Mapped['Category'] = relationship('Category', back_populates="users")
     user_type: Mapped['UserType'] = relationship('UserType', back_populates='users')
     profile: Mapped['Profile'] = relationship('Profile', back_populates='user', uselist=False)
     reviews: Mapped[list['Review']] = relationship('Review', back_populates='user', foreign_keys='Review.user_id')
@@ -177,10 +177,12 @@ class Category(db.Model):
     __tablename__ = 'category' 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] =mapped_column(String, unique=True)
-    description: Mapped[str] =mapped_column(String)
-    image: Mapped[str] =mapped_column(String)
-    carousel: Mapped[str] = mapped_column(String)
+    description: Mapped[str] =mapped_column(String, nullable=True)
+    image: Mapped[str] =mapped_column(String, nullable=True)
+    carousel: Mapped[str] = mapped_column(String, nullable=True)
     profiles: Mapped[list['Profile']] = relationship('Profile', back_populates="category")
+
+    users: Mapped[list['User']] = relationship('User', back_populates="category")
 
 
     def serialize(self):

@@ -13,7 +13,6 @@ import ForgotPasswordForm from "./pages/ForgotPasswordForm.jsx";
 
 import { Category } from "./pages/Category.jsx";
 import TattooerProfile from "./pages/TattooerProfile.jsx";
-import EditTattooerProfile from "./pages/EditTattooerProfile.jsx";
 import injectContext from "./store/appContext";
 
 
