@@ -285,15 +285,28 @@ def create_tattooer_profile():
     data = request.get_json()
 
     user_id = get_jwt_identity()
+    user = db.session.query(User).filter_by(id=user_id).one_or_none()
+    if user is None :
+        return jsonify({"msg":"no se encuentra el usuario con ese id"}),404
+    if "category_name" not in data:
+        return jsonify({"msg":"el campo category_name es obligatorio"}),400
+    category= db.session.query(category).filter_by(name=data["category_name"]).one_or_none()
+    if category is None:
+        return jsonify({"msg":"no se encuentra la categoria con ese nombre"}),404
+    
     
 
     # Crear perfil asociado
     new_profile = Profile(
-        user_id=new_user.id,
-        bio=data['bio'],
-        social_media=json.dumps(data['social_media']),  # Convertir JSON a string para almacenar
-        profile_picture=data.get('profile_picture', ''),  # Opcional, si no lo envían se guarda vacío
-        ranking=0  # Iniciar ranking en 0 por defecto
+        user_id=user_id,
+        bio="",
+        social_media_insta="", 
+        social_media_wsp="",
+        social_media_x="",
+        social_media_facebook="",
+        profile_picture="",  
+        ranking=0, 
+        category_id=category.id
     )
 
     db.session.add(new_profile)
@@ -301,7 +314,7 @@ def create_tattooer_profile():
 
     return jsonify({
         'msg': 'Perfil creado exitosamente',
-        'user': new_user.serialize()
+        'user': new_profile.serialize()
     }), 201
 
 
