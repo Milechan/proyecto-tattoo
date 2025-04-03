@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 893ac35678a2
+Revision ID: 2698f1563c4a
 Revises: 
-Create Date: 2025-03-31 20:24:59.432555
+Create Date: 2025-04-03 11:50:05.779687
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '893ac35678a2'
+revision = '2698f1563c4a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,6 +23,7 @@ def upgrade():
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('description', sa.String(), nullable=False),
     sa.Column('image', sa.String(), nullable=False),
+    sa.Column('carousel', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
@@ -41,7 +42,9 @@ def upgrade():
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('notification_enabled', sa.Boolean(), nullable=False),
     sa.Column('user_type_id', sa.Integer(), nullable=False),
+    sa.Column('category_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['category_id'], ['category.id'], ),
     sa.ForeignKeyConstraint(['user_type_id'], ['user_type.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
@@ -72,7 +75,10 @@ def upgrade():
     op.create_table('profile',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('social_media', sa.String(), nullable=False),
+    sa.Column('social_media_insta', sa.String(), nullable=False),
+    sa.Column('social_media_wsp', sa.String(), nullable=False),
+    sa.Column('social_media_x', sa.String(), nullable=False),
+    sa.Column('social_media_facebook', sa.String(), nullable=False),
     sa.Column('bio', sa.String(), nullable=False),
     sa.Column('profile_picture', sa.String(), nullable=False),
     sa.Column('ranking', sa.Integer(), nullable=False),

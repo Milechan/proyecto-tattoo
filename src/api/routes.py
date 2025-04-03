@@ -280,44 +280,33 @@ def get_tattooer_profile(tattooer_id):
 
 #Ruta para crear perfil:
 @api.route('/profile', methods=['POST'])
+@jwt_required()
 def create_tattooer_profile():
     data = request.get_json()
 
-    required_fields = ['name', 'email', 'username', 'password', 'bio', 'social_media']
-    for field in required_fields:
-        if field not in data:
-            return jsonify({'msg': f'Falta el campo requerido: {field}'}), 400
-
-    # Verificar si el email o username ya está registrado
-    existing_user = db.session.query(User).filter(
-        (User.email == data['email']) | (User.username == data['username'])
-    ).first()
-    if existing_user:
-        return jsonify({'msg': 'El email o el username ya están registrados'}), 400
-
-    # Validar que `social_media` sea un objeto JSON válido
-    if not isinstance(data['social_media'], dict):
-        return jsonify({'msg': 'El campo social_media debe ser un objeto JSON válido'}), 400
-
-    # Crear nuevo usuario
-    new_user = User(
-        name=data['name'],
-        username=data['username'],
-        email=data['email'],
-        password=data['password'],
-        user_type='tattooer'
-    )
-
-    db.session.add(new_user)
-    db.session.commit()
+    user_id = get_jwt_identity()
+    user = db.session.query(User).filter_by(id=user_id).one_or_none()
+    if user is None :
+        return jsonify({"msg":"no se encuentra el usuario con ese id"}),404
+    if "category_name" not in data:
+        return jsonify({"msg":"el campo category_name es obligatorio"}),400
+    category= db.session.query(category).filter_by(name=data["category_name"]).one_or_none()
+    if category is None:
+        return jsonify({"msg":"no se encuentra la categoria con ese nombre"}),404
+    
+    
 
     # Crear perfil asociado
     new_profile = Profile(
-        user_id=new_user.id,
-        bio=data['bio'],
-        social_media=json.dumps(data['social_media']),  # Convertir JSON a string para almacenar
-        profile_picture=data.get('profile_picture', ''),  # Opcional, si no lo envían se guarda vacío
-        ranking=0  # Iniciar ranking en 0 por defecto
+        user_id=user_id,
+        bio="",
+        social_media_insta="", 
+        social_media_wsp="",
+        social_media_x="",
+        social_media_facebook="",
+        profile_picture="",  
+        ranking=0, 
+        category_id=category.id
     )
 
     db.session.add(new_profile)
@@ -325,7 +314,7 @@ def create_tattooer_profile():
 
     return jsonify({
         'msg': 'Perfil creado exitosamente',
-        'user': new_user.serialize()
+        'user': new_profile.serialize()
     }), 201
 
 
