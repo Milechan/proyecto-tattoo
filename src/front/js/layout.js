@@ -18,6 +18,12 @@ import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
+import { Notifications } from "./component/Notifications.js";
+
+// Página de Notificaciones (mock)
+export const NotificationsPage = () => {
+  return <Notifications />;
+};
 
 //create your first component
 
@@ -69,7 +75,7 @@ const ContentWrapper = () => {
 
                         <Route element={<Category />} path="/category/:categoryId" />
                         <Route element={<TattooerProfile />} path="/tattooer/:id" />
-
+                        <Route path="/notifications" element={<NotificationsPage />} />
                         <Route element={<h1>Not found!</h1>} />
                         
                     </Routes>
@@ -79,5 +85,5 @@ const ContentWrapper = () => {
         </div>
     );
   };
-  
+
   export default injectContext(Layout);
