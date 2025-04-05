@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Post, Profile, Review, Notification
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from api.models import db, User, Post, Profile, Review, Notification, UserType, Category
+from api.models import  User, Post, Profile, Review, Notification, UserType, Category
 
 from datetime import datetime
 import json
@@ -136,7 +136,7 @@ def register():
     if data.get("isTattooer") is True:
         user_type = db.session.query(UserType).filter_by(name='tattooer').first()
     else:
-        user_type = db.session.query(UserType).filter_by(name='usuario').first()
+        user_type = db.session.query(UserType).filter_by(name='user').first()
 
     category = db.session.query(Category).filter_by(name=data.get('categoryName')).first()
 
@@ -517,5 +517,10 @@ def get_top_tattooer():
     result = [profile.serialize() for profile in profiles]
     return jsonify(result), 200
 
-
-"""BUSCADOR"""
+@api.route("/category/<string:category_name>", methods=["GET"])
+def get_category_by_name(category_name):
+    category=db.session.query(Category).filter_by(name=category_name).one_or_none()
+    print(category)
+    if category is None:
+        return jsonify({"msg":"no hay categoria con ese nombre"}),404
+    return jsonify({"category":category.serialize()}),200
