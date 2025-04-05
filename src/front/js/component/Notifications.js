@@ -1,48 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   FaCheckCircle,
-  FaCalendarAlt,
-  FaUserCheck,
+  FaPaintBrush,
+  FaUserEdit,
   FaStar,
   FaBell,
 } from "react-icons/fa";
+import { Context } from "../store/appContext";
+
+const getNotificationIcon = (type) => {
+  const iconStyle = { color: "#ccd5dc", fontSize: "1.5rem", marginRight: "0.75rem" };
+
+  switch (type) {
+    case "solicitud":
+      return <FaPaintBrush style={iconStyle} />;
+    case "actualizacion":
+      return <FaUserEdit style={iconStyle} />;
+    case "valoracion":
+      return <FaStar style={iconStyle} />;
+    default:
+      return <FaBell style={iconStyle} />;
+  }
+};
 
 export const Notifications = () => {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      message: "Tienes una nueva solicitud de tatuaje.",
-      date: "2025-04-04T12:00:00Z",
-      is_read: false,
-      type: "appointment_request",
-    },
-    {
-      id: 2,
-      message: "Tu cita ha sido confirmada.",
-      date: "2025-04-03T15:30:00Z",
-      is_read: true,
-      type: "appointment_confirmed",
-    },
-    {
-      id: 3,
-      message: "Has recibido una nueva valoración.",
-      date: "2025-04-01T10:00:00Z",
-      is_read: false,
-      type: "review_received",
-    },
-    {
-      id: 4,
-      message: "Tu perfil fue actualizado correctamente.",
-      date: "2025-03-30T17:45:00Z",
-      is_read: true,
-      type: "profile_updated",
-    },
-  ]);
+  const { store } = useContext(Context);
+  const [notifications, setNotifications] = useState([]);
 
-  const markAsRead = (id) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
-    );
+  const markAsRead = async (id) => {
+    try {
+      const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications/${id}/read`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${store.token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (resp.ok) {
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
+        );
+      }
+    } catch (error) {
+      console.error("Error al marcar como leída:", error);
+    }
   };
 
   const formatDate = (isoString) => {
@@ -53,37 +54,64 @@ export const Notifications = () => {
     });
   };
 
-  const getIcon = (type) => {
-    switch (type) {
-      case "appointment_request":
-        return <FaCalendarAlt className="text-warning me-2" />;
-      case "appointment_confirmed":
-        return <FaUserCheck className="text-success me-2" />;
-      case "review_received":
-        return <FaStar className="text-info me-2" />;
-      case "profile_updated":
-        return <FaBell className="text-primary me-2" />;
-      default:
-        return <FaBell className="me-2" />;
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications`, {
+          headers: {
+            Authorization: `Bearer ${store.token}`,
+          },
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          setNotifications(data.notifications || data);
+        } else {
+          console.error("Error al obtener notificaciones");
+        }
+      } catch (error) {
+        console.error("Error al conectar al back-end:", error);
+      }
+    };
+
+    if (store.token) {
+      fetchNotifications();
     }
-  };
+  }, [store.token]);
 
   return (
-    <div className="container mt-4">
-      <h2>🔔 Notificaciones</h2>
+    <div
+      className="container mt-4"
+      style={{
+        maxWidth: "600px",
+        margin: "0 auto",
+        backgroundColor: "#f5f4f2", // blanco crema
+        padding: "20px",
+        borderRadius: "20px",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <h2 className="mb-4" style={{ color: "#6c282f" }}>
+        🔔 Notificaciones
+      </h2>
       {notifications.length === 0 ? (
-        <p>No tienes notificaciones.</p>
+        <p style={{ color: "#20292f" }}>No tienes notificaciones.</p>
       ) : (
-        <ul className="list-group mt-3">
+        <ul className="list-group">
           {notifications.map((notification) => (
             <li
               key={notification.id}
-              className={`list-group-item d-flex justify-content-between align-items-center ${
-                notification.is_read ? "text-muted bg-light" : ""
-              }`}
+              className="list-group-item d-flex justify-content-between align-items-center"
+              style={{
+                backgroundColor: notification.is_read ? "#f5f4f2" : "#9a5762",
+                color: notification.is_read ? "#20292f" : "white",
+                border: "none",
+                marginBottom: "10px",
+                borderRadius: "10px",
+                padding: "15px",
+              }}
             >
-              <div className="d-flex align-items-start">
-                {getIcon(notification.type)}
+              <div className="d-flex align-items-center">
+                {getNotificationIcon(notification.type)}
                 <div>
                   <p className="mb-1">{notification.message}</p>
                   <small>{formatDate(notification.date)}</small>
@@ -91,7 +119,7 @@ export const Notifications = () => {
               </div>
               {!notification.is_read && (
                 <button
-                  className="btn btn-sm btn-outline-success"
+                  className="btn btn-sm btn-light"
                   onClick={() => markAsRead(notification.id)}
                 >
                   <FaCheckCircle className="me-1" /> Marcar como leída
