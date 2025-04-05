@@ -140,7 +140,7 @@ def register():
     if data.get("isTattooer") is True:
         user_type = db.session.query(UserType).filter_by(name='tattooer').first()
     else:
-        user_type = db.session.query(UserType).filter_by(name='usuario').first()
+        user_type = db.session.query(UserType).filter_by(name='user').first()
 
     category = db.session.query(Category).filter_by(name=data.get('categoryName')).first()
 
