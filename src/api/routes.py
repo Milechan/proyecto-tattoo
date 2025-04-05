@@ -5,7 +5,10 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Post, Profile, Review, Notification
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from api.models import  User, Post, Profile, Review, Notification, UserType, Category
+from api.models import db, User, Post, Profile, Review, Notification, UserType, Category
+import sendgrid
+from sendgrid.helpers.mail import Mail
+import os
 
 from datetime import datetime
 import json
@@ -517,6 +520,7 @@ def get_top_tattooer():
     result = [profile.serialize() for profile in profiles]
     return jsonify(result), 200
 
+
 @api.route("/category/<string:category_name>", methods=["GET"])
 def get_category_by_name(category_name):
     category=db.session.query(Category).filter_by(name=category_name).one_or_none()
@@ -524,3 +528,29 @@ def get_category_by_name(category_name):
     if category is None:
         return jsonify({"msg":"no hay categoria con ese nombre"}),404
     return jsonify({"category":category.serialize()}),200
+
+
+"""API CORREO"""
+@api.route('/send-email', methods=['POST'])
+def send_email():
+    data = request.get_json()
+    to_email = data.get("to")
+    subject = data.get("subject", "Consulta desde TattooLink")
+    message = data.get("message", "")
+
+    if not to_email or not message:
+        return jsonify({"msg": "Faltan campos requeridos"}), 400
+
+    sg = sendgrid.SendGridAPIClient(api_key=os.getenv("SENDGRID_API_KEY"))
+    email = Mail(
+        from_email="alanjrojas97@gmail.com",
+        to_emails=to_email,
+        subject=subject,
+        plain_text_content=message
+    )
+
+    try:
+        response = sg.send(email)
+        return jsonify({"msg": "Correo enviado", "status": response.status_code}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
