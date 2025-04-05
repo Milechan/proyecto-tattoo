@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, Text
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -55,6 +56,15 @@ class User(db.Model):
     notifications: Mapped[list['Notification']] = relationship('Notification', back_populates='user', foreign_keys='Notification.user_id')
     likes: Mapped[list['Likes']] = relationship('Likes', back_populates='user', cascade="all, delete-orphan")
 
+    #genera un hash para contraseña
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+    
+    #verifica si la contraseña coincide con el hash que se gaurdo
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+
     def serialize(self):
         return {
             "id": self.id,
@@ -69,8 +79,8 @@ class User(db.Model):
             "posts": [post.serialize() for post in self.posts],
             "notifications": [notification.serialize() for notification in self.notifications]
         }
-
-
+    
+    
 class Profile(db.Model):
     __tablename__ = 'profile'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

@@ -121,6 +121,8 @@ def get_post_by_id(post_id):
 
 
 """AUTENTICACIÓN"""
+
+
 @api.route('/register', methods=['POST'])
 def register():
     data = request.json
@@ -147,9 +149,11 @@ def register():
         name=data.get('name'),
         username=data.get('username'),
         user_type_id=user_type.id,
-        category_id=category.id,
+        category_id=category.id if category else None,
         created_at=datetime.utcnow()
     )
+
+    new_user.set_password(data['password'])
     
     db.session.add(new_user)
     db.session.commit()
@@ -168,7 +172,7 @@ def login():
     # Buscar usuario
     user = db.session.query(User).filter_by(email=data['email']).first()
     
-    if not user or not user.check_password(data['password']):  # Falta método check_password
+    if not user or not user.check_password(data['password']):
         return jsonify({"msg": "Email o contraseña incorrectos"}), 401
     
     # Crear token de acceso
@@ -177,7 +181,7 @@ def login():
     return jsonify({
         "success": True,
         "token": access_token,
-        "user": user.serialize()  # Falta un método serialize
+        "user": user.serialize()
     }), 200
 
 
