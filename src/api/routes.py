@@ -9,6 +9,7 @@ from api.models import db, User, Post, Profile, Review, Notification, UserType, 
 import sendgrid
 from sendgrid.helpers.mail import Mail
 import os
+
 from datetime import datetime
 import json
 from flask_jwt_extended import jwt_required , get_jwt_identity, create_access_token
@@ -524,7 +525,14 @@ def get_top_tattooer():
     return jsonify(result), 200
 
 
-"""BUSCADOR"""
+@api.route("/category/<string:category_name>", methods=["GET"])
+def get_category_by_name(category_name):
+    category=db.session.query(Category).filter_by(name=category_name).one_or_none()
+    print(category)
+    if category is None:
+        return jsonify({"msg":"no hay categoria con ese nombre"}),404
+    return jsonify({"category":category.serialize()}),200
+
 
 """API CORREO"""
 @api.route('/send-email', methods=['POST'])
