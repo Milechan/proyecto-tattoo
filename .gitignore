@@ -38,7 +38,6 @@ Thumbs.db
 
 # ignore log files and databases
 *.log
-*.sql
 *.sqlite
 
 # ignore compiled files
@@ -80,3 +79,4 @@ database.database
 database.db
 diagram.png
 __pycache__/
+*.db-journal

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/TattooerProfile.css";
 import banner from "../../img/banner.webp";
 import perfil from "../../img/perfil.webp";
@@ -26,6 +26,8 @@ const TattooerProfile = () => {
       instagram: "@juantattoo"
     }
   });
+
+
 
   const [galleryImages, setGalleryImages] = useState([g1, g2, g3, g4, g5, g6, g7]);
   const [likes, setLikes] = useState(Array(galleryImages.length).fill(false));
@@ -60,7 +62,7 @@ const TattooerProfile = () => {
   const handleBannerChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setNewBanner(URL.createObjectURL(file)); // Vista previa local
+      setNewBanner(URL.createObjectURL(file));
     }
   };
 
@@ -99,6 +101,53 @@ const TattooerProfile = () => {
     }
   };
 
+
+  const [showModal, setShowModal] = useState(false);
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+
+
+  const handleSendEmail = async () => {
+    if (!contactEmail || !contactMessage) {
+      alert("Por favor completa todos los campos.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3001/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: "fidoalanrojas@gmail.com", //Este correo debe venir del perfil del tatuador
+          subject: `Nuevo mensaje de ${contactEmail}`,
+          message: contactMessage
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("¡Mensaje enviado con éxito!");
+        setShowModal(false);
+        setContactEmail("");
+        setContactMessage("");
+      } else {
+        alert(`Error: ${data.msg || data.error}`);
+      }
+    } catch (error) {
+      console.error("Error al enviar el correo:", error);
+      alert("Ocurrió un error al enviar el mensaje.");
+    }
+  };
+
+
+
+  useEffect(() => {
+    if (showModal) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+  }, [showModal]);
 
 
   return (
@@ -193,7 +242,67 @@ const TattooerProfile = () => {
 
 
           <div className="contact-section">
-            <button className="contact-button">Contáctame aquí</button>
+            <button className="contact-button" onClick={() => setShowModal(true)}>
+              Contáctame aquí
+            </button>
+
+            {showModal && (
+              <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
+                <div className="modal-dialog">
+                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <div className="modal-header">
+                      <h5 className="modal-title">Enviar mensaje al tatuador</h5>
+                      <button
+                        type="button"
+                        className="close btn-close"
+                        onClick={() => setShowModal(false)}
+                      ></button>
+                    </div>
+                    <div className="modal-body">
+                      <form>
+                        <div className="mb-3">
+                          <label htmlFor="contactEmail" className="form-label">
+                            Tu correo
+                          </label>
+                          <input
+                            type="email"
+                            className="form-control"
+                            id="contactEmail"
+                            placeholder="tucorreo@correo.com"
+                            value={contactEmail}
+                            onChange={(e) => setContactEmail(e.target.value)}
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="contactMessage" className="form-label">
+                            Tu mensaje
+                          </label>
+                          <textarea
+                            className="form-control"
+                            id="contactMessage"
+                            rows="4"
+                            placeholder="Escribe tu mensaje..."
+                            value={contactMessage}
+                            onChange={(e) => setContactMessage(e.target.value)}
+                          ></textarea>
+                        </div>
+                      </form>
+                    </div>
+                    <div className="modal-footer">
+                      <button className="btn cancel" onClick={() => setShowModal(false)}>
+                        Cancelar
+                      </button>
+                      <button className="btn send" onClick={handleSendEmail}>
+                        Enviar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+
+
             <button className="edit-button" onClick={toggleEdit}>
               {isEditing ? "Guardar Cambios" : "Editar perfil"}
             </button>
@@ -241,24 +350,60 @@ const TattooerProfile = () => {
 
         {modalOpen && (
           <div className="modal-overlay" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <span className="modal-close" onClick={closeModal}>
-                ✖
-              </span>
-              <img
-                src={galleryImages[modalImageIndex]}
-                alt="Imagen ampliada"
-                className="modal-image"
-              />
+            {modalImageIndex > 0 && (
               <button
-                className="like-button modal-like"
-                onClick={() => toggleLike(modalImageIndex)}
+                className="modal-arrow left-arrow"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setModalImageIndex(modalImageIndex - 1);
+                }}
               >
-                {likes[modalImageIndex] ? "❤️" : "🤍"}
+                &#10094;
               </button>
+            )}
+
+            {modalImageIndex < galleryImages.length - 1 && (
+              <button
+                className="modal-arrow right-arrow"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setModalImageIndex(modalImageIndex + 1);
+                }}
+              >
+                &#10095;
+              </button>
+            )}
+            <div className="custom-modal-container" onClick={(e) => e.stopPropagation()}>
+              <div className="row g-0">
+                {/* Columna izquierda: Descripción */}
+                <div className="col-md-5 modal-description-container p-4">
+                  <h5 className="modal-tattooer-name">Juan Tattoo</h5>
+                  <p className="modal-description">Descripción de la imagen o galería que quieras mostrar aquí.</p>
+                  <button
+                    className="like-button modal-like"
+                    onClick={() => toggleLike(modalImageIndex)}
+                  >
+                    {likes[modalImageIndex] ? "❤️" : "🤍"}
+                  </button>
+                </div>
+
+                {/* Columna derecha: Imagen */}
+                <div className="col-md-7 d-flex align-items-center justify-content-center modal-image-wrapper">
+                  <img
+                    src={galleryImages[modalImageIndex]}
+                    alt="Imagen ampliada"
+                    className="modal-image"
+                  />
+                </div>
+              </div>
+
+              <button className="close btn-close position-absolute top-0 end-0 m-3" onClick={closeModal}></button>
+
             </div>
           </div>
         )}
+
+
 
         <div className="extras">
           <div className="location">
