@@ -45,7 +45,7 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     notification_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     user_type_id: Mapped[int] = mapped_column(Integer, ForeignKey('user_type.id'))
-    category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'))
+    category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'), nullable=True)
     created_at: Mapped[DateTime] = mapped_column(DateTime)
 
     category: Mapped['Category'] = relationship('Category', back_populates="users")
@@ -101,10 +101,10 @@ class Profile(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "social_media_insta": self.social_media,
-            "social_media_wsp": self.social_media,
-            "social_media_x": self.social_media,
-            "social_media_facebook": self.social_media,
+            "social_media_insta": self.social_media_insta,
+            "social_media_wsp": self.social_media_wsp,
+            "social_media_x": self.social_media_x,
+            "social_media_facebook": self.social_media_facebook,
             "bio": self.bio,
             "profile_picture": self.profile_picture,
             "ranking": self.ranking
@@ -139,7 +139,7 @@ class Post(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     image: Mapped[str] = mapped_column(String)
     description: Mapped[str] = mapped_column(String)
-    likes: Mapped[int] = mapped_column(Integer, default=0)
+    #likes: Mapped[int] = mapped_column(Integer, default=0)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
     created_at: Mapped[DateTime] = mapped_column(DateTime)
 
@@ -151,7 +151,7 @@ class Post(db.Model):
             "id": self.id,
             "image": self.image,
             "description": self.description,
-            "likes": self.likes,
+            "likes": len(self.likes),
             "user_id": self.user_id,
             "created_at": self.created_at
         }

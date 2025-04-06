@@ -118,7 +118,7 @@ const TattooerProfile = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: "fidoalanrojas@gmail.com", //Este correo debe venir del perfil del tatuador
+          to: "milena.concha.m@gmail.com", //Este correo debe venir del perfil del tatuador
           subject: `Nuevo mensaje de ${contactEmail}`,
           message: contactMessage
         })
