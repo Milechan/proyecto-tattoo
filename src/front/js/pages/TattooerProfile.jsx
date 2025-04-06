@@ -375,7 +375,7 @@ const TattooerProfile = () => {
             )}
             <div className="custom-modal-container" onClick={(e) => e.stopPropagation()}>
               <div className="row g-0">
-                {/* Columna izquierda: Descripción */}
+
                 <div className="col-md-5 modal-description-container p-4">
                   <h5 className="modal-tattooer-name">Juan Tattoo</h5>
                   <p className="modal-description">Descripción de la imagen o galería que quieras mostrar aquí.</p>
@@ -387,7 +387,7 @@ const TattooerProfile = () => {
                   </button>
                 </div>
 
-                {/* Columna derecha: Imagen */}
+
                 <div className="col-md-7 d-flex align-items-center justify-content-center modal-image-wrapper">
                   <img
                     src={galleryImages[modalImageIndex]}
