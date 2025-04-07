@@ -31,7 +31,8 @@
 }
 
 .container-profile {
-    border: 1px solid red;
+    border: 1px solid black;
+    border-radius: 2px solid black;
     width: 250px;
     height: 350px;
     margin-top: 150px;
