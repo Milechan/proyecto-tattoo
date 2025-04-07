@@ -43,7 +43,7 @@ const ContentWrapper = () => {
           <Route element={<LoginForm />} path="/login" />
           <Route element={<RegisterForm />} path="/register" />
           <Route element={<ForgotPasswordForm />} path="/login/forgotpass" />
-          <Route element={<Category />} path="/category/:categoryId" />
+          <Route element={<Category />} path="/category/:categoryName" />
           <Route element={<TattooerProfile />} path="/tattooer/:id" />
           <Route element={<h1>Not found!</h1>} path="*" /> 
         </Routes>

@@ -1,10 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/category.css"
+import { useParams } from "react-router-dom";
 
 
 export const Category = () => {
     const { store, actions } = useContext(Context);
+    const { categoryName } = useParams()
+    useEffect(() => {
+        actions.getCategory(categoryName)
+    }, [])
     const categoryObtained = {
         name: "Geek",
         description: " Un tatuaje geek es un diseño inspirado en la cultura geek, que incluye temas de ciencia, tecnología, videojuegos, dibujos animados, cómics, películas, y más.\n¿Qué es un geek? Geek es un término que se usa para describir a una persona apasionada por la tecnología, la informática, y temas relacionados.Los geeks suelen estar obsesionados con lo más nuevo, lo más cool, y lo más de moda en su tema de interés.",
