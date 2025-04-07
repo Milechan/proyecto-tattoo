@@ -79,3 +79,4 @@ database.database
 database.db
 diagram.png
 __pycache__/
+*.db-journal

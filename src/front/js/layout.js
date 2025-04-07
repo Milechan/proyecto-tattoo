@@ -53,31 +53,17 @@ const ContentWrapper = () => {
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
   
     return (
-        <div>
-            <BrowserRouter>
-                <ScrollToTop>
-                    <Navbar />
-                    <Routes>
-                        <Route element={<Home />} path="/" />
-                        <Route element={<Demo />} path="/demo" />
-                        <Route element={<Single />} path="/single/:theid" />
 
-                        <Route element={<LoginForm />} path="/login"/>
-                        <Route element={<RegisterForm />} path="/register"/>
-                        <Route element={<ForgotPasswordForm />} path="/login/forgotpass"/>
+      <div className="h-100">
+      <BrowserRouter>
+        <ScrollToTop>
+          <ContentWrapper />
+          {/* <Footer /> */}
+        </ScrollToTop>
+      </BrowserRouter>
+    </div>
+  );
+};
 
-                        <Route element={<Category />} path="/category/:categoryId" />
-                        <Route element={<TattooerProfile />} path="/tattooer/:id" />
-
-
-                        <Route element={<h1>Not found!</h1>} />
-                        
-                    </Routes>
-                    {/* <Footer /> */}
-                </ScrollToTop>
-            </BrowserRouter>
-        </div>
-    );
-  };
   
   export default injectContext(Layout);
