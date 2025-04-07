@@ -10,7 +10,6 @@ import { Single } from "./pages/single";
 import LoginForm  from "./pages/LoginForm.jsx";
 import RegisterForm  from "./pages/RegisterForm.jsx";
 import ForgotPasswordForm from "./pages/ForgotPasswordForm.jsx";
-
 import { Category } from "./pages/Category.jsx";
 import TattooerProfile from "./pages/TattooerProfile.jsx";
 import injectContext from "./store/appContext";

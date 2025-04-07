@@ -1,6 +1,6 @@
 .profile-page {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9f9;
+  background-color: white;
   padding-bottom: 30px;
   width: 100%;
   max-width: 1200px;
@@ -16,6 +16,9 @@
   
 }
 
+.btn-close {
+  filter: invert(1); 
+}
 
 .banner {
   width: 100%;
@@ -175,6 +178,36 @@
 
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal-title {
+  color: white;
+  text-shadow: 2px 2px 8px black;
+}
+
+.form-label {
+  color: white;
+  text-shadow: 2px 2px 8px black;
+}
+
+.cancel {
+  background-color: #64272D;
+  color: white;
+  text-shadow: 2px 2px 8px black;
+}
+
+.send {
+  background-color: #64272D;
+  color: white;
+  text-shadow: 2px 2px 8px black;
+}
+
+.send:hover {
+  background-color: #4e1f22;
+  color: white;
+}
 
 .edit-button {
   margin-top: 10px;
@@ -189,8 +222,9 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.edit-button:hover {
+.edit-button, .cancel:hover {
   background-color: #4e1f22;
+  color: white;
 }
 
 
@@ -256,7 +290,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.85); /* Oscurece el fondo */
+  background-color: rgba(0, 0, 0, 0.5); /* Oscurece el fondo */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -302,6 +336,73 @@
   cursor: pointer;
   color: white;
 }
+
+.custom-modal-container {
+  max-width: 900px;
+  width: 90%;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-description-container {
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.modal-tattooer-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.modal-description {
+  font-size: 16px;
+  color: #333;
+}
+
+.modal-image-wrapper {
+  background-color: #000;
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+.modal-arrow {
+  position: fixed; /* CAMBIADO: ahora es fijo en toda la pantalla */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2.5rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #000;
+  border: none;
+  padding: 0 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1100; /* encima del modal */
+  transition: background-color 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-arrow:hover {
+  background-color: white;
+}
+
+.left-arrow {
+  left: 20px;
+}
+
+.right-arrow {
+  right: 20px;
+}
+
 
 .extras {
   display: flex;

@@ -6,6 +6,9 @@ from api.models import db, User, Post, Profile, Review, Notification
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from api.models import db, User, Post, Profile, Review, Notification, UserType, Category
+import sendgrid
+from sendgrid.helpers.mail import Mail
+import os
 
 from datetime import datetime
 import json
@@ -44,7 +47,6 @@ def create_post():
         new_post = Post(
             image=data['image'],
             description=data['description'],
-            likes=0,
             user_id=current_user,
             created_at=datetime.utcnow()
         )
@@ -54,6 +56,7 @@ def create_post():
 
     except Exception as e:
         db.session.rollback()
+        print(e)
         return jsonify({"error": str(e)}), 500
 
 
@@ -121,6 +124,8 @@ def get_post_by_id(post_id):
 
 
 """AUTENTICACIÓN"""
+
+
 @api.route('/register', methods=['POST'])
 def register():
     data = request.json
@@ -136,9 +141,11 @@ def register():
     if data.get("isTattooer") is True:
         user_type = db.session.query(UserType).filter_by(name='tattooer').first()
     else:
-        user_type = db.session.query(UserType).filter_by(name='usuario').first()
-
-    category = db.session.query(Category).filter_by(name=data.get('categoryName')).first()
+        user_type = db.session.query(UserType).filter_by(name='user').first()
+    if data.get("categoryName") is not None: 
+        category = db.session.query(Category).filter_by(name=data.get('categoryName')).first()
+    else:
+        category = None
 
     # Crear nuevo usuario
     new_user = User(
@@ -147,9 +154,11 @@ def register():
         name=data.get('name'),
         username=data.get('username'),
         user_type_id=user_type.id,
-        category_id=category.id,
+        category_id=category.id if category is not None else None,
         created_at=datetime.utcnow()
     )
+
+    new_user.set_password(data['password'])
     
     db.session.add(new_user)
     db.session.commit()
@@ -168,16 +177,16 @@ def login():
     # Buscar usuario
     user = db.session.query(User).filter_by(email=data['email']).first()
     
-    if not user or not user.check_password(data['password']):  # Falta método check_password
+    if not user or not user.check_password(data['password']):
         return jsonify({"msg": "Email o contraseña incorrectos"}), 401
     
     # Crear token de acceso
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=str(user.id), expires_delta= False)
     
     return jsonify({
         "success": True,
         "token": access_token,
-        "user": user.serialize()  # Falta un método serialize
+        "user": user.serialize()
     }), 200
 
 
@@ -186,11 +195,11 @@ def login():
 @jwt_required()
 def get_current_user():
     current_user_id = get_jwt_identity()
-    user = db.session.query(User).get(current_user_id)
+    user = db.session.query(User).filter_by(id= current_user_id).one_or_none()
     
     if not user:
         return jsonify({"msg": "Usuario no encontrado"}), 404
-    
+    print(user.serialize())
     return jsonify({"success": True, "user": user.serialize()}), 200
 
 
@@ -290,10 +299,12 @@ def create_tattooer_profile():
         return jsonify({"msg":"no se encuentra el usuario con ese id"}),404
     if "category_name" not in data:
         return jsonify({"msg":"el campo category_name es obligatorio"}),400
-    category= db.session.query(category).filter_by(name=data["category_name"]).one_or_none()
+    category= db.session.query(Category).filter_by(name=data["category_name"]).one_or_none()
     if category is None:
         return jsonify({"msg":"no se encuentra la categoria con ese nombre"}),404
-    
+    user_type= db.session.query(UserType).filter_by(id = user.user_type_id).one_or_none()
+    if user_type.name == "user":
+        return jsonify({"msg":"Solo puede crear perfil un tatuador"}),402
     
 
     # Crear perfil asociado
@@ -394,8 +405,9 @@ def get_review_by_tattooer(tattooer_id):
 @jwt_required()
 def create_review():
     #obtengo datos del body
+    current_user = get_jwt_identity()
     data=request.json #del request(peticion) obtengo el json que me mandan del body
-    user= db.session.query(User).filter_by(id=data['user_id']).one_or_none() #en la db se consulta(query)en la tabla user,filtramos por el id con el parametro 'user_id' que viene del body.nos obtiene uno o ninguno
+    user= db.session.query(User).filter_by(id=current_user).one_or_none() #en la db se consulta(query)en la tabla user,filtramos por el id con el parametro 'user_id' que viene del body.nos obtiene uno o ninguno
     if user is None :
         return jsonify({'msg': f"no se encontro un usuario con el user_id {data['user_id']}"}), 404
     tattooer= db.session.query(User).filter_by(id=data['tattooer_id']).one_or_none()
@@ -406,8 +418,9 @@ def create_review():
     new_review=Review(
         description=data['description'],
         rating=data['rating'],
-        user_id = data['user_id'],
-        tattooer_id=data['tattooer_id']
+        user_id = current_user,
+        tattooer_id=data['tattooer_id'],
+        created_at =datetime.now()
     )
     #asignar los datos del body a la instacia recien creada
     #new_review.description=data['description']
@@ -418,7 +431,7 @@ def create_review():
     db.session.add(new_review)
     db.session.commit()
     #devuelvo un codigo 201 con el review creado
-    return jsonify(new_review),201
+    return jsonify(new_review.serialize()),201
     
 
 """NOTIFICACIONES"""
@@ -518,4 +531,35 @@ def get_top_tattooer():
     return jsonify(result), 200
 
 
-"""BUSCADOR"""
+@api.route("/category/<string:category_name>", methods=["GET"])
+def get_category_by_name(category_name):
+    category=db.session.query(Category).filter_by(name=category_name).one_or_none()
+    print(category)
+    if category is None:
+        return jsonify({"msg":"no hay categoria con ese nombre"}),404
+    return jsonify({"category":category.serialize()}),200
+
+
+"""API CORREO"""
+@api.route('/send-email', methods=['POST'])
+def send_email():
+    try:
+        data = request.get_json()
+        to_email = data.get("to")
+        subject = data.get("subject", "Consulta desde TattooLink")
+        message = data.get("message", "")
+
+        if not to_email or not message:
+            return jsonify({"msg": "Faltan campos requeridos"}), 400
+
+        sg = sendgrid.SendGridAPIClient(api_key=os.getenv("SENDGRID_API_KEY"))
+        email = Mail(
+            from_email="alanjrojas97@gmail.com",
+            to_emails=to_email,
+            subject=subject,
+            plain_text_content=message
+        )
+        response = sg.send(email)
+        return jsonify({"msg": "Correo enviado", "status": response.status_code}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
