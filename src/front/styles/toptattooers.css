@@ -1,0 +1,43 @@
+.top-tattooers-container {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .top-tattooers-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .carousel-image {
+    height: 250px;
+    object-fit: cover;
+    cursor: pointer;
+  }
+  
+  .modal-img-container {
+    padding-bottom: 20px; 
+  }
+  
+  .modal-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 20px; 
+  }
+  
+  .modal-dialog {
+    max-width: 80%;
+    width: 90%;
+  }
+  
+  .modal-content {
+    padding-bottom: 20px; 
+  }
+  
+  .tattoo-carousel-container {
+    margin-bottom: 30px;
+  }
+  
+  .carousel-inner {
+    padding-bottom: 20px;
+  }
+  

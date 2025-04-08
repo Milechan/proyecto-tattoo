@@ -1,13 +1,65 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   const [isTattooer, setIsTattooer] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    username: '',
+    email: '',
+    password: '',
+    categoryName: null,
+    social_media_insta: ""
+  });
+
+  const navigate = useNavigate()
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const userData = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      isTattooer: isTattooer,  // aqui se diferencia el 1 o el 2 de las tablas
+      categoryName: isTattooer ? formData.categoryName : null
+    };
+
+    try {
+      const response = await fetch('http://localhost:3001/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Registro exitoso! Por favor inicia sesión");
+        navigate("/login");
+      } else {
+        alert(data.msg || "Error al registrar");
+      }
+    } catch (error) {
+      alert("Error de conexión");
+    }
+  };
+
+
+
 
   // Paleta de colores
   const styles = {
-    mainBg: { 
-      backgroundColor: '#f8f9fa', 
+    mainBg: {
+      backgroundColor: '#f8f9fa',
       minHeight: '100vh',
       padding: '2rem 0'
     },
@@ -71,87 +123,112 @@ const RegisterForm = () => {
             <Card.Body className="p-4 p-md-5">
               <Form>
                 <h4 style={styles.title}>Crea tu cuenta</h4>
-                
+
                 <Row>
                   <Col md={6} className="mb-3">
-                    <Form.Control 
-                      placeholder="Nombre" 
+                    <Form.Control
+                      name="name"
+                      placeholder="Nombre Completo"
                       style={styles.input}
-                      required 
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
                     />
                   </Col>
                   <Col md={6} className="mb-3">
-                    <Form.Control 
-                      placeholder="Apellido" 
+                    <Form.Control
+                      name="username"
+                      placeholder="Nombre de usuario"
                       style={styles.input}
-                      required 
+                      required
+                      value={formData.username}
+                      onChange={handleChange}
                     />
                   </Col>
                 </Row>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Fecha de nacimiento</Form.Label>
-                  <Form.Control 
-                    type="date" 
+                  <Form.Control
+                    name="created_at"
+                    type="date"
                     style={styles.input}
-                    required 
+                    required
+                    value={formData.created_at}
+                    onChange={handleChange}
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Control 
-                    type="email" 
-                    placeholder="Correo electrónico" 
+                  <Form.Control
+                    name="email"
+                    type="email"
+                    placeholder="Correo electrónico"
                     style={styles.input}
-                    required 
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Control 
-                    type="password" 
-                    placeholder="Contraseña" 
+                  <Form.Control
+                    name="password"
+                    type="password"
+                    placeholder="Contraseña"
                     style={styles.input}
-                    required 
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    minLength="6"
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Control 
-                    type="text" 
-                    placeholder="Instagram (opcional)" 
+                  <Form.Control
+                    name="social_media_insta"
+                    type="text"
+                    placeholder="Instagram (opcional)"
                     style={styles.input}
+                    value={formData.social_media_insta}
+                    onChange={handleChange}
                   />
                 </Form.Group>
 
-                <Form.Check 
+                <Form.Check
                   type="checkbox"
                   id="tattooer-check"
                   label="Soy tatuador"
                   className="mb-3"
-                  
+                  checked={isTattooer}
+                  onChange={(e) => setIsTattooer(e.target.checked)}
 
                 >
-                  <Form.Check.Input type="checkbox" onClick={(e) => {console.log("Click en soy tatuador"); setIsTattooer(true)}}/>
+                  <Form.Check.Input type="checkbox" onClick={(e) => { console.log("Click en soy tatuador"); setIsTattooer(true) }} />
                   <Form.Check.Label style={styles.checkboxLabel}>
                     Soy tatuador
                   </Form.Check.Label>
                 </Form.Check>
 
                 {isTattooer && (
-                  <Form.Group className="mb-3">
-                    <Form.Select style={styles.select}
-                    onChange={(e) => console.log(e.target.value)}>
-                      <option>Selecciona tu categoría</option>
-                      <option>Minimalism</option>
-                      <option>FullColor</option>
-                      <option>Realismo</option>
-                      <option>Tradicional</option>
+                  <Form.Group>
+                    <Form.Select
+                      name="categoryName"
+                      value={formData.categoryName}
+                      onChange={handleChange}
+                      style={styles.input}
+                      required={isTattooer}
+                    >
+                      <option value="">Selecciona tu especialidad</option>
+                      <option value="Minimalism">Minimalismo</option>
+                      <option value="FullColor">Color</option>
+                      <option value="Realismo">Realismo</option>
+                      <option value="Tradicional">Tradicional</option>
                     </Form.Select>
                   </Form.Group>
                 )}
 
-                <Form.Check 
+                <Form.Check
                   type="checkbox"
                   id="terms-check"
                   className="mb-4"
@@ -163,8 +240,8 @@ const RegisterForm = () => {
                   </Form.Check.Label>
                 </Form.Check>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   style={styles.button}
                   className="text-white"
                 >
