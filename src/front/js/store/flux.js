@@ -1,7 +1,27 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			category:{
+				description:"",
+				id:"",
+				image:"",
+				name:""
+			},
 			message: null,
+			user: {
+			id: "",
+            name: "",
+            username: "",
+            email: "",
+            notification_enabled: false,
+            user_type: {},
+            created_at: "",
+            profile: {},
+            reviews: [],
+            posts: [],
+            notifications: [],
+
+			},
 			demo: [
 				{
 					title: "FIRST",
@@ -13,9 +33,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
+				
 			]
 		},
 		actions: {
+			getCategory:async(categoryName)=>{
+				try {
+					const request=await fetch(process.env.BACKEND_URL+"/api/category/"+categoryName,{method:"GET"})
+					const data = await request.json()
+					setStore({category:data.category})
+					return data
+
+				} catch (error) {
+					console.error("hubo un error al obtener esta categoria")
+					console.error(error)
+				}
+			},
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
@@ -30,7 +63,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// don't forget to return something, that is how the async resolves
 					return data;
 				}catch(error){
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 			changeColor: (index, color) => {
@@ -46,6 +79,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			changeUser: (user) => {
+				setStore({user})
 			}
 		}
 	};

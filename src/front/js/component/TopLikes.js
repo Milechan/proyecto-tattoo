@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import { FaHeart } from "react-icons/fa"; // Ícono de corazón
-import tatuaje3 from "../../img/tatuaje3.png"; // Imagen 1
-import tatuaje4 from "../../img/tatuaje4.png"; // Imagen 2
-import tatuaje5 from "../../img/tatuaje5.jpg"; // Imagen 3
+import { FaHeart } from "react-icons/fa"; 
+import tatuaje3 from "../../img/tatuaje3.png";
+import tatuaje4 from "../../img/tatuaje4.png";
+import tatuaje5 from "../../img/tatuaje5.jpg";
 
 export const TopLikes = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [likesState, setLikesState] = useState({
-    1: { liked: false, likes: 1760 },  // Imagen 1 con 1760 likes iniciales
-    2: { liked: false, likes: 3500 },  // Imagen 2 con 3500 likes iniciales
-    3: { liked: false, likes: 4323 },  // Imagen 3 con 4323 likes iniciales
+    1: { liked: false, likes: 1760 },  
+    2: { liked: false, likes: 3500 },  
+    3: { liked: false, likes: 4323 },  
   });
 
-  // Array de imágenes para cada card
   const images = [tatuaje3, tatuaje4, tatuaje5];
 
   const handleImageClick = (index) => {
@@ -39,14 +38,14 @@ export const TopLikes = () => {
           {[1, 2, 3].map((index) => (
             <div key={index} className="card" style={{ width: "18rem" }}>
               <img
-                src={images[index - 1]} // Asignamos la imagen correspondiente
+                src={images[index - 1]} 
                 className="card-img-top"
                 alt={`Tatuaje ${index}`}
                 onClick={() => handleImageClick(index)}
                 style={{ cursor: "pointer" }}
               />
               <div className="card-body">
-                <p className="card-text">Descripción del tatuaje #{index}</p>
+                <p className="card-text text-white">Descripción del tatuaje #{index}</p>
                 <button
                   className={`btn ${likesState[index]?.liked ? "btn-danger" : "btn-outline-danger"}`}
                   onClick={() => toggleLike(index)}
@@ -76,13 +75,13 @@ export const TopLikes = () => {
               ></button>
 
               <div className="modal-header">
-                <h5 className="modal-title">Detalle del Tatuaje</h5>
+                <h5 className="modal-title text-white">Detalle del Tatuaje</h5>
               </div>
 
               <div className="modal-body d-flex">
                 <img src={images[selectedImage - 1]} alt={`Tatuaje ${selectedImage}`} className="img-fluid w-50" />
                 <div className="ms-3">
-                  <p>
+                  <p className="text-white">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum.
                   </p>
                   <button
