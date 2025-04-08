@@ -4,7 +4,6 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import { Home } from "./pages/home";
-import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 
 import LoginForm  from "./pages/LoginForm.jsx";
@@ -40,7 +39,6 @@ const ContentWrapper = () => {
         {shouldShowNavbar && <Navbar />}
         <Routes>
           <Route element={<Home />} path="/" />
-          <Route element={<Demo />} path="/demo" />
           <Route element={<Single />} path="/single/:theid" />
           <Route element={<LoginForm />} path="/login" />
           <Route element={<RegisterForm />} path="/register" />
@@ -62,6 +60,7 @@ const ContentWrapper = () => {
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
   
     return (
+<<<<<<< HEAD
         <div>
             <BrowserRouter>
                 <ScrollToTop>
@@ -88,5 +87,17 @@ const ContentWrapper = () => {
         </div>
     );
   };
+=======
+      <div className="h-100">
+      <BrowserRouter>
+        <ScrollToTop>
+          <ContentWrapper />
+          {/* <Footer /> */}
+        </ScrollToTop>
+      </BrowserRouter>
+    </div>
+  );
+};
+>>>>>>> 57ffb4effeffae095a16042a4496f96e284b9f97
 
   export default injectContext(Layout);
