@@ -398,7 +398,8 @@ def get_review_by_tattooer(tattooer_id):
     if tattooer is None :
         return jsonify({'msg':f'no se encontro un usuario con el user_id {tattooer_id}'}),404
     reviews = db.session.query(Review).filter_by(tattooer_id=tattooer_id).all() 
-    return jsonify(reviews),200
+    review_list = [review.serialize() for review in reviews]
+    return jsonify(review_list),200
 
 #para que un usuario cree una  review a un tatuador
 @api.route('/review',methods=['POST'])
@@ -414,6 +415,8 @@ def create_review():
     if tattooer is None:
         return jsonify({"msg": f"no se encontró un usuario con el tattooer_id {data['tattooer_id']}"}), 404
     
+    if user.user_type.name.lower() == 'tattoer':
+        return jsonify({"msg":"Los tatuadores no pueden crear reviews"}),403
     #creo nueva instacia del review
     new_review=Review(
         description=data['description'],
@@ -422,11 +425,7 @@ def create_review():
         tattooer_id=data['tattooer_id'],
         created_at =datetime.now()
     )
-    #asignar los datos del body a la instacia recien creada
-    #new_review.description=data['description']
-    #new_review.rating=data['rating']
-    #new_review.user_id= user.id
-    #new_review.tattooer_id=tattooer.id
+
     #guardar la instancia modificada en la base de datos
     db.session.add(new_review)
     db.session.commit()

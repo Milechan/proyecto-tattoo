@@ -46,7 +46,7 @@ export const TopLikes = () => {
                 style={{ cursor: "pointer" }}
               />
               <div className="card-body">
-                <p className="card-text">Descripción del tatuaje #{index}</p>
+                <p className="card-text text-white">Descripción del tatuaje #{index}</p>
                 <button
                   className={`btn ${likesState[index]?.liked ? "btn-danger" : "btn-outline-danger"}`}
                   onClick={() => toggleLike(index)}
@@ -76,13 +76,13 @@ export const TopLikes = () => {
               ></button>
 
               <div className="modal-header">
-                <h5 className="modal-title">Detalle del Tatuaje</h5>
+                <h5 className="modal-title text-white">Detalle del Tatuaje</h5>
               </div>
 
               <div className="modal-body d-flex">
                 <img src={images[selectedImage - 1]} alt={`Tatuaje ${selectedImage}`} className="img-fluid w-50" />
                 <div className="ms-3">
-                  <p>
+                  <p className="text-white">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum.
                   </p>
                   <button
