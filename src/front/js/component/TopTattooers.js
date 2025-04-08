@@ -24,7 +24,7 @@ export const TopTattooers = () => {
         data-bs-ride="carousel"
         style={{
           maxWidth: "700px",
-          height: "500px", /* Aquí se añade la altura */
+          height: "500px",
         }}
       >
         <div className="carousel-inner" style={{ height: "100%" }}>
@@ -34,7 +34,7 @@ export const TopTattooers = () => {
               className="d-block w-100 carousel-image"
               alt="Tatuaje g2"
               onClick={() => handleImageClick(g2)}
-              style={{ height: "100%", objectFit: "cover" }} /* Asegura que la imagen cubra el contenedor */
+              style={{ height: "100%", objectFit: "cover" }} 
             />
           </div>
           <div className="carousel-item" style={{ height: "100%" }}>
