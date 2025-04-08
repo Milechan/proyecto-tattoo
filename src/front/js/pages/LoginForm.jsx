@@ -1,23 +1,32 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Context } from '../store/appContext';
+import { useNavigate } from "react-router-dom";
+
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const { actions } = useContext(Context)
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://tu-backend-flask/login', {
+      const response = await fetch('http://localhost:3001/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.mensaje);
+      if (!response.ok) {
+        throw new Error(data.msg || 'Error al iniciar sesión')
+        navigate("/RegisterForm");
+      }
       localStorage.setItem('token', data.token);
-      window.location.href = '/';
+
+      actions.changeUser(data.user);
+
     } catch (error) {
       alert(error.message);
     }

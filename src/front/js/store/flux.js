@@ -2,6 +2,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			user: {
+			id: "",
+            name: "",
+            username: "",
+            email: "",
+            notification_enabled: false,
+            user_type: {},
+            created_at: "",
+            profile: {},
+            reviews: [],
+            posts: [],
+            notifications: [],
+
+			},
 			demo: [
 				{
 					title: "FIRST",
@@ -13,6 +27,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
+				
 			]
 		},
 		actions: {
@@ -46,6 +61,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			changeUser: (user) => {
+				setStore({user})
 			}
 		}
 	};
