@@ -45,6 +45,7 @@ const ContentWrapper = () => {
           <Route element={<ForgotPasswordForm />} path="/login/forgotpass" />
           <Route element={<Category />} path="/category/:categoryName" />
           <Route element={<TattooerProfile />} path="/tattooer/:id" />
+          <Route element={ <Notifications /> } path="/notifications"/>
           <Route element={<h1>Not found!</h1>} path="*" /> 
           <Route path="/about" element={<AboutUs />} />
         </Routes>
@@ -60,34 +61,6 @@ const ContentWrapper = () => {
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
   
     return (
-<<<<<<< HEAD
-        <div>
-            <BrowserRouter>
-                <ScrollToTop>
-                    <Navbar />
-                    <Routes>
-                        <Route element={<Home />} path="/" />
-                        <Route element={<Demo />} path="/demo" />
-                        <Route element={<Single />} path="/single/:theid" />
-
-                        <Route element={<LoginForm />} path="/login"/>
-                        <Route element={<RegisterForm />} path="/register"/>
-                        <Route element={<ForgotPasswordForm />} path="/login/forgotpass"/>
-
-                        <Route element={<Category />} path="/category/:categoryId" />
-                        <Route element={<TattooerProfile />} path="/tattooer/:id" />
-                        <Route path="/notifications" element={<NotificationsPage />} />
-                        <Route element={<h1>Not found!</h1>} />
-                        <Route path="/about" element={<AboutUs />} />
-                        
-                    </Routes>
-                    {/* <Footer /> */}
-                </ScrollToTop>
-            </BrowserRouter>
-        </div>
-    );
-  };
-=======
       <div className="h-100">
       <BrowserRouter>
         <ScrollToTop>
@@ -98,6 +71,5 @@ const ContentWrapper = () => {
     </div>
   );
 };
->>>>>>> 57ffb4effeffae095a16042a4496f96e284b9f97
 
   export default injectContext(Layout);
