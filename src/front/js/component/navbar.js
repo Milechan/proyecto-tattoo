@@ -35,10 +35,10 @@ export const Navbar = () => {
         <button className="close-btn" onClick={toggleMenu}>×</button>
         <ul className="menu-list">
           <li><Link to="/perfil" onClick={toggleMenu}>Perfil</Link></li>
-          <li><Link to="/notificaciones" onClick={toggleMenu}>Notificaciones</Link></li>
+          <li><Link to="/notifications" onClick={toggleMenu}>Notificaciones</Link></li>
           <li><Link to="/categorias" onClick={toggleMenu}>Categorías</Link></li>
           <li><Link to="/configuracion" onClick={toggleMenu}>Configuración</Link></li>
-          <li><Link to="/quienes-somos" onClick={toggleMenu}>Quiénes Somos</Link></li>
+          <li><Link to="/about" onClick={toggleMenu}>Quiénes Somos</Link></li>
           <li><Link to="/logout" onClick={toggleMenu}>Cerrar Sesión</Link></li>
         </ul>
       </div>
