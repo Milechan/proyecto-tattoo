@@ -3,23 +3,54 @@ import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const ForgotPasswordForm = () => {
-  // Paleta de colores (consistente con LoginForm)
+
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:3001/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: email,
+          subject: "Recuperación de contraseña",
+          message: "Haz clic en este enlace para restablecer tu contraseña"
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.msg || 'Error al enviar el correo');
+      }
+
+      alert('Se ha enviado un correo con instrucciones para restablecer tu contraseña');
+
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+
+  // Paleta de colores 
   const styles = {
     mainBg: { backgroundColor: '#f8f9fa', minHeight: '100vh' },
-    card: { 
-      border: 'none', 
+    card: {
+      border: 'none',
       borderRadius: '15px',
       boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
       maxWidth: '450px'
     },
-    header: { 
+    header: {
       backgroundColor: '#5c2d42', // Vinotinto oscuro
       color: 'white',
       borderTopLeftRadius: '15px',
       borderTopRightRadius: '15px',
       padding: '1.5rem'
     },
-    input: { 
+    input: {
       borderRadius: '10px',
       border: '1px solid #dee2e6',
       padding: '12px 15px',
@@ -56,19 +87,21 @@ const ForgotPasswordForm = () => {
               <h3>Recuperemos tu cuenta</h3>
             </Card.Header>
             <Card.Body className="p-4">
-              <Form>
+              <Form onSubmit={handleSubmit}>
                 <Form.Group>
-                  <Form.Control 
-                    type="email" 
-                    placeholder="Correo electrónico" 
+                  <Form.Control
+                    type="email"
+                    placeholder="Correo electrónico"
                     style={styles.input}
-                    required 
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Form.Group>
 
                 <div className="d-grid">
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     style={styles.button}
                     className="text-white mb-3"
                   >
@@ -76,8 +109,8 @@ const ForgotPasswordForm = () => {
                   </Button>
                 </div>
 
-                <Link 
-                  to="/login" 
+                <Link
+                  to="/login"
                   style={styles.link}
                   className="text-center"
                 >
