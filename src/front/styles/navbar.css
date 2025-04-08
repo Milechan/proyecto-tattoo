@@ -13,3 +13,69 @@
     cursor: pointer;
     margin-top: 5px;
   }
+
+.img-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: none;
+  }
+  
+  .profile-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  
+
+  .slide-menu {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background-color: #f8f9fa;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+    padding: 2rem 1.5rem;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .slide-menu.open {
+    right: 0;
+  }
+  
+  .close-btn {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+  
+  .menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-list li {
+    margin: 1rem 0;
+  }
+  
+  .menu-list a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+  }
+  
+  .menu-list a:hover {
+    color: #007bff;
+  }
+  

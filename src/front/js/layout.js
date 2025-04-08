@@ -4,7 +4,6 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import { Home } from "./pages/home";
-import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 
 import LoginForm  from "./pages/LoginForm.jsx";
@@ -38,7 +37,6 @@ const ContentWrapper = () => {
         {shouldShowNavbar && <Navbar />}
         <Routes>
           <Route element={<Home />} path="/" />
-          <Route element={<Demo />} path="/demo" />
           <Route element={<Single />} path="/single/:theid" />
           <Route element={<LoginForm />} path="/login" />
           <Route element={<RegisterForm />} path="/register" />
