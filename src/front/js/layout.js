@@ -60,7 +60,6 @@ const ContentWrapper = () => {
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
   
     return (
-<<<<<<< HEAD
         <div>
             <BrowserRouter>
                 <ScrollToTop>
@@ -87,7 +86,6 @@ const ContentWrapper = () => {
         </div>
     );
   };
-=======
       <div className="h-100">
       <BrowserRouter>
         <ScrollToTop>
@@ -96,8 +94,6 @@ const ContentWrapper = () => {
         </ScrollToTop>
       </BrowserRouter>
     </div>
-  );
-};
->>>>>>> 57ffb4effeffae095a16042a4496f96e284b9f97
+  
 
   export default injectContext(Layout);
