@@ -11,7 +11,6 @@ export const Categories = () => {
                     <button type="button" className="btn burdeo mx-4">Minimalista</button>
                     <button type="button" className="btn burdeo mx-4">Black-Out</button>
                     <button type="button" className="btn burdeo mx-4">Realismo</button>
-                    <button type="button" className="btn burdeo mx-4">Full-Color</button>
                 </div>
 
 			</div>
