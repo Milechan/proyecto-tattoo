@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaHeart } from "react-icons/fa"; 
+import { FaHeart } from "react-icons/fa";
 import tatuaje3 from "../../img/tatuaje3.png";
 import tatuaje4 from "../../img/tatuaje4.png";
 import tatuaje5 from "../../img/tatuaje5.jpg";
@@ -8,9 +8,9 @@ export const TopLikes = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [likesState, setLikesState] = useState({
-    1: { liked: false, likes: 1760 },  
-    2: { liked: false, likes: 3500 },  
-    3: { liked: false, likes: 4323 },  
+    1: { liked: false, likes: 1760 },
+    2: { liked: false, likes: 3500 },
+    3: { liked: false, likes: 4323 },
   });
 
   const images = [tatuaje3, tatuaje4, tatuaje5];
@@ -38,7 +38,7 @@ export const TopLikes = () => {
           {[1, 2, 3].map((index) => (
             <div key={index} className="card" style={{ width: "18rem" }}>
               <img
-                src={images[index - 1]} 
+                src={images[index - 1]}
                 className="card-img-top"
                 alt={`Tatuaje ${index}`}
                 onClick={() => handleImageClick(index)}
@@ -59,7 +59,11 @@ export const TopLikes = () => {
       </div>
 
       {showModal && (
-        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
           <div className="modal-dialog modal-lg">
             <div className="modal-content position-relative">
               <button
@@ -79,13 +83,18 @@ export const TopLikes = () => {
               </div>
 
               <div className="modal-body d-flex">
-                <img src={images[selectedImage - 1]} alt={`Tatuaje ${selectedImage}`} className="img-fluid w-50" />
+                <img
+                  src={images[selectedImage - 1]}
+                  alt={`Tatuaje ${selectedImage}`}
+                  className="img-fluid w-100"
+                  style={{ maxHeight: "70vh", objectFit: "contain" }}
+                />
                 <div className="ms-3">
                   <p className="text-white">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum.
                   </p>
                   <button
-                    className={`btn ${likesState[selectedImage]?.liked ? "btn-danger" : "btn-outline-danger"}`}
+                    className={`btn ${likesState[selectedImage]?.liked ? "btn-danger" : "btn-outline-danger"} mt-3`}
                     onClick={() => toggleLike(selectedImage)}
                   >
                     <FaHeart /> {likesState[selectedImage]?.likes || 0}
