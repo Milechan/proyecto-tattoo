@@ -15,7 +15,7 @@ import injectContext from "./store/appContext";
 
 
 import { Navbar } from "./component/navbar";
-import { Footer } from "./component/footer";
+import Footer from './component/Footer';
 import { Notifications } from "./component/Notifications.js";
 import AboutUs from "./pages/AboutUs.js";
 
@@ -61,15 +61,32 @@ const ContentWrapper = () => {
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
   
     return (
-      <div className="h-100">
-      <BrowserRouter>
-        <ScrollToTop>
-          <ContentWrapper />
-          {/* <Footer /> */}
-        </ScrollToTop>
-      </BrowserRouter>
-    </div>
-  );
-};
+      <div className="d-flex flex-column min-vh-100">
+        <BrowserRouter>
+          <ScrollToTop>
+            <Navbar />
+    
+            <div className="flex-grow-1">
+              <Routes>
+                <Route element={<Home />} path="/" />
+                <Route element={<Single />} path="/single/:theid" />
+                <Route element={<LoginForm />} path="/login" />
+                <Route element={<RegisterForm />} path="/register" />
+                <Route element={<ForgotPasswordForm />} path="/login/forgotpass" />
+                <Route element={<Category />} path="/category/:categoryId" />
+                <Route element={<TattooerProfile />} path="/tattooer/:id" />
+                <Route path="/notifications" element={<NotificationsPage />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route element={<h1>Not found!</h1>} path="*" />
+              </Routes>
+            </div>
+    
+            <Footer />
+          </ScrollToTop>
+        </BrowserRouter>
+      </div>
+    );
+  }
+
 
   export default injectContext(Layout);

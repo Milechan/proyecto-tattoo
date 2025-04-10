@@ -553,7 +553,7 @@ def send_email():
 
         sg = sendgrid.SendGridAPIClient(api_key=os.getenv("SENDGRID_API_KEY"))
         email = Mail(
-            from_email="alanjrojas97@gmail.com",
+            from_email="matchtattoocontacto@gmail.com",
             to_emails=to_email,
             subject=subject,
             plain_text_content=message

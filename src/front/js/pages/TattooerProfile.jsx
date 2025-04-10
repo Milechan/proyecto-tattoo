@@ -9,6 +9,7 @@ import g4 from "../../img/g4.webp";
 import g5 from "../../img/g5.webp";
 import g6 from "../../img/g6.webp";
 import g7 from "../../img/g7.webp";
+import { FiEdit2 } from "react-icons/fi";
 
 
 const TattooerProfile = () => {
@@ -118,7 +119,7 @@ const TattooerProfile = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: "milena.concha.m@gmail.com", //Este correo debe venir del perfil del tatuador
+          to: "milena.concha.m@gmail.com",
           subject: `Nuevo mensaje de ${contactEmail}`,
           message: contactMessage
         })
@@ -148,6 +149,11 @@ const TattooerProfile = () => {
       document.body.classList.remove("modal-open");
     }
   }, [showModal]);
+
+
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [editedDescription, setEditedDescription] = useState("Descripción de la imagen o galería que quieras mostrar aquí."); // valor inicial
+  const isTattooer = true; //temporal hasta que se conecte con back
 
 
   return (
@@ -378,7 +384,25 @@ const TattooerProfile = () => {
 
                 <div className="col-md-5 modal-description-container p-4">
                   <h5 className="modal-tattooer-name">Juan Tattoo</h5>
-                  <p className="modal-description">Descripción de la imagen o galería que quieras mostrar aquí.</p>
+                  {isEditingDescription ? (
+                    <div className="description-editor">
+                      <textarea
+                        className="edit-textarea"
+                        value={editedDescription}
+                        onChange={(e) => setEditedDescription(e.target.value)}
+                      />
+                      <button
+                        className="save-description"
+                        onClick={() => setIsEditingDescription(false)}
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="modal-description">{editedDescription}</p>
+                  )}
+
+
                   <button
                     className="like-button modal-like"
                     onClick={() => toggleLike(modalImageIndex)}
@@ -398,6 +422,14 @@ const TattooerProfile = () => {
               </div>
 
               <button className="close btn-close position-absolute top-0 end-0 m-3" onClick={closeModal}></button>
+              {isTattooer && !isEditingDescription && (
+                <FiEdit2
+                  className="edit-description-icon"
+                  title="Editar descripción"
+                  onClick={() => setIsEditingDescription(true)}
+                />
+              )}
+
 
             </div>
           </div>
