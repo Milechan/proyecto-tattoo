@@ -58,7 +58,7 @@ export const Navbar = () => {
           <li><Link to="/" onClick={closeAll}>Inicio</Link></li>
           {isLoggedIn ? (
             <>
-              <li><Link to="/perfil" onClick={closeAll}>Perfil</Link></li>
+              <li><Link to="/tattooer/:id" onClick={closeAll}>Perfil</Link></li>
               <li><Link to="/notifications" onClick={closeAll}>Notificaciones</Link></li>
               <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
               <li className="dropdown-container">
