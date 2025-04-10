@@ -150,7 +150,6 @@ def register():
     # Crear nuevo usuario
     new_user = User(
         email=data['email'],
-        password=data['password'], #Falta hashear
         name=data.get('name'),
         username=data.get('username'),
         user_type_id=user_type.id,
@@ -207,7 +206,7 @@ def get_current_user():
 @jwt_required()
 def update_user():
     current_user_id = get_jwt_identity()
-    user = db.session.query(User).get(current_user_id)
+    user = db.session.query(User).filter_by(id=current_user_id).one_or_none()
     
     if not user:
         return jsonify({"msg": "Usuario no encontrado"}), 404
@@ -217,17 +216,14 @@ def update_user():
     # Actualizar campos permitidos
     if 'name' in data:
         user.name = data['name']
-    if 'last_name' in data:
-        user.last_name = data['last_name']
     if 'email' in data:
         # Verificar si el nuevo email ya está en uso
         if db.session.query(User).filter(User.email == data['email'], User.id != current_user_id).first():
             return jsonify({"msg": "El email ya está en uso"}), 400
         user.email = data['email']
     if 'password' in data:
-        user.password = data['password']  # Debería hashear la nueva contraseña
-    
-    user.updated_at = datetime.utcnow()
+        user.set_password(data['password'])
+
     db.session.commit()
     
     return jsonify({"success": True, "msg": "Usuario actualizado", "user": user.serialize()}), 200

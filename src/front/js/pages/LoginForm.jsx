@@ -26,7 +26,7 @@ const LoginForm = () => {
       localStorage.setItem('token', data.token);
 
       actions.changeUser(data.user);
-
+      navigate("/");
     } catch (error) {
       alert(error.message);
     }

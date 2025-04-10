@@ -24,9 +24,11 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    //setError(null);
 
     const userData = {
       name: formData.name,
+      username: formData.username,
       email: formData.email,
       password: formData.password,
       isTattooer: isTattooer,  // aqui se diferencia el 1 o el 2 de las tablas
@@ -148,18 +150,6 @@ const RegisterForm = () => {
                 </Row>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Fecha de nacimiento</Form.Label>
-                  <Form.Control
-                    name="created_at"
-                    type="date"
-                    style={styles.input}
-                    required
-                    value={formData.created_at}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
                   <Form.Control
                     name="email"
                     type="email"
@@ -181,17 +171,6 @@ const RegisterForm = () => {
                     value={formData.password}
                     onChange={handleChange}
                     minLength="6"
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Control
-                    name="social_media_insta"
-                    type="text"
-                    placeholder="Instagram (opcional)"
-                    style={styles.input}
-                    value={formData.social_media_insta}
-                    onChange={handleChange}
                   />
                 </Form.Group>
 
@@ -244,6 +223,9 @@ const RegisterForm = () => {
                   type="submit"
                   style={styles.button}
                   className="text-white"
+                  onClick={(e) => handleSubmit(e)
+
+                  }
                 >
                   Registrarse
                 </Button>
