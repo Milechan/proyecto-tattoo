@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
 import profilePic from "../../img/foto_perfil.webp";
+import logo_final from "../../img/logo_final.webp"
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,12 +11,20 @@ export const Navbar = () => {
   const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
 
+  const navigate = useNavigate();
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    closeAll();
+    window.location.href = "/login";
   };
 
   const closeAll = () => {
@@ -28,7 +37,7 @@ export const Navbar = () => {
       <nav className="navbar navbar-light bg-light">
         <div className="container d-flex justify-content-between align-items-center w-100">
           <Link to="/">
-            <span className="navbar-brand mb-0 h1">LOGO TATTOO MATCH</span>
+          <img src={logo_final} alt="Logo Tattoo Match" className="navbar-logo" />
           </Link>
           <input
             type="text"
@@ -52,7 +61,6 @@ export const Navbar = () => {
               <li><Link to="/perfil" onClick={closeAll}>Perfil</Link></li>
               <li><Link to="/notifications" onClick={closeAll}>Notificaciones</Link></li>
               <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
-              <li><Link to="/logout" onClick={closeAll}>Cerrar Sesión</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>
                   Categorías
@@ -68,6 +76,8 @@ export const Navbar = () => {
                 )}
               </li>
               <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
+              <li><Link to="#" onClick={handleLogout}>Cerrar Sesión</Link></li>
+
             </>
           ) : (
             <>
@@ -93,4 +103,4 @@ export const Navbar = () => {
       </div>
     </>
   );
-};  
+};
