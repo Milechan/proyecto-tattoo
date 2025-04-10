@@ -5,9 +5,21 @@ import profilePic from "../../img/foto_perfil.webp";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const token = localStorage.getItem("token") 
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const closeAll = () => {
+    setIsMenuOpen(false);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -21,7 +33,6 @@ export const Navbar = () => {
             type="text"
             className="form-control w-50"
             placeholder="Buscar..."
-            aria-label="Buscar"
           />
           <div>
             <button className="profile-button" onClick={toggleMenu}>
@@ -34,12 +45,27 @@ export const Navbar = () => {
       <div className={`slide-menu ${isMenuOpen ? "open" : ""}`}>
         <button className="close-btn" onClick={toggleMenu}>×</button>
         <ul className="menu-list">
-          <li><Link to="/perfil" onClick={toggleMenu}>Perfil</Link></li>
-          <li><Link to="/notifications" onClick={toggleMenu}>Notificaciones</Link></li>
-          <li><Link to="/categorias" onClick={toggleMenu}>Categorías</Link></li>
-          <li><Link to="/configuracion" onClick={toggleMenu}>Configuración</Link></li>
-          <li><Link to="/about" onClick={toggleMenu}>Quiénes Somos</Link></li>
-          <li><Link to="/logout" onClick={toggleMenu}>Cerrar Sesión</Link></li>
+          <li><Link to="/" onClick={closeAll}>Inicio</Link></li>
+          <li><Link to="/perfil" onClick={closeAll}>Perfil</Link></li>
+          <li><Link to="/notifications" onClick={closeAll}>Notificaciones</Link></li>
+          <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
+          <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
+          <li><Link to="/logout" onClick={closeAll}>Cerrar Sesión</Link></li>
+          <li className="dropdown-container"> 
+            <div className="dropdown-toggle" onClick={toggleDropdown}>
+              Categorías
+            </div>
+            {isDropdownOpen && (
+              <ul className="dropdown-menu">
+                <li><Link to="/category/neotradicional" onClick={closeAll}>Neotradicional</Link></li>
+                <li><Link to="/category/geeks" onClick={closeAll}>Geeks</Link></li>
+                <li><Link to="/category/minimalista" onClick={closeAll}>Minimalista</Link></li>
+                <li><Link to="/category/black-out" onClick={closeAll}>Black-out</Link></li>
+                <li><Link to="/category/realismo" onClick={closeAll}>Realismo</Link></li>
+              </ul>
+            )}
+          </li>
+
         </ul>
       </div>
     </>
