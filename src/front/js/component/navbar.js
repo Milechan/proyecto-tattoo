@@ -7,7 +7,8 @@ export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const token = localStorage.getItem("token") 
+  const token = localStorage.getItem("token");
+  const isLoggedIn = !!token;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -46,28 +47,50 @@ export const Navbar = () => {
         <button className="close-btn" onClick={toggleMenu}>×</button>
         <ul className="menu-list">
           <li><Link to="/" onClick={closeAll}>Inicio</Link></li>
-          <li><Link to="/perfil" onClick={closeAll}>Perfil</Link></li>
-          <li><Link to="/notifications" onClick={closeAll}>Notificaciones</Link></li>
-          <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
-          <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
-          <li><Link to="/logout" onClick={closeAll}>Cerrar Sesión</Link></li>
-          <li className="dropdown-container"> 
-            <div className="dropdown-toggle" onClick={toggleDropdown}>
-              Categorías
-            </div>
-            {isDropdownOpen && (
-              <ul className="dropdown-menu">
-                <li><Link to="/category/neotradicional" onClick={closeAll}>Neotradicional</Link></li>
-                <li><Link to="/category/geeks" onClick={closeAll}>Geeks</Link></li>
-                <li><Link to="/category/minimalista" onClick={closeAll}>Minimalista</Link></li>
-                <li><Link to="/category/black-out" onClick={closeAll}>Black-out</Link></li>
-                <li><Link to="/category/realismo" onClick={closeAll}>Realismo</Link></li>
-              </ul>
-            )}
-          </li>
-
+          {isLoggedIn ? (
+            <>
+              <li><Link to="/perfil" onClick={closeAll}>Perfil</Link></li>
+              <li><Link to="/notifications" onClick={closeAll}>Notificaciones</Link></li>
+              <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
+              <li><Link to="/logout" onClick={closeAll}>Cerrar Sesión</Link></li>
+              <li className="dropdown-container">
+                <div className="dropdown-toggle" onClick={toggleDropdown}>
+                  Categorías
+                </div>
+                {isDropdownOpen && (
+                  <ul className="dropdown-menu">
+                    <li><Link to="/category/neotradicional" onClick={closeAll}>Neotradicional</Link></li>
+                    <li><Link to="/category/geeks" onClick={closeAll}>Geeks</Link></li>
+                    <li><Link to="/category/minimalista" onClick={closeAll}>Minimalista</Link></li>
+                    <li><Link to="/category/black-out" onClick={closeAll}>Black-out</Link></li>
+                    <li><Link to="/category/realismo" onClick={closeAll}>Realismo</Link></li>
+                  </ul>
+                )}
+              </li>
+              <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
+            </>
+          ) : (
+            <>
+              <li><Link to="/login" onClick={closeAll}>Iniciar Sesión/Registrarse</Link></li>
+              <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
+              <li className="dropdown-container">
+                <div className="dropdown-toggle" onClick={toggleDropdown}>
+                  Categorías
+                </div>
+                {isDropdownOpen && (
+                  <ul className="dropdown-menu">
+                    <li><Link to="/category/neotradicional" onClick={closeAll}>Neotradicional</Link></li>
+                    <li><Link to="/category/geeks" onClick={closeAll}>Geeks</Link></li>
+                    <li><Link to="/category/minimalista" onClick={closeAll}>Minimalista</Link></li>
+                    <li><Link to="/category/black-out" onClick={closeAll}>Black-out</Link></li>
+                    <li><Link to="/category/realismo" onClick={closeAll}>Realismo</Link></li>
+                  </ul>
+                )}
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </>
   );
-};
+};  
