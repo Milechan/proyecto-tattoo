@@ -7,6 +7,8 @@ export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const token = localStorage.getItem("token") 
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -49,7 +51,7 @@ export const Navbar = () => {
           <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
           <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
           <li><Link to="/logout" onClick={closeAll}>Cerrar Sesión</Link></li>
-          <li className="dropdown-container"> {/* Añadimos un contenedor para el dropdown */}
+          <li className="dropdown-container"> 
             <div className="dropdown-toggle" onClick={toggleDropdown}>
               Categorías
             </div>
