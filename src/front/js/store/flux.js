@@ -11,17 +11,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			message: null,
 			user: {
-			id: "",
-            name: "",
-            username: "",
-            email: "",
-            notification_enabled: false,
-            user_type: {},
-            created_at: "",
-            profile: {},
-            reviews: [],
-            posts: [],
-            notifications: [],
+				id: "",
+				name: "",
+				username: "",
+				email: "",
+				notification_enabled: false,
+				user_type: {},
+				created_at: "",
+				profile: {},
+				reviews: [],
+				posts: [],
+				notifications: [],
 
 			},
 			demo: [
@@ -35,7 +35,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-				
+
 			]
 		},
 		actions: {
@@ -46,7 +46,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					}
 					const data = await request.json()
-					setStore({ category: data.category })
+
+					setStore({
+						category: {
+							...data.category,
+							carousel: JSON.parse(data.category.carousel)
+						}
+					})
 					return data
 
 				} catch (error) {
@@ -87,7 +93,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ demo: demo });
 			},
 			changeUser: (user) => {
-				setStore({user})
+				setStore({ user })
 			}
 		}
 	};

@@ -11,23 +11,27 @@ export const Category = () => {
     useEffect(() => {
         try {
             const category = actions.getCategory(categoryName)
+            console.warn(category);
+
         } catch (error) {
             console.warn("No se encontro la categoria con ese nombre")
         }
 
-    }, [])
+    }, [categoryName])
 
     return (
         <div className="container-category">
+            <div className="container-category-image">
+                <div className="category-image">
+                    <img src={store.category.image} alt="" />
+                </div>
+            </div>
             <div className="container-category-name">
                 <div>{store.category.name}</div>
             </div>
 
             <div className="container-category-description">
                 <div>{store.category.description}</div>
-            </div>
-            <div className="container-category-image">
-                <div className="category-image"><div>{store.category.image}</div></div>
             </div>
             <div className="container-category-carousel">
                 <div className="container-carousel">
@@ -39,13 +43,13 @@ export const Category = () => {
                         </div>
                         <div className="carousel-inner">
                             <div className="carousel-item active">
-                                <img src="..." className="d-block w-100" alt="..." />
+                                <img src={store.category.carousel[0]} className="d-block " alt="..." />
                             </div>
                             <div className="carousel-item">
-                                <img src="..." className="d-block w-100" alt="..." />
+                                <img src={store.category.carousel[1]} className="d-block " alt="..." />
                             </div>
                             <div className="carousel-item">
-                                <img src="..." className="d-block w-100" alt="..." />
+                                <img src={store.category.carousel[2]} className="d-block " alt="..." />
                             </div>
                         </div>
                         <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
