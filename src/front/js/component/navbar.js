@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
 import profilePic from "../../img/foto_perfil.webp";
-import logo_final from "../../img/logo_final.webp"
+import logo_final from "../../img/logo_final.webp";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,7 +34,7 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar navbar-light bg-light">
+      <nav className="navbar navbar-light custom-navbar">
         <div className="container d-flex justify-content-between align-items-center w-100">
           <Link to="/">
             <img src={logo_final} alt="Logo Tattoo Match" className="navbar-logo" />
@@ -46,7 +46,11 @@ export const Navbar = () => {
           />
           <div>
             <button className="profile-button" onClick={toggleMenu}>
-              <img src={profilePic} className="img-profile" alt="Foto de perfil" />
+              {isLoggedIn ? (
+                <img src={profilePic} className="img-profile" alt="Foto de perfil" />
+              ) : (
+                <span className="hamburger-icon">☰</span>
+              )}
             </button>
           </div>
         </div>
@@ -77,7 +81,6 @@ export const Navbar = () => {
               </li>
               <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
               <li><Link to="#" onClick={handleLogout}>Cerrar Sesión</Link></li>
-
             </>
           ) : (
             <>
