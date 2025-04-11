@@ -36,8 +36,8 @@ def create_post():
     current_user = get_jwt_identity()
     data = request.get_json()
 
-    user = User.query.get(current_user)
-    if not user:
+    user = db.session.query(User).filter_by(id=current_user).one_or_none()
+    if user is None:
         return jsonify({"msg": "Usuario no válido o no encontrado"}), 404
 
     if not data.get('image') or not data.get('description'):
@@ -48,7 +48,7 @@ def create_post():
             image=data['image'],
             description=data['description'],
             user_id=current_user,
-            created_at=datetime.utcnow()
+            created_at=datetime.now()
         )
         db.session.add(new_post)
         db.session.commit()
@@ -65,9 +65,9 @@ def create_post():
 @jwt_required()
 def delete_post(post_id):
     # Buscar el post en la bd
-    post = Post.query.get(post_id)
+    post = db.session.query(Post).filter_by(id=post_id).one_or_none()
 
-    if not post:
+    if post is None:
         return jsonify({"msg": "Post no encontrado"}), 404
 
     current_user_id = get_jwt_identity()
@@ -91,8 +91,8 @@ def update_post(post_id):
     data = request.get_json()
 
     #Buscar el post por su ID
-    post = Post.query.get(post_id)
-    if not post:
+    post = db.session.query(Post).filter_by(id=post_id).one_or_none()
+    if post is None:
         return jsonify({"msg": "Post no encontrado"}), 404
 
     current_user_id = get_jwt_identity()
@@ -115,9 +115,9 @@ def update_post(post_id):
 #Ruta para ver un post por su id
 @api.route('/posts/<int:post_id>', methods=['GET'])
 def get_post_by_id(post_id):
-    post = Post.query.get(post_id)
+    post = db.session.query(Post).filter_by(id=post_id).one_or_none()
     
-    if not post:
+    if post is None:
         return jsonify({"msg": "Post no encontrado"}), 404
 
     return jsonify(post.serialize()), 200
