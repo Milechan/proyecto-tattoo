@@ -454,7 +454,7 @@ def get_notification_by_id(notification_id):
         if notification is None:
             return jsonify({"msg": f"No se encontró la notificación con el ID {notification_id}"}), 404
     # Si se encuentra, devolver la notificación en formato JSON
-        return jsonify(notification), 200
+        return jsonify(notification.serialize()), 200
 
 #para marcar como leida una notificacion
 @api.route('/notifcation/<int:notification_id>/readed',methods=['PUT'])
@@ -468,7 +468,7 @@ def set_notification_readed(notification_id):
     # Marcar la notificación como leída (suponiendo que tiene un campo `readed`)
     notification.is_read = True
     db.session.commit()
-    return jsonify({"success": True, "msg": "Notificación marcada como leída"}), 200
+    return jsonify({"success": True, "msg": "Notificación marcada como leída","notification":notification.serialize()}), 200
 
 #para crear una notificacion, asignandola al usuario que se especifica en el body
 @api.route('/notification',methods=['POST'])
@@ -492,9 +492,7 @@ def create_notification():
     db.session.add(new_notification)
     db.session.commit()
     return jsonify({"success": True, "msg": "Notificación creada con éxito", "notification": new_notification.serialize()}), 201
-
-
-
+ 
 """HOME"""
 
 # Categorías: obtiene todos los perfiles de una categoría determinada.
@@ -533,6 +531,7 @@ def get_category_by_name(category_name):
     if category is None:
         return jsonify({"msg":"no hay categoria con ese nombre"}),404
     return jsonify({"category":category.serialize()}),200
+
 
 
 """API CORREO"""
