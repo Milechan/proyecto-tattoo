@@ -9,7 +9,7 @@ from api.models import db, User, Post, Profile, Review, Notification, UserType, 
 import sendgrid
 from sendgrid.helpers.mail import Mail
 import os
-
+from api.utils import s3
 from datetime import datetime
 import json
 from flask_jwt_extended import jwt_required , get_jwt_identity, create_access_token
