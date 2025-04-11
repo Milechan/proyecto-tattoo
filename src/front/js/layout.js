@@ -15,7 +15,7 @@ import injectContext from "./store/appContext";
 
 
 import { Navbar } from "./component/navbar";
-import { Footer } from "./component/footer";
+import Footer from './component/Footer.jsx';
 import { Notifications } from "./component/Notifications.js";
 import AboutUs from "./pages/AboutUs.js";
 
@@ -65,7 +65,7 @@ const ContentWrapper = () => {
       <BrowserRouter>
         <ScrollToTop>
           <ContentWrapper />
-          {/* <Footer /> */}
+          { <Footer /> }
         </ScrollToTop>
       </BrowserRouter>
     </div>
