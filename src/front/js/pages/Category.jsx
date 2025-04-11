@@ -27,7 +27,7 @@ export const Category = () => {
                 </div>
             </div>
             <div className="container-category-name">
-                <div>{store.category.name}</div>
+                <div className="category-name">{store.category.name}</div>
             </div>
 
             <div className="container-category-description">
