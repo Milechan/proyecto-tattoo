@@ -492,6 +492,47 @@ def create_notification():
     db.session.add(new_notification)
     db.session.commit()
     return jsonify({"success": True, "msg": "Notificación creada con éxito", "notification": new_notification.serialize()}), 201
+ 
+"""HOME"""
+
+# Categorías: obtiene todos los perfiles de una categoría determinada.
+@api.route('/profiles/category/<string:category>', methods=['GET'])
+def get_profiles_by_category(category):
+
+    profiles = db.session.query(Profile).filter_by(category=category).all()
+    if not profiles:
+        return jsonify({"msg": f"No se encontraron perfiles para la categoría '{category}'"}), 404
+    result = [profile.serialize() for profile in profiles]
+    return jsonify(result), 200
+
+
+# Top Likes: obtiene los posts con más likes.
+@api.route('/posts/top-likes', methods=['GET'])
+def get_top_likes_posts():
+    # Se obtienen los posts ordenados por likes en forma descendente
+    posts = db.session.query(Post).order_by(Post.likes.desc()).limit(5).all()
+    result = [post.serialize() for post in posts]
+    return jsonify(result), 200
+
+
+# Top Tatuadores: obtiene los perfiles con mejores evaluaciones.
+@api.route('/profiles/top-tattooer', methods=['GET'])
+def get_top_tattooer():
+    # Se obtienen los perfiles ordenados por ranking en forma descendente, limitando a 10 resultados
+    profiles = db.session.query(Profile).order_by(Profile.ranking.desc()).limit(10).all()
+    result = [profile.serialize() for profile in profiles]
+    return jsonify(result), 200
+
+
+@api.route("/category/<string:category_name>", methods=["GET"])
+def get_category_by_name(category_name):
+    category=db.session.query(Category).filter_by(name=category_name).one_or_none()
+    print(category)
+    if category is None:
+        return jsonify({"msg":"no hay categoria con ese nombre"}),404
+    return jsonify({"category":category.serialize()}),200
+
+
 
 """API CORREO"""
 @api.route('/send-email', methods=['POST'])
