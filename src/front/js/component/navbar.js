@@ -37,7 +37,7 @@ export const Navbar = () => {
       <nav className="navbar navbar-light bg-light">
         <div className="container d-flex justify-content-between align-items-center w-100">
           <Link to="/">
-          <img src={logo_final} alt="Logo Tattoo Match" className="navbar-logo" />
+            <img src={logo_final} alt="Logo Tattoo Match" className="navbar-logo" />
           </Link>
           <input
             type="text"
@@ -67,11 +67,11 @@ export const Navbar = () => {
                 </div>
                 {isDropdownOpen && (
                   <ul className="dropdown-menu">
-                    <li><Link to="/category/neotradicional" onClick={closeAll}>Neotradicional</Link></li>
-                    <li><Link to="/category/geeks" onClick={closeAll}>Geeks</Link></li>
-                    <li><Link to="/category/minimalista" onClick={closeAll}>Minimalista</Link></li>
-                    <li><Link to="/category/black-out" onClick={closeAll}>Black-out</Link></li>
-                    <li><Link to="/category/realismo" onClick={closeAll}>Realismo</Link></li>
+                    <li><Link to="/category/Neotradicional" onClick={closeAll}>Neotradicional</Link></li>
+                    <li><Link to="/category/Geeks" onClick={closeAll}>Geeks</Link></li>
+                    <li><Link to="/category/Minimalista" onClick={closeAll}>Minimalista</Link></li>
+                    <li><Link to="/category/Black-Out" onClick={closeAll}>Black-out</Link></li>
+                    <li><Link to="/category/Realismo" onClick={closeAll}>Realismo</Link></li>
                   </ul>
                 )}
               </li>
@@ -89,11 +89,11 @@ export const Navbar = () => {
                 </div>
                 {isDropdownOpen && (
                   <ul className="dropdown-menu">
-                    <li><Link to="/category/neotradicional" onClick={closeAll}>Neotradicional</Link></li>
-                    <li><Link to="/category/geeks" onClick={closeAll}>Geeks</Link></li>
-                    <li><Link to="/category/minimalista" onClick={closeAll}>Minimalista</Link></li>
-                    <li><Link to="/category/black-out" onClick={closeAll}>Black-out</Link></li>
-                    <li><Link to="/category/realismo" onClick={closeAll}>Realismo</Link></li>
+                    <li><Link to="/category/Neotradicional" onClick={closeAll}>Neotradicional</Link></li>
+                    <li><Link to="/category/Geeks" onClick={closeAll}>Geeks</Link></li>
+                    <li><Link to="/category/Minimalista" onClick={closeAll}>Minimalista</Link></li>
+                    <li><Link to="/category/Black-Out" onClick={closeAll}>Black-out</Link></li>
+                    <li><Link to="/category/Realismo" onClick={closeAll}>Realismo</Link></li>
                   </ul>
                 )}
               </li>
