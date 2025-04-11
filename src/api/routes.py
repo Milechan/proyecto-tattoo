@@ -261,26 +261,7 @@ def get_tattooer_profile(tattooer_id):
     if tattooer.profile is None:
         return jsonify({'msg': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
 
-    # Convertir `social_media` de string a JSON de forma segura
-    try:
-        social_media = json.loads(tattooer.profile.social_media) if tattooer.profile.social_media else {}
-    except ValueError:
-        social_media = {}
-
-    # Estructurar la respuesta
-    tattooer_data = {
-        'id': tattooer.id,
-        'name': tattooer.name,
-        'username': tattooer.username,
-        'email': tattooer.email,
-        'bio': tattooer.profile.bio,
-        'social_media': social_media,
-        'profile_picture': tattooer.profile.profile_picture,
-        'ranking': tattooer.profile.ranking,
-        'created_at': tattooer.created_at.isoformat() if tattooer.created_at else None
-    }
-
-    return jsonify(tattooer_data), 200
+    return jsonify(tattooer.profile.serialize()), 200
 
 
 #Ruta para crear perfil:
@@ -327,9 +308,10 @@ def create_tattooer_profile():
 
 #Ruta para actualizar perfil por ID:
 @api.route('/profile/<int:tattooer_id>', methods=['PUT'])
+@jwt_required()
 def update_tattooer_profile(tattooer_id):
     data = request.get_json()
-
+    current_user = get_jwt_identity()
     # Buscar al usuario en la base de datos
     tattooer = db.session.query(User).filter_by(id=tattooer_id).one_or_none()
     if tattooer is None:
@@ -342,17 +324,25 @@ def update_tattooer_profile(tattooer_id):
     # Obtener el perfil asociado
     profile = tattooer.profile
 
+    # verificar si current_user es el propietario del perfil antes de editar
+    user = db.session.query(User).filter_by(id=current_user).one_or_none()
+    if user is None:
+        return jsonify({'msg': f'El usuario con ID {current_user} no tiene permisos para editar este perfil'}), 403
+
     # Actualizar los campos si están en la solicitud
     if 'bio' in data:
         profile.bio = data['bio']
-    if 'social_media' in data:
-        if not isinstance(data['social_media'], dict):
-            return jsonify({'msg': 'El campo social_media debe ser un objeto JSON válido'}), 400
-        profile.social_media = json.dumps(data['social_media'])  # Guardamos como JSON en la DB
+    if 'social_media_insta' in data:
+        profile.social_media_insta=data['social_media_insta']
+    if 'social_media_wsp' in data:
+        profile.social_media_wsp=data['social_media_wsp']
+    if 'social_media_x' in data:
+        profile.social_media_x=data['social_media_x']
+    if 'social_media_facebook' in data:
+        profile.social_media_facebook=data['social_media_facebook']
     if 'profile_picture' in data:
         profile.profile_picture = data['profile_picture']
-    if 'ranking' in data:
-        profile.ranking = data['ranking']
+    
 
     # Guardar los cambios en la base de datos
     db.session.commit()
@@ -364,7 +354,9 @@ def update_tattooer_profile(tattooer_id):
 
 #Ruta para eliminar el perfil por ID:
 @api.route('/profile/<int:tattooer_id>', methods=['DELETE'])
+@jwt_required()
 def delete_tattooer_profile(tattooer_id):
+    current_user = get_jwt_identity()
     # Buscar al usuario en la base de datos
     tattooer = db.session.query(User).filter_by(id=tattooer_id).one_or_none()
     if tattooer is None:
@@ -373,6 +365,11 @@ def delete_tattooer_profile(tattooer_id):
     # Verificar si el usuario tiene un perfil
     if tattooer.profile is None:
         return jsonify({'msg': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
+
+    # verificar si current_user es el propietario del perfil antes de editar
+    user = db.session.query(User).filter_by(id=current_user).one_or_none()
+    if user is None:
+        return jsonify({'msg': f'El usuario con ID {current_user} no tiene permisos para eliminar este perfil'}), 403
 
     # Obtener el perfil asociado
     profile = tattooer.profile
