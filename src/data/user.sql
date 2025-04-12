@@ -10,10 +10,10 @@ INSERT INTO user (name,username,password,email,notification_enabled,user_type_id
 ("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,2),
 ("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,2),
 --minimalista
-("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,3),
-("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,3),
-("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,3),
-("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,3),
+("Teffylines Bta", "teffylines", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "teffylines@gmail.com", true, 2, 3),
+("Jessica Dahian Duran Molina", "jessicaduran_art", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "jessicaduran_art@gmail.com", true, 2, 3),
+("Daisy", "daisydoestattoos", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "daisydoestattoos@gmail.com", true, 2, 3),
+("Gime Femia", "gimefemia", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "gimefemia@gmail.com", true, 2, 3);
 --black-out
 ("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,4),
 ("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,4),
