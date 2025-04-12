@@ -9,6 +9,8 @@ from api.models import db, User, Post, Profile, Review, Notification, UserType, 
 import sendgrid
 from sendgrid.helpers.mail import Mail
 import os
+import re
+import base64
 from api.utils import s3
 from datetime import datetime
 import json
@@ -300,11 +302,22 @@ def create_tattooer_profile():
     db.session.add(new_profile)
     db.session.commit()
 
+    ## CREAMOS CARPETA PARA PERFIL CON USERNAME DEL USUARIO
+    try:
+        bucket = s3.Bucket("matchtattoo")
+        bucket.Object(user.username).put() 
+    except Exception as e:
+        print(e)
+
     return jsonify({
         'msg': 'Perfil creado exitosamente',
         'user': new_profile.serialize()
     }), 201
-
+@api.route('/s3', methods=['GET'])
+def test_s3():
+    for bucket in s3.buckets.all():
+        print(bucket)
+    return jsonify({"msg": "tested ok." })
 
 #Ruta para actualizar perfil por ID:
 @api.route('/profile/<int:tattooer_id>', methods=['PUT'])
@@ -330,19 +343,45 @@ def update_tattooer_profile(tattooer_id):
         return jsonify({'msg': f'El usuario con ID {current_user} no tiene permisos para editar este perfil'}), 403
 
     # Actualizar los campos si están en la solicitud
-    if 'bio' in data:
+    if 'bio' in data and data['bio']!='':
         profile.bio = data['bio']
-    if 'social_media_insta' in data:
+    if 'social_media_insta' in data and data['social_media_insta']!='':
         profile.social_media_insta=data['social_media_insta']
-    if 'social_media_wsp' in data:
+    if 'social_media_wsp' in data and data['social_media_wsp']!='':
         profile.social_media_wsp=data['social_media_wsp']
-    if 'social_media_x' in data:
+    if 'social_media_x' in data and data['social_media_x']!='':
         profile.social_media_x=data['social_media_x']
-    if 'social_media_facebook' in data:
+    if 'social_media_facebook' in data and data['social_media_facebook']!='':
         profile.social_media_facebook=data['social_media_facebook']
-    if 'profile_picture' in data:
-        profile.profile_picture = data['profile_picture']
-    
+    if 'profile_picture' in data and data['profile_picture'] != "": # si detecta que le enviamos la foto
+        try:
+            b64_image = data["profile_picture"]
+            # validamos formato
+            match = re.match(r"data:(image/\w+);base64,(.+)",b64_image) 
+            if not match:
+                return jsonify({"msg":"error, profile_picture tiene un formato invalido"}),400
+            # obtenemos informacion
+            mime_type = match.group(1) # tipo de archivo
+            image_data = match.group(2) # imagen en base64
+            extension = mime_type.split('/')[-1] # extension de archivo
+
+            filename = f"profiles/{user.username}/profile_picture.{extension}" # definimos nombre del archivo
+            image_bytes = base64.b64decode(image_data) # decodificamos imagen
+
+            # subimos imagen
+            bucket = s3.Bucket("matchtattoo")
+            bucket.put_object(
+                Key=filename,
+                Body=image_bytes,
+                ContentType=mime_type
+            )
+            # guardamos en perfil la url
+            profile.profile_picture = f"https://matchtattoo.s3.us-east-2.amazonaws.com/profiles/{user.username}/profile_picture.{extension}"
+
+
+        except Exception as e:
+            print(e)
+            return jsonify({"msg":"error subiendo la foto de perfil"}),500
 
     # Guardar los cambios en la base de datos
     db.session.commit()
