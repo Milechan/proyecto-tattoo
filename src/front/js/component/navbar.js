@@ -81,7 +81,6 @@ export const Navbar = () => {
                 </Link>
               </li>
 
-              <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>
                   Categorías
@@ -97,13 +96,12 @@ export const Navbar = () => {
                 )}
               </li>
               <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
+              <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
               <li><Link to="#" onClick={handleLogout}>Cerrar Sesión</Link></li>
             </>
           ) : (
             <>
               <li><Link to="/login" onClick={closeAll}>Iniciar Sesión</Link></li>
-              <li><Link to="/register" onClick={closeAll}>Registrarse</Link></li>
-              <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>
                   Categorías
@@ -118,6 +116,8 @@ export const Navbar = () => {
                   </ul>
                 )}
               </li>
+              <li><Link to="/register" onClick={closeAll}>Registrarse</Link></li>
+              <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
             </>
           )}
         </ul>
