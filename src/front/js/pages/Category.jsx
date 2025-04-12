@@ -22,16 +22,14 @@ export const Category = () => {
     return (
         <div className="container-category">
             <div className="container-category-image">
-                <div className="category-image">
-                    <img src={store.category.image} alt="" />
-                </div>
+                <img src={store.category.image} alt="" className="banner" />
             </div>
             <div className="container-category-name">
                 <div className="category-name">{store.category.name}</div>
             </div>
 
             <div className="container-category-description">
-                <div>{store.category.description}</div>
+                <div className="description">{store.category.description}</div>
             </div>
             <div className="container-category-carousel">
                 <div className="container-carousel">
