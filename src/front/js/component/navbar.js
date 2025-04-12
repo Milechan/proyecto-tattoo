@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
-import profilePic from "../../img/foto_perfil.webp";
-import logo_final from "../../img/logo_final.webp";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,7 +36,11 @@ export const Navbar = () => {
       <nav className="navbar navbar-light custom-navbar">
         <div className="container d-flex justify-content-between align-items-center w-100">
           <Link to="/">
-            <img src={logo_final} alt="Logo Tattoo Match" className="navbar-logo" />
+            <img
+              src="https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/logo+final.png"
+              alt="Logo Tattoo Match"
+              className="navbar-logo"
+            />
           </Link>
           <input
             type="text"
@@ -48,7 +50,11 @@ export const Navbar = () => {
           <div>
             <button className="profile-button" onClick={toggleMenu}>
               {isLoggedIn ? (
-                <img src={profilePic} className="img-profile" alt="Foto de perfil" />
+                <img
+                  src="https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/foto_perfil.png"
+                  className="img-profile"
+                  alt="Foto de perfil"
+                />
               ) : (
                 <span className="hamburger-icon">☰</span>
               )}
@@ -65,7 +71,6 @@ export const Navbar = () => {
             <>
               <li><Link to="/tattooer/:id" onClick={closeAll}>Perfil</Link></li>
 
-              {/* Notificaciones con badge */}
               <li className="position-relative">
                 <Link to="/notifications" onClick={closeAll} className="d-inline-block position-relative">
                   Notificaciones
