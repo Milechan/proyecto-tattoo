@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import tatuaje3 from "../../img/tatuaje3.png";
-import tatuaje4 from "../../img/tatuaje4.png";
-import tatuaje5 from "../../img/tatuaje5.jpg";
 
 export const TopLikes = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -13,7 +10,11 @@ export const TopLikes = () => {
     3: { liked: false, likes: 4323 },
   });
 
-  const images = [tatuaje3, tatuaje4, tatuaje5];
+  const images = [
+    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/home/top+tatuadores/topTattoo1.png",
+    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/home/top+tatuadores/topTatto2.png",
+    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/home/top+tatuadores/topTattoo3.png"
+  ];
 
   const handleImageClick = (index) => {
     setSelectedImage(index);
@@ -25,7 +26,9 @@ export const TopLikes = () => {
       ...prevLikes,
       [index]: {
         liked: !prevLikes[index]?.liked,
-        likes: prevLikes[index]?.liked ? prevLikes[index].likes - 1 : (prevLikes[index]?.likes || 0) + 1,
+        likes: prevLikes[index]?.liked
+          ? prevLikes[index].likes - 1
+          : (prevLikes[index]?.likes || 0) + 1,
       },
     }));
   };

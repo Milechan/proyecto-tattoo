@@ -199,10 +199,11 @@ const RegisterForm = () => {
                       required={isTattooer}
                     >
                       <option value="">Selecciona tu especialidad</option>
-                      <option value="Minimalism">Minimalismo</option>
-                      <option value="FullColor">Color</option>
+                      <option value="Minimalista">Minimalista</option>
                       <option value="Realismo">Realismo</option>
-                      <option value="Tradicional">Tradicional</option>
+                      <option value="Black-Out">Black-Out</option>
+                      <option value="Geeks">Geeks</option>
+                      <option value="Neotradicional">Neotradicional</option>
                     </Form.Select>
                   </Form.Group>
                 )}
