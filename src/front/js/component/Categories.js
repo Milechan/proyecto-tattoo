@@ -5,7 +5,6 @@ export const Categories = () => {
     return (
         <div className="text-center mt-5">
             <div className="container-flex">
-                <h1>Categorías</h1>
                 <div className="d-flex flex-wrap justify-content-center mt-4 gap-3">
                     <Link
                         to="/category/Neotradicional"

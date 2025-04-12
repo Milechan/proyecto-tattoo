@@ -18,7 +18,7 @@ export const TopTattooers = () => {
 
   return (
     <div className="top-tattooers-container text-center">
-      <h1>Top de tatuadores</h1>
+      <h1 style={{ marginTop: "3rem" }}>Top de tatuadores</h1>
       <div
         id="carouselExampleAutoplaying"
         className="carousel slide mx-auto tattoo-carousel-container"
