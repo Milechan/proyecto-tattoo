@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../../styles/TattooerProfile.css";
 import banner from "../../img/banner.webp";
 import perfil from "../../img/perfil.webp";
@@ -11,21 +11,28 @@ import g6 from "../../img/g6.webp";
 import g7 from "../../img/g7.webp";
 import { FiEdit2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 
 const TattooerProfile = () => {
+  const { id } = useParams()
+  const { actions, store } = useContext(Context)
   const [isEditing, setIsEditing] = useState(false);
 
   const [tattooer, setTattooer] = useState({
     name: "Juan Tattoo",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    bio: store.profile.bio,
     profile_picture: "",
     email: "juan@example.com",
     username: "juantattoo",
     ranking: 5,
     created_at: "2025-03-30T22:51:14Z",
     social_media: {
-      instagram: "@juantattoo"
+      instagram: "@juantattoo",
+      x: "",
+      wsp: "",
+      facebook: ""
     }
   });
 
@@ -67,7 +74,10 @@ const TattooerProfile = () => {
     setModalImageIndex(null);
   };
 
-  const toggleEdit = () => {
+  const toggleEdit = async () => {
+    if (isEditing) {
+      await handleEditProfile(id)
+    }
     setIsEditing(!isEditing);
   };
 
@@ -78,10 +88,15 @@ const TattooerProfile = () => {
     }
   };
 
-  const handleProfilePicChange = (e) => {
+  const handleProfilePicChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       setNewProfilePic(URL.createObjectURL(file));
+      const file64 = await getBase64(file)
+      setTattooer({
+        ...tattooer,
+        profile_picture: file64
+      })
     }
   };
 
@@ -119,6 +134,15 @@ const TattooerProfile = () => {
   const [contactMessage, setContactMessage] = useState("");
 
 
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = (error) => reject(error)
+    })
+  }
+
   const handleSendEmail = async () => {
     if (!contactEmail || !contactMessage) {
       alert("Por favor completa todos los campos.");
@@ -151,6 +175,28 @@ const TattooerProfile = () => {
     }
   };
 
+  const handleEditProfile = async (userId) => {
+    try {
+      const token = localStorage.getItem("token")
+      const response = await fetch(`http://localhost:3001/api/profile/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          "bio": editedBio,
+          "social_media_insta": tattooer.social_media.instagram,
+          "social_media_wsp": tattooer.social_media.wsp,
+          "social_media_x": tattooer.social_media.x,
+          "social_media_facebook": tattooer.social_media.facebook,
+          "profile_picture": tattooer.profile_picture
+        })
+      })
+      const data = await response.json()
+      actions.getProfile(id)
+    } catch (error) {
+      console.error("Error al actualizar el perfil:", error);
+      alert("Ocurrió un error al actualizar perfil.");
+    }
+  }
 
 
   useEffect(() => {
@@ -159,7 +205,8 @@ const TattooerProfile = () => {
     } else {
       document.body.classList.remove("modal-open");
     }
-  }, [showModal]);
+    actions.getProfile(id)
+  }, [showModal, id]);
 
 
   // para cargar reviews 
@@ -324,7 +371,7 @@ const TattooerProfile = () => {
             </>
           )}
           <div className="profile-picture-container">
-            <img src={newProfilePic || perfil} alt="Tatuador" className="profile-picture" />
+            <img src={store.profile.profile_picture != '' ? store.profile.profile_picture : perfil} alt="Tatuador" className="profile-picture" />
             {isEditing && (
               <>
                 <div className="profile-picture-overlay" onClick={() => document.getElementById("profileInput").click()}>
@@ -354,7 +401,7 @@ const TattooerProfile = () => {
                 onChange={(e) => setEditedName(e.target.value)}
               />
             ) : (
-              <h2>{editedName}</h2>
+              <h2>{store.profile.profile_name}</h2>
             )}
 
             {isEditing ? (
@@ -364,7 +411,7 @@ const TattooerProfile = () => {
                 onChange={(e) => setEditedBio(e.target.value)}
               />
             ) : (
-              <p className="bio">{editedBio}</p>
+              <p className="bio">{store.profile.bio}</p>
             )}
 
             {isEditing ? (

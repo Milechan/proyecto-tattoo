@@ -74,6 +74,7 @@ class User(db.Model):
             "notification_enabled": self.notification_enabled,
             "user_type": self.user_type.serialize() if self.user_type else None,
             "created_at": self.created_at,
+            "category": self.category.serialize() if self.category else None,
             "profile": self.profile.serialize() if self.profile else None,
             "reviews": [review.serialize() for review in self.reviews],
             "posts": [post.serialize() for post in self.posts],
@@ -101,6 +102,7 @@ class Profile(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "profile_name":self.user.username,
             "social_media_insta": self.social_media_insta,
             "social_media_wsp": self.social_media_wsp,
             "social_media_x": self.social_media_x,
