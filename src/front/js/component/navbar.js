@@ -7,6 +7,7 @@ import logo_final from "../../img/logo_final.webp";
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(1);
 
   const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
@@ -63,7 +64,18 @@ export const Navbar = () => {
           {isLoggedIn ? (
             <>
               <li><Link to="/tattooer/:id" onClick={closeAll}>Perfil</Link></li>
-              <li><Link to="/notifications" onClick={closeAll}>Notificaciones</Link></li>
+
+              {/* Notificaciones con badge */}
+              <li className="position-relative">
+                <Link to="/notifications" onClick={closeAll} className="d-inline-block position-relative">
+                  Notificaciones
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {notificationCount}
+                    <span className="visually-hidden">nuevas notificaciones</span>
+                  </span>
+                </Link>
+              </li>
+
               <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>
