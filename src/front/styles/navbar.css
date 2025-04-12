@@ -1,103 +1,128 @@
+/* Imagen de perfil */
 .img-profile {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: none;
-  }
-  
-  .profile-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
-  
-  .slide-menu {
-    position: fixed;
-    top: 0;
-    right: -400px;
-    width: 400px;
-    height: 100vh;
-    background-color: #f8f9fa;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-    transition: right 0.3s ease;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    padding: 2rem 1.5rem;
-  }
-  
-  .slide-menu.open {
-    right: 0;
-  }
-  
-  .close-btn {
-    align-self: flex-end;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    margin-bottom: 1rem;
-  }
-  
-  .menu-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .menu-list li {
-    margin: 1rem 0;
-    position: relative; 
-  }
-  
-  .menu-list a,
-  .dropdown-toggle {
-    text-decoration: none;
-    color: #333;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: block;
-    transition: color 0.2s;
-    position: relative; 
-    z-index: 1;
-  }
-  
-  .menu-list a:hover,
-  .dropdown-toggle:hover {
-    color: #007bff;
-  }
-  
-  .dropdown-menu {
-    list-style: none;
-    padding-left: 1rem;
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    position: absolute; 
-    top: 100%; 
-    left: 0;
-    background-color: #f8f9fa; 
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-    z-index: 2; 
-  }
-  
-  .dropdown-menu li {
-    margin: 0.4rem 0;
-  }
-  
-  .dropdown-menu a {
-    color: #555;
-    font-size: 1rem;
-    text-decoration: none;
-  }
-  
-  .dropdown-menu a:hover {
-    color: #007bff;
-  }
-  .navbar-logo {
-    height: 70px; 
-    width: 70px;
-  }
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: none;
+}
+
+/* Botón de perfil / hamburguesa */
+.profile-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ícono de hamburguesa */
+.hamburger-icon {
+  font-size: 40px; /* Tamaño grande */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Slide menu (menú lateral) */
+.slide-menu {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100vh;
+  background-color: #f8f9fa;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+}
+
+.slide-menu.open {
+  right: 0;
+}
+
+/* Botón cerrar (X) */
+.close-btn {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+/* Lista de opciones del menú */
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-list li {
+  margin: 1rem 0;
+  position: relative;
+}
+
+.menu-list a,
+.dropdown-toggle {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: block;
+  transition: color 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.menu-list a:hover,
+.dropdown-toggle:hover {
+  color: #007bff;
+}
+
+/* Submenú de categorías */
+.dropdown-menu {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.dropdown-menu li {
+  margin: 0.4rem 0;
+}
+
+.dropdown-menu a {
+  color: #555;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+  color: #007bff;
+}
+
+/* Logo */
+.navbar-logo {
+  height: 70px;
+  width: 70px;
+}
+
+/* Navbar con fondo gris */
+.navbar {
+  background-color: #e0e0e0 !important; /* Gris claro */
+}
