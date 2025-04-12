@@ -84,7 +84,8 @@ export const Navbar = () => {
             </>
           ) : (
             <>
-              <li><Link to="/login" onClick={closeAll}>Iniciar Sesión/Registrarse</Link></li>
+              <li><Link to="/login" onClick={closeAll}>Iniciar Sesión</Link></li>
+              <li><Link to="/register" onClick={closeAll}>Registrarse</Link></li>
               <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>
