@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 const RegisterForm = () => {
   const [isTattooer, setIsTattooer] = useState(false);
@@ -45,7 +46,11 @@ const RegisterForm = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Registro exitoso! Por favor inicia sesión");
+        Swal.fire({
+          title: "Registro exitoso! Por favor inicia sesión",
+          icon: "success",
+          draggable: true
+        });
         navigate("/login");
       } else {
         alert(data.msg || "Error al registrar");
