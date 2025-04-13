@@ -1,0 +1,82 @@
+[33m8e165ba[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32malan[m[33m)[m HEAD@{0}: pull origin dev: Merge made by the 'ort' strategy.
+[33m194daa0[m[33m ([m[1;31morigin/alan[m[33m)[m HEAD@{1}: commit: Actualizacion de rutas y perfil
+[33m84f6aba[m HEAD@{2}: commit: Se conecta perfil y se suben imagenes a s3
+[33md6e328f[m HEAD@{3}: pull origin dev: Fast-forward
+[33me8a0a65[m HEAD@{4}: pull origin dev: Fast-forward
+[33m1718876[m HEAD@{5}: pull origin dev: Fast-forward
+[33mc973850[m HEAD@{6}: commit: Rutas actualizadas
+[33mc4d1ed8[m HEAD@{7}: pull origin dev: Merge made by the 'ort' strategy.
+[33mc189358[m HEAD@{8}: commit (merge): Merge branch 'dev' of https://github.com/Milechan/proyecto-tattoo into alan
+[33me2e6294[m HEAD@{9}: commit (merge): Merge branch 'main' of https://github.com/Milechan/proyecto-tattoo into alan
+[33mc4f990b[m HEAD@{10}: pull origin dev: Fast-forward
+[33md076715[m HEAD@{11}: commit: Mejoras en vista TattoerProfile
+[33m8514a07[m HEAD@{12}: pull origin dev: Fast-forward
+[33m6b82458[m HEAD@{13}: pull origin dev: Fast-forward
+[33m5431a6b[m HEAD@{14}: commit: Se eliminan comentarios
+[33m8b397cf[m HEAD@{15}: reset: moving to HEAD
+[33m8b397cf[m HEAD@{16}: rebase (abort): returning to refs/heads/alan
+[33m79068ea[m HEAD@{17}: rebase (pick): se crea la carpeta data para poder tener info de sql,se edita categorias en base a la descripcion y banner
+[33mf5b57d0[m HEAD@{18}: commit: Resuelve conflictos de merge
+[33m3e7861c[m HEAD@{19}: pull origin dev --rebase (start): checkout 3e7861ccb7581a5435622e6c4884bb73ea23f8c3
+[33m8b397cf[m HEAD@{20}: commit: Se actualiza modelo, rutas
+[33m3f57e9e[m HEAD@{21}: pull origin main: Fast-forward
+[33m55fed6c[m HEAD@{22}: commit (merge): Merge branch 'dev' of https://github.com/Milechan/proyecto-tattoo into alan
+[33md526f4d[m HEAD@{23}: rebase (finish): returning to refs/heads/alan
+[33md526f4d[m HEAD@{24}: rebase (pick): Se actualiza el diseño del perfil de tatuador y se agrega funcionalidad al boton contactame aqui
+[33m554adb0[m HEAD@{25}: rebase (pick): cambios de icono y title de la pagina
+[33m1f090a6[m HEAD@{26}: rebase (continue): se crea ruta para obtener por nombre una categoria, y informacion de esta, falta perfil de tatuadores y carruseles.
+[33m77e79b3[m HEAD@{27}: rebase (continue): se crea la carpeta data para poder tener info de sql,se edita categorias en base a la descripcion y banner
+[33m05265ec[m HEAD@{28}: pull origin main --rebase (pick): subo edicion de css de categoria ,agrego carrusel
+[33mf73e4fb[m HEAD@{29}: pull origin main --rebase (start): checkout f73e4fb20d21f2cc2f6e7c947ec3320d6643d23d
+[33m226841a[m HEAD@{30}: commit: Se actualiza el diseño del perfil de tatuador y se agrega funcionalidad al boton contactame aqui
+[33mdbd84da[m HEAD@{31}: reset: moving to HEAD
+[33mdbd84da[m HEAD@{32}: commit (merge): Cambios
+[33mfdda382[m HEAD@{33}: pull origin main: Fast-forward
+[33m0063f5c[m HEAD@{34}: checkout: moving from dev to alan
+[33m84351de[m[33m ([m[1;32mdev[m[33m)[m HEAD@{35}: commit: Se agrega ruta de api correo
+[33med80f28[m HEAD@{36}: pull origin main: Fast-forward
+[33me389ba9[m HEAD@{37}: commit: Se actualiza modelo en tabla category y user, tambien ya se pueden crear usuarios
+[33m049bc30[m HEAD@{38}: pull --tags origin dev: Merge made by the 'ort' strategy.
+[33m4618d1e[m HEAD@{39}: commit (merge): Merge branch 'main' of https://github.com/Milechan/proyecto-tattoo into dev
+[33mcaf71f4[m HEAD@{40}: commit: Se actualiza ruta perfil
+[33mcae544a[m HEAD@{41}: checkout: moving from alan to dev
+[33m0063f5c[m HEAD@{42}: commit: Se agrega editar perfil de tatuador
+[33m27065ff[m HEAD@{43}: commit: Merge branch 'main' of https://github.com/Milechan/proyecto-tattoo into alan
+[33m5bf8f56[m[33m ([m[1;31morigin/milena[m[33m)[m HEAD@{44}: pull origin main: Fast-forward
+[33m1c2b496[m HEAD@{45}: commit (merge): Finalizado merge con main
+[33mf992059[m HEAD@{46}: commit: Se actualiza en las rutas de mensaje a msg
+[33m48fa5a9[m HEAD@{47}: pull origin main: Fast-forward
+[33m0d1f833[m HEAD@{48}: commit: Creacion de vista de perfil del tatuador
+[33m237af77[m HEAD@{49}: pull origin main: Fast-forward
+[33me777933[m HEAD@{50}: commit: Actualizacion de ruta post con jwt
+[33me08dbc1[m HEAD@{51}: pull origin main: Fast-forward
+[33mf57b2eb[m HEAD@{52}: commit: Se agrego la tabla Likes
+[33m974282e[m HEAD@{53}: commit: Se agrega verificacion a la ruta posts
+[33m85e8516[m HEAD@{54}: pull origin main: Fast-forward
+[33ma38bd50[m HEAD@{55}: pull origin main: Fast-forward
+[33md289375[m HEAD@{56}: pull origin main: Fast-forward
+[33mcb6ea07[m HEAD@{57}: commit: Actualizacion de modelo agregando tabla usertype
+[33mfadfc8a[m HEAD@{58}: pull origin main: Fast-forward
+[33mdee34c0[m HEAD@{59}: pull origin main: Fast-forward
+[33m28b3757[m HEAD@{60}: pull origin main: Fast-forward
+[33m444cfa9[m HEAD@{61}: commit: Se agrego a post, editar, eliminar y visualizar por id
+[33m0b4b543[m HEAD@{62}: commit (merge): Merge branch 'main' of https://github.com/Milechan/proyecto-tattoo into alan
+[33md4c96ee[m HEAD@{63}: checkout: moving from alan to alan
+[33md4c96ee[m HEAD@{64}: commit: Conflicto resuelto en routes.py
+[33me538499[m HEAD@{65}: checkout: moving from main to alan
+[33m6f21456[m[33m ([m[1;32mmain[m[33m)[m HEAD@{66}: reset: moving to HEAD
+[33m6f21456[m[33m ([m[1;32mmain[m[33m)[m HEAD@{67}: pull: Fast-forward
+[33me538499[m HEAD@{68}: commit: Rutas estructuradas
+[33m6cd7184[m HEAD@{69}: reset: moving to HEAD
+[33m6cd7184[m HEAD@{70}: reset: moving to HEAD
+[33m6cd7184[m HEAD@{71}: commit: Nueva ruta
+[33m9da55cf[m HEAD@{72}: commit: Rutas actualizadas
+[33m1519582[m HEAD@{73}: pull origin main: Fast-forward
+[33m460eb40[m HEAD@{74}: pull: Fast-forward
+[33m1e70e81[m HEAD@{75}: pull origin main --rebase: Fast-forward
+[33m22a6f62[m HEAD@{76}: pull origin main --rebase: Fast-forward
+[33m69f25d9[m HEAD@{77}: pull origin main --rebase (finish): returning to refs/heads/main
+[33m69f25d9[m HEAD@{78}: pull origin main --rebase (pick): GET /HOME
+[33m20fd98c[m HEAD@{79}: pull origin main --rebase (start): checkout 20fd98c838a3f206641553f7b072ff86cf74fbca
+[33me6a5f85[m HEAD@{80}: commit: GET /HOME
+[33mf17b44c[m HEAD@{81}: clone: from https://github.com/Milechan/proyecto-tattoo.git

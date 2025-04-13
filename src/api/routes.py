@@ -72,7 +72,9 @@ def delete_post(post_id):
     if post is None:
         return jsonify({"msg": "Post no encontrado"}), 404
 
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
+
+
     if post.user_id != current_user_id:
         return jsonify({"msg": "No tienes permiso para eliminar este post"}), 403
    
@@ -97,7 +99,7 @@ def update_post(post_id):
     if post is None:
         return jsonify({"msg": "Post no encontrado"}), 404
 
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     if post.user_id != current_user_id:
         return jsonify({"msg": "No tienes permiso para editar este post"}), 403
 
@@ -343,15 +345,15 @@ def update_tattooer_profile(tattooer_id):
         return jsonify({'msg': f'El usuario con ID {current_user} no tiene permisos para editar este perfil'}), 403
 
     # Actualizar los campos si están en la solicitud
-    if 'bio' in data and data['bio']!='':
+    if 'bio' in data:
         profile.bio = data['bio']
-    if 'social_media_insta' in data and data['social_media_insta']!='':
+    if 'social_media_insta' in data:
         profile.social_media_insta=data['social_media_insta']
-    if 'social_media_wsp' in data and data['social_media_wsp']!='':
+    if 'social_media_wsp' in data:
         profile.social_media_wsp=data['social_media_wsp']
-    if 'social_media_x' in data and data['social_media_x']!='':
+    if 'social_media_x' in data:
         profile.social_media_x=data['social_media_x']
-    if 'social_media_facebook' in data and data['social_media_facebook']!='':
+    if 'social_media_facebook' in data:
         profile.social_media_facebook=data['social_media_facebook']
     if 'profile_picture' in data and data['profile_picture'] != "": # si detecta que le enviamos la foto
         try:
@@ -377,6 +379,7 @@ def update_tattooer_profile(tattooer_id):
             )
             # guardamos en perfil la url
             profile.profile_picture = f"https://matchtattoo.s3.us-east-2.amazonaws.com/profiles/{user.username}/profile_picture.{extension}"
+            
 
 
         except Exception as e:

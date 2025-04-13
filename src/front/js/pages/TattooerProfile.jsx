@@ -9,16 +9,88 @@ import g4 from "../../img/g4.webp";
 import g5 from "../../img/g5.webp";
 import g6 from "../../img/g6.webp";
 import g7 from "../../img/g7.webp";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { FaInstagram, FaFacebookF, FaXTwitter, FaWhatsapp } from "react-icons/fa6";
 
 
 const TattooerProfile = () => {
   const { id } = useParams()
   const { actions, store } = useContext(Context)
   const [isEditing, setIsEditing] = useState(false);
+  const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+  const [newPostImage, setNewPostImage] = useState(null);
+  const [newPostDescription, setNewPostDescription] = useState("");
+  const [isSubmittingPost, setIsSubmittingPost] = useState(false);
+
+
+
+  const handleAddPost = async () => {
+    if (!newPostImage || !newPostDescription) {
+      alert("Completa todos los campos del post");
+      return;
+    }
+
+    try {
+      const file64 = await getBase64(newPostImage);
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:3001/api/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          image: file64,
+          description: newPostDescription
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Post creado exitosamente");
+        setShowCreatePostModal(false);
+        setNewPostDescription("");
+        setNewPostImage(null);
+      } else {
+        alert(data.msg || "Error al crear el post");
+      }
+    } catch (error) {
+      console.error("Error al crear post:", error);
+      alert("Ocurrió un error al crear el post");
+    }
+  };
+
+  const handleDeletePost = async (postId) => {
+    const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este post?");
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3001/api/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert("Post eliminado correctamente.");
+        setPosts(posts.filter((post) => post.id !== postId));
+      } else {
+        const data = await response.json();
+        alert(data.msg || "Error al eliminar el post.");
+      }
+    } catch (error) {
+      console.error("Error al eliminar post:", error);
+      alert("Ocurrió un error al eliminar el post.");
+    }
+  };
+
+
+
 
   const [tattooer, setTattooer] = useState({
     name: "Juan Tattoo",
@@ -69,7 +141,10 @@ const TattooerProfile = () => {
   const openModal = (index) => {
     setModalImageIndex(index);
     setModalOpen(true);
+    setEditedDescription(posts[index]?.description || "");
+    setIsEditingDescription(false);
   };
+
 
   const closeModal = () => {
     setModalOpen(false);
@@ -82,13 +157,54 @@ const TattooerProfile = () => {
     }
     setIsEditing(!isEditing);
   };
+  const handleUpdateDescription = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const postId = posts[modalImageIndex]?.id;
 
-  const handleBannerChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setNewBanner(URL.createObjectURL(file));
+      const response = await fetch(`http://localhost:3001/api/posts/${postId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          image: posts[modalImageIndex]?.image,
+          description: editedDescription
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Descripción actualizada correctamente");
+
+
+        const updatedPosts = [...posts];
+        updatedPosts[modalImageIndex].description = editedDescription;
+        setPosts(updatedPosts);
+
+
+        setIsEditingDescription(false);
+      } else {
+        alert(data.msg || "Error al actualizar la descripción");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Ocurrió un error al editar el post.");
     }
   };
+
+
+  const handleBannerChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const preview = URL.createObjectURL(file);
+      const base64 = await getBase64(file);
+      setNewBanner(preview);
+      setNewBannerBase64(base64);
+    }
+  };
+
 
   const handleProfilePicChange = async (e) => {
     const file = e.target.files[0];
@@ -102,25 +218,23 @@ const TattooerProfile = () => {
     }
   };
 
+  const [newBannerBase64, setNewBannerBase64] = useState("");
+
+
+
+
   const [editedName, setEditedName] = useState(tattooer.name);
 
   const [editedBio, setEditedBio] = useState(tattooer.bio);
 
   const [socialMedia, setSocialMedia] = useState({
-    instagram: tattooer.social_media.instagram || "",
-    x: "",
-    whatsapp: "",
-    facebook: ""
+    instagram: store.profile.social_media_insta || "",
+    facebook: store.profile.social_media_facebook || "",
+    whatsapp: store.profile.social_media_wsp || "",
+    x: store.profile.social_media_x || ""
   });
 
-  const handleDeleteImage = (index) => {
-    const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta imagen?");
-    if (confirmDelete) {
-      const updatedImages = [...galleryImages];
-      updatedImages.splice(index, 1);
-      setGalleryImages(updatedImages);
-    }
-  };
+
 
   const handleAddImage = (e) => {
     const file = e.target.files[0];
@@ -179,26 +293,77 @@ const TattooerProfile = () => {
 
   const handleEditProfile = async (userId) => {
     try {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       const response = await fetch(`http://localhost:3001/api/profile/${userId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify({
-          "bio": editedBio,
-          "social_media_insta": tattooer.social_media.instagram,
-          "social_media_wsp": tattooer.social_media.wsp,
-          "social_media_x": tattooer.social_media.x,
-          "social_media_facebook": tattooer.social_media.facebook,
-          "profile_picture": tattooer.profile_picture
+          bio: editedBio,
+          social_media_insta: socialMedia.instagram,
+          social_media_wsp: socialMedia.whatsapp,
+          social_media_x: socialMedia.x,
+          social_media_facebook: socialMedia.facebook,
+          profile_picture: tattooer.profile_picture,
+          banner: newBannerBase64
         })
-      })
-      const data = await response.json()
-      actions.getProfile(id)
+      });
+      const data = await response.json();
+      actions.getProfile(id);
     } catch (error) {
       console.error("Error al actualizar el perfil:", error);
       alert("Ocurrió un error al actualizar perfil.");
     }
-  }
+  };
+
+  const renderSocialIcons = () => {
+    return (
+      <div className="social-icons">
+        {socialMedia.instagram && (
+          <a
+            href={socialMedia.instagram}
+            className="social-link instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaInstagram />
+          </a>
+        )}
+        {socialMedia.facebook && (
+          <a
+            href={socialMedia.facebook}
+            className="social-link facebook"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaFacebookF />
+          </a>
+        )}
+        {socialMedia.x && (
+          <a
+            href={socialMedia.x}
+            className="social-link x"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaXTwitter />
+          </a>
+        )}
+        {socialMedia.whatsapp && (
+          <a
+            href={socialMedia.whatsapp}
+            className="social-link whatsapp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaWhatsapp />
+          </a>
+        )}
+      </div>
+    );
+  };
 
 
   useEffect(() => {
@@ -266,6 +431,49 @@ const TattooerProfile = () => {
 
     fetchReviews();
   }, [currentPage]);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/posts`);
+        const data = await response.json();
+        if (response.ok) {
+          setPosts(data.filter(post => post.user_id == id));
+        } else {
+          console.error("Error al obtener posts:", data.msg);
+        }
+      } catch (error) {
+        console.error("Error al conectar con el backend:", error);
+      }
+    };
+
+    fetchPosts();
+  }, [id, showCreatePostModal]);
+
+  useEffect(() => {
+    if (store.profile) {
+      setSocialMedia({
+        instagram: store.profile.social_media_insta || "",
+        facebook: store.profile.social_media_facebook || "",
+        whatsapp: store.profile.social_media_wsp || "",
+        x: store.profile.social_media_x || ""
+      });
+    }
+  }, [store.profile]);
+  useEffect(() => {
+    if (!isEditing) return;
+
+    setEditedBio(store.profile.bio || "");
+    setEditedName(store.profile.profile_name || "");
+    setSocialMedia({
+      instagram: store.profile.social_media_insta || "",
+      facebook: store.profile.social_media_facebook || "",
+      whatsapp: store.profile.social_media_wsp || "",
+      x: store.profile.social_media_x || ""
+    });
+  }, [isEditing]);
+
 
   // para enviar nueva review
   const handleSubmitReview = async (e) => {
@@ -318,7 +526,7 @@ const TattooerProfile = () => {
       backgroundColor: '#fff',
       borderRadius: '10px',
       boxShadow: '0 2px 15px rgba(0,0,0,0.08)',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         padding: '1rem'
       }
     },
@@ -328,7 +536,7 @@ const TattooerProfile = () => {
       borderRadius: '8px',
       padding: '1.5rem',
       marginBottom: '2rem',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         padding: '1rem'
       }
     },
@@ -374,7 +582,7 @@ const TattooerProfile = () => {
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: '0.5rem',
-      '@media (max-width: 480px)': {
+      '@media (maxWidth: 480px)': {
         flexDirection: 'column',
         alignItems: 'flex-start'
       }
@@ -390,7 +598,8 @@ const TattooerProfile = () => {
     <div className="profile-page">
       <div className="container-central">
         <div className="banner">
-          <img src={newBanner || banner} alt="Banner" className="banner-img" />
+          <img src={newBanner || store.profile.banner || banner} alt="Banner" className="banner-img" />
+
           {isEditing && (
             <>
               <div className="banner-overlay" onClick={() => document.getElementById("bannerInput").click()}>
@@ -452,27 +661,26 @@ const TattooerProfile = () => {
             {isEditing ? (
               <div className="social-edit">
                 {Object.entries(socialMedia).map(([key, value]) => (
-                  <input
-                    key={key}
-                    type="text"
-                    placeholder={`@${key}`}
-                    value={value}
-                    onChange={(e) =>
-                      setSocialMedia({ ...socialMedia, [key]: e.target.value })
-                    }
-                    className="edit-input"
-                  />
+                  <div className="input-with-icon" key={key}>
+                    {key === "instagram" && <FaInstagram className="input-icon" />}
+                    {key === "facebook" && <FaFacebookF className="input-icon" />}
+                    {key === "x" && <FaXTwitter className="input-icon" />}
+                    {key === "whatsapp" && <FaWhatsapp className="input-icon" />}
+                    <input
+                      type="text"
+                      placeholder={`URL de ${key}`}
+                      value={value}
+                      onChange={(e) => setSocialMedia({ ...socialMedia, [key]: e.target.value })}
+                      className="edit-input"
+                    />
+                  </div>
                 ))}
               </div>
+
             ) : (
-              <div className="social-icons">
-                {Object.entries(socialMedia).map(([key, value]) => (
-                  value && (
-                    <div key={key} className={`icon ${key}`} title={`${key}: ${value}`}></div>
-                  )
-                ))}
-              </div>
+              renderSocialIcons()
             )}
+
 
           </div>
 
@@ -542,23 +750,35 @@ const TattooerProfile = () => {
             <button className="edit-button" onClick={toggleEdit}>
               {isEditing ? "Guardar Cambios" : "Editar perfil"}
             </button>
+            {isEditing && (
+              <button
+                className="create-post-button"
+                onClick={() => setShowCreatePostModal(true)}
+              >
+                Crear post
+              </button>
+            )}
+
           </div>
         </div>
 
 
         <div className="gallery">
-          {galleryImages.map((img, index) => (
-            <div className="card tattoo-card" key={index}>
+          {posts.map((post, index) => (
+            <div className="card tattoo-card" key={post.id}>
               <div className="image-wrapper">
                 <img
-                  src={img}
+                  src={post.image}
                   className="card-img-top"
-                  alt={`tattoo${index + 1}`}
+                  alt={`tattoo-${index}`}
                   onClick={() => openModal(index)}
                 />
                 {isEditing && (
-                  <div className="delete-icon" onClick={() => handleDeleteImage(index)}>x</div>
+                  <div className="delete-icon" onClick={() => handleDeletePost(post.id)}>
+                    <FiTrash2 size={20} />
+                  </div>
                 )}
+
               </div>
               <div className="card-body">
                 <button className="like-button" onClick={() => toggleLike(index)}>
@@ -567,6 +787,7 @@ const TattooerProfile = () => {
               </div>
             </div>
           ))}
+
 
           {isEditing && (
             <div className="card tattoo-card add-card">
@@ -613,7 +834,7 @@ const TattooerProfile = () => {
               <div className="row g-0">
 
                 <div className="col-md-5 modal-description-container p-4">
-                  <h5 className="modal-tattooer-name">Juan Tattoo</h5>
+                  <h5 className="modal-tattooer-name">{store.profile.username}</h5>
                   {isEditingDescription ? (
                     <div className="description-editor">
                       <textarea
@@ -623,14 +844,17 @@ const TattooerProfile = () => {
                       />
                       <button
                         className="save-description"
-                        onClick={() => setIsEditingDescription(false)}
+                        onClick={handleUpdateDescription}
                       >
                         Guardar
                       </button>
                     </div>
                   ) : (
-                    <p className="modal-description">{editedDescription}</p>
+                    <p className="modal-description">
+                      {posts[modalImageIndex]?.description || "Sin descripción disponible."}
+                    </p>
                   )}
+
 
 
                   <button
@@ -644,21 +868,26 @@ const TattooerProfile = () => {
 
                 <div className="col-md-7 d-flex align-items-center justify-content-center modal-image-wrapper">
                   <img
-                    src={galleryImages[modalImageIndex]}
+                    src={posts[modalImageIndex]?.image}
                     alt="Imagen ampliada"
                     className="modal-image"
                   />
+
                 </div>
               </div>
 
               <button className="close btn-close position-absolute top-0 end-0 m-3" onClick={closeModal}></button>
-              {isTattooer && !isEditingDescription && (
+              {store.user?.id == posts[modalImageIndex]?.user_id && !isEditingDescription && (
                 <FiEdit2
                   className="edit-description-icon"
                   title="Editar descripción"
-                  onClick={() => setIsEditingDescription(true)}
+                  onClick={() => {
+                    setEditedDescription(posts[modalImageIndex]?.description || "");
+                    setIsEditingDescription(true);
+                  }}
                 />
               )}
+
 
 
             </div>
@@ -915,6 +1144,59 @@ const TattooerProfile = () => {
             )}
           </div>
         </div>
+        {showCreatePostModal && (
+          <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
+            <div className="modal-dialog">
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <h5 className="modal-title">Crear nuevo post</h5>
+                  <button
+                    type="button"
+                    className="close btn-close"
+                    onClick={() => setShowCreatePostModal(false)}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <div className="mb-3">
+                    <label className="form-label">Imagen del tatuaje</label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      accept="image/*"
+                      onChange={(e) => setNewPostImage(e.target.files[0])}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Descripción</label>
+                    <textarea
+                      className="form-control"
+                      rows="4"
+                      placeholder="Escribe una descripción para el post"
+                      value={newPostDescription}
+                      onChange={(e) => setNewPostDescription(e.target.value)}
+                    ></textarea>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    className="btn cancel"
+                    onClick={() => setShowCreatePostModal(false)}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    className="btn send"
+                    onClick={handleAddPost}
+                    disabled={isSubmittingPost}
+                  >
+                    {isSubmittingPost ? "Guardando..." : "Guardar Post"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
