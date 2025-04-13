@@ -1,4 +1,4 @@
-.banner{
+/* .banner{
     width: 100%;
     height: 650px!important;
     background-size: cover;
@@ -6,7 +6,7 @@
     background-repeat: no-repeat;
     position: relative;
     object-fit: cover;
-}
+} */
 .category-name{
     position: absolute;
     top: 50%;
