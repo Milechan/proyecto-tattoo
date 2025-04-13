@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
+import profilePic from "../../img/foto_perfil.webp";
+import logo_final from "../../img/logo_final.webp"
+import { Context } from "../store/appContext";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(1);
 
+  const { actions, store } = useContext(Context)
   const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
+  useEffect(() => {
+    if (isLoggedIn) {
+      actions.getUser(token)
+      console.warn(store.user)
+    }
+
+  }, [token])
 
   const navigate = useNavigate();
 
@@ -23,7 +34,7 @@ export const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     closeAll();
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   const closeAll = () => {
@@ -66,21 +77,9 @@ export const Navbar = () => {
       <div className={`slide-menu ${isMenuOpen ? "open" : ""}`}>
         <button className="close-btn" onClick={toggleMenu}>×</button>
         <ul className="menu-list">
-          <li><Link to="/" onClick={closeAll}>Inicio</Link></li>
           {isLoggedIn ? (
             <>
-              <li><Link to="/tattooer/:id" onClick={closeAll}>Perfil</Link></li>
-
-              <li className="position-relative">
-                <Link to="/notifications" onClick={closeAll} className="d-inline-block position-relative">
-                  Notificaciones
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {notificationCount}
-                    <span className="visually-hidden">nuevas notificaciones</span>
-                  </span>
-                </Link>
-              </li>
-
+              <li><Link to="/" onClick={closeAll}>Inicio</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>
                   Categorías
@@ -95,13 +94,21 @@ export const Navbar = () => {
                   </ul>
                 )}
               </li>
+              <li className="position-relative">
+                <Link to="/notifications" onClick={closeAll} className="d-inline-block position-relative">
+                  Notificaciones
+                </Link>
+              </li>
+              <li><Link to={`/tattooer/${store.user.id}`} onClick={closeAll}>Perfil</Link></li>
               <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
               <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
               <li><Link to="#" onClick={handleLogout}>Cerrar Sesión</Link></li>
             </>
           ) : (
             <>
+              <li><Link to="/register" onClick={closeAll}>Registrarse</Link></li>
               <li><Link to="/login" onClick={closeAll}>Iniciar Sesión</Link></li>
+              <li><Link to="/" onClick={closeAll}>Inicio</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>
                   Categorías
@@ -116,7 +123,6 @@ export const Navbar = () => {
                   </ul>
                 )}
               </li>
-              <li><Link to="/register" onClick={closeAll}>Registrarse</Link></li>
               <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
             </>
           )}

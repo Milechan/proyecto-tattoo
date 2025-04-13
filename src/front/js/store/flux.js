@@ -18,11 +18,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				notification_enabled: false,
 				user_type: {},
 				created_at: "",
-				profile: {},
+				profile: [],
 				reviews: [],
 				posts: [],
 				notifications: [],
 
+			},
+			profile: {
+				id: '',
+				bio: '',
+				profile_picture: '',
+				ranking: 0,
+				social_media_facebook: '',
+				social_media_insta: '',
+				social_media_wsp: '',
+				social_media_x: '',
+				user_id: ''
 			},
 			demo: [
 				{
@@ -62,22 +73,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
 
-			getMessage: async () => {
-				try {
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				} catch (error) {
-					console.error("Error loading message from backend", error)
-				}
-			},
+
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();
@@ -94,7 +91,41 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			changeUser: (user) => {
 				setStore({ user })
+			},
+			changeProfile: (profile) => {
+				setStore({ profile })
+			},
+			getUser: async (token) => {
+				try {
+					const actions = getActions()
+					const response = await fetch(process.env.BACKEND_URL + '/api/user', {
+						method: 'GET',
+						headers: {
+							'Authorization': `Bearer ${token}`
+						}
+					})
+					const data = await response.json()
+					actions.changeUser(data.user)
+				} catch (error) {
+
+				}
+			},
+			getProfile: async (userId) => {
+				try {
+					const actions = getActions()
+					const response = await fetch(process.env.BACKEND_URL + '/api/profile/' + userId, {
+						method: "GET"
+					})
+					const data = await response.json()
+					console.warn(data);
+
+					actions.changeProfile(data)
+				} catch (error) {
+					console.error("Error obteniendo el perfil");
+
+				}
 			}
+
 		}
 	};
 };

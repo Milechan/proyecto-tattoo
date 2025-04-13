@@ -10,6 +10,28 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const { actions } = useContext(Context)
   const navigate = useNavigate()
+
+  const handleCreateProfile = async (categoryName, token) => {
+    const userProfile = {
+      category_name: categoryName
+    }
+    try {
+      const response = await fetch('http://localhost:3001/api/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(userProfile)
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        // throw new Error(data.msg || 'Error al crear perfil')
+      }
+      alert('Se creo el perfil')
+    } catch (error) {
+      console.error("error creando el perfil");
+      console.error(error);
+
+    }
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -26,6 +48,11 @@ const LoginForm = () => {
       localStorage.setItem('token', data.token);
 
       actions.changeUser(data.user);
+      console.warn("datos recibidos: ", data.user);
+
+      if (data.user.user_type.name == "tattooer" && data.user.profile == null) {
+        await handleCreateProfile(data.user.category.name, data.token)
+      }
       navigate("/");
     } catch (error) {
       alert(error.message);
@@ -37,7 +64,7 @@ const LoginForm = () => {
     mainBg: {
       backgroundColor: '#f8f9fa',
       minHeight: '100vh',
-      backgroundImage: 'url("https://i.gifer.com/RJHi.gif")',
+      backgroundImage: 'url("https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/gifs/8d6e67643888ba34335fdf8eb87052e4.gif")',
       backgroundSize: 'background-repeat', // define si es en mosaico o no
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed', // efecto parallax

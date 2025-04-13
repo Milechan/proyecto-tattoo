@@ -9,6 +9,8 @@ from api.models import db, User, Post, Profile, Review, Notification, UserType, 
 import sendgrid
 from sendgrid.helpers.mail import Mail
 import os
+import re
+import base64
 from api.utils import s3
 from datetime import datetime
 import json
@@ -70,7 +72,9 @@ def delete_post(post_id):
     if post is None:
         return jsonify({"msg": "Post no encontrado"}), 404
 
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
+
+
     if post.user_id != current_user_id:
         return jsonify({"msg": "No tienes permiso para eliminar este post"}), 403
    
@@ -95,7 +99,7 @@ def update_post(post_id):
     if post is None:
         return jsonify({"msg": "Post no encontrado"}), 404
 
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     if post.user_id != current_user_id:
         return jsonify({"msg": "No tienes permiso para editar este post"}), 403
 
@@ -300,11 +304,22 @@ def create_tattooer_profile():
     db.session.add(new_profile)
     db.session.commit()
 
+    ## CREAMOS CARPETA PARA PERFIL CON USERNAME DEL USUARIO
+    # try:
+    #     bucket = s3.Bucket("matchtattoo")
+    #     bucket.Object(user.username).put() 
+    # except Exception as e:
+    #     print(e)
+
     return jsonify({
         'msg': 'Perfil creado exitosamente',
         'user': new_profile.serialize()
     }), 201
-
+@api.route('/s3', methods=['GET'])
+def test_s3():
+    for bucket in s3.buckets.all():
+        print(bucket)
+    return jsonify({"msg": "tested ok." })
 
 #Ruta para actualizar perfil por ID:
 @api.route('/profile/<int:tattooer_id>', methods=['PUT'])
@@ -340,9 +355,36 @@ def update_tattooer_profile(tattooer_id):
         profile.social_media_x=data['social_media_x']
     if 'social_media_facebook' in data:
         profile.social_media_facebook=data['social_media_facebook']
-    if 'profile_picture' in data:
-        profile.profile_picture = data['profile_picture']
-    
+    if 'profile_picture' in data and data['profile_picture'] != "": # si detecta que le enviamos la foto
+        try:
+            b64_image = data["profile_picture"]
+            # validamos formato
+            match = re.match(r"data:(image/\w+);base64,(.+)",b64_image) 
+            if not match:
+                return jsonify({"msg":"error, profile_picture tiene un formato invalido"}),400
+            # obtenemos informacion
+            mime_type = match.group(1) # tipo de archivo
+            image_data = match.group(2) # imagen en base64
+            extension = mime_type.split('/')[-1] # extension de archivo
+
+            filename = f"profiles/{user.username}/profile_picture.{extension}" # definimos nombre del archivo
+            image_bytes = base64.b64decode(image_data) # decodificamos imagen
+
+            # subimos imagen
+            bucket = s3.Bucket("matchtattoo")
+            bucket.put_object(
+                Key=filename,
+                Body=image_bytes,
+                ContentType=mime_type
+            )
+            # guardamos en perfil la url
+            profile.profile_picture = f"https://matchtattoo.s3.us-east-2.amazonaws.com/profiles/{user.username}/profile_picture.{extension}"
+            
+
+
+        except Exception as e:
+            print(e)
+            return jsonify({"msg":"error subiendo la foto de perfil"}),500
 
     # Guardar los cambios en la base de datos
     db.session.commit()
@@ -395,36 +437,51 @@ def get_review_by_tattooer(tattooer_id):
     return jsonify(review_list),200
 
 #para que un usuario cree una  review a un tatuador
-@api.route('/review',methods=['POST'])
+@api.route('/review', methods=['POST'])
 @jwt_required()
 def create_review():
-    #obtengo datos del body
     current_user = get_jwt_identity()
-    data=request.json #del request(peticion) obtengo el json que me mandan del body
-    user= db.session.query(User).filter_by(id=current_user).one_or_none() #en la db se consulta(query)en la tabla user,filtramos por el id con el parametro 'user_id' que viene del body.nos obtiene uno o ninguno
-    if user is None :
-        return jsonify({'msg': f"no se encontro un usuario con el user_id {data['user_id']}"}), 404
-    tattooer= db.session.query(User).filter_by(id=data['tattooer_id']).one_or_none()
+    data = request.json
+
+    user = db.session.query(User).filter_by(id=current_user).one_or_none()
+    if user is None:
+        return jsonify({'msg': f"No se encontró un usuario con el user_id {current_user}"}), 404
+
+    tattooer = db.session.query(User).filter_by(id=data['tattooer_id']).one_or_none()
     if tattooer is None:
-        return jsonify({"msg": f"no se encontró un usuario con el tattooer_id {data['tattooer_id']}"}), 404
-    
+        return jsonify({"msg": f"No se encontró un usuario con el tattooer_id {data['tattooer_id']}"}), 404
+
     if user.user_type.name.lower() == 'tattoer':
-        return jsonify({"msg":"Los tatuadores no pueden crear reviews"}),403
-    #creo nueva instacia del review
-    new_review=Review(
+        return jsonify({"msg": "Los tatuadores no pueden crear reviews"}), 403
+
+    new_review = Review(
         description=data['description'],
         rating=data['rating'],
-        user_id = current_user,
+        user_id=current_user,
         tattooer_id=data['tattooer_id'],
-        created_at =datetime.now()
+        created_at=datetime.now()
     )
 
-    #guardar la instancia modificada en la base de datos
     db.session.add(new_review)
+
+    # 🔔 Crear notificación automática al tatuador
+    notification = Notification(
+        message=f"{user.username} dejó una valoración en tu perfil",
+        user_id=data['tattooer_id'],       # destinatario: el tatuador
+        sender_id=current_user,            # quien deja la review
+        is_read=False,
+        type="valoracion",
+        date=datetime.utcnow(),
+        created_at=datetime.utcnow()
+    )
+
+    db.session.add(notification)
+
+    # Commit de ambas cosas juntas
     db.session.commit()
-    #devuelvo un codigo 201 con el review creado
-    return jsonify(new_review.serialize()),201
-    
+
+    return jsonify(new_review.serialize()), 201
+
 
 """NOTIFICACIONES"""
 
@@ -454,7 +511,7 @@ def get_notification_by_id(notification_id):
         return jsonify(notification.serialize()), 200
 
 #para marcar como leida una notificacion
-@api.route('/notifcation/<int:notification_id>/readed',methods=['PUT'])
+@api.route('/notification/<int:notification_id>/readed',methods=['PUT'])
 @jwt_required()
 def set_notification_readed(notification_id):
     current_id = get_jwt_identity()
@@ -479,11 +536,13 @@ def create_notification():
         return jsonify({"msg": "Faltan datos requeridos (msg, user_id)"}), 400
     # Crear una nueva instancia de Notificación
     new_notification = Notification(
-        menssage=data["msg"],
+        message=data["msg"],
         user_id=data["user_id"],
         is_read=False, # Inicialmente la notificación no está leída
         date =datetime.utcnow(),
-        sender_id =current_user
+        sender_id =current_user,
+        type=data["type"],
+        created_at =datetime.now()
     )
     # Guardar en la base de datos
     db.session.add(new_notification)

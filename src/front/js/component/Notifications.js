@@ -29,7 +29,7 @@ export const Notifications = () => {
 
   const markAsRead = async (id) => {
     try {
-      const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications/${id}/read`, {
+      const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications/${id}/readed`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${store.token}`,
@@ -55,28 +55,10 @@ export const Notifications = () => {
   };
 
   useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications`, {
-          headers: {
-            Authorization: `Bearer ${store.token}`,
-          },
-        });
-        if (resp.ok) {
-          const data = await resp.json();
-          setNotifications(data.notifications || data);
-        } else {
-          console.error("Error al obtener notificaciones");
-        }
-      } catch (error) {
-        console.error("Error al conectar al back-end:", error);
-      }
-    };
-
-    if (store.token) {
-      fetchNotifications();
+    if (store.user && store.user.notifications) {
+      setNotifications(store.user.notifications);
     }
-  }, [store.token]);
+  }, [store.user]);
 
   return (
     <div

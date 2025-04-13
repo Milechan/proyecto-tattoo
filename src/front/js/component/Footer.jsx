@@ -19,7 +19,7 @@ const Footer = () => {
 
                     <Col md={4} className="text-center mb-3 mb-md-0">
                         <a href="/about" className="d-block text-light text-decoration-none">Quiénes somos</a>
-                        <a href="/terms" className="d-block text-light text-decoration-none">Términos y condiciones</a>
+                        <a href="/terms-and-conditions" className="d-block text-light text-decoration-none">Términos y condiciones</a>
                     </Col>
 
                     <Col md={4} className="text-center">
