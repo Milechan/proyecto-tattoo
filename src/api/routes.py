@@ -379,7 +379,6 @@ def update_tattooer_profile(tattooer_id):
             return jsonify({"msg":"error subiendo la foto de perfil"}),500
 
 
-    # 🆕 ESTO DEBE IR FUERA DEL BLOQUE ANTERIOR:
     if 'banner' in data and data['banner'] != "":
         try:
             match = re.match(r"data:(image/\w+);base64,(.+)", data['banner']) 

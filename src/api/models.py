@@ -46,7 +46,7 @@ class User(db.Model):
     notification_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     user_type_id: Mapped[int] = mapped_column(Integer, ForeignKey('user_type.id'))
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'), nullable=True)
-    created_at: Mapped[DateTime] = mapped_column(DateTime)
+    created_at: Mapped[DateTime] = mapped_column(DateTime,nullable=True)
 
     category: Mapped['Category'] = relationship('Category', back_populates="users")
     user_type: Mapped['UserType'] = relationship('UserType', back_populates='users')
@@ -145,7 +145,7 @@ class Post(db.Model):
     description: Mapped[str] = mapped_column(String)
     #likes: Mapped[int] = mapped_column(Integer, default=0)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
-    created_at: Mapped[DateTime] = mapped_column(DateTime)
+    created_at: Mapped[DateTime] = mapped_column(DateTime,nullable=True)
 
     user: Mapped['User'] = relationship('User', back_populates='posts')
     likes: Mapped[list['Likes']] = relationship('Likes', back_populates='post', cascade="all, delete-orphan")
