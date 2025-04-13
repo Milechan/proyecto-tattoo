@@ -21,9 +21,9 @@ export const Category = () => {
 
     return (
         <div className="container-category">
-            <div className="container-category-image">
+            {/* <div className="container-category-image">
                 <img src={store.category.image} alt="" className="banner" />
-            </div>
+            </div> */}
             <div className="container-category-name">
                 <div className="category-name">{store.category.name}</div>
             </div>
