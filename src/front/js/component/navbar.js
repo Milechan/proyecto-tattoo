@@ -111,7 +111,9 @@ export const Navbar = () => {
                   <Link to={`/tattooer/${store.user.id}`} onClick={closeAll}>Perfil</Link>
                 </li>
               )}
-
+          {isLoggedIn ? (
+            <>
+              <li><Link to="/" onClick={closeAll}>Inicio</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>Categorías</div>
                 {isDropdownOpen && (
@@ -124,15 +126,21 @@ export const Navbar = () => {
                   </ul>
                 )}
               </li>
-
+              <li className="position-relative">
+                <Link to="/notifications" onClick={closeAll} className="d-inline-block position-relative">
+                  Notificaciones
+                </Link>
+              </li>
+              <li><Link to={`/tattooer/${store.user.id}`} onClick={closeAll}>Perfil</Link></li>
               <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
+              <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
               <li><Link to="#" onClick={handleLogout}>Cerrar Sesión</Link></li>
             </>
           ) : (
             <>
-              <li><Link to="/login" onClick={closeAll}>Iniciar Sesión</Link></li>
               <li><Link to="/register" onClick={closeAll}>Registrarse</Link></li>
-              <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
+              <li><Link to="/login" onClick={closeAll}>Iniciar Sesión</Link></li>
+              <li><Link to="/" onClick={closeAll}>Inicio</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>Categorías</div>
                 {isDropdownOpen && (
@@ -145,6 +153,7 @@ export const Navbar = () => {
                   </ul>
                 )}
               </li>
+              <li><Link to="/about" onClick={closeAll}>Quiénes Somos</Link></li>
             </>
           )}
         </ul>

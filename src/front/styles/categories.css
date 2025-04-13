@@ -1,0 +1,15 @@
+.bradius{
+    border-radius: 16px;
+}
+.category-button {
+    margin-right: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .category-button:last-child {
+    margin-right: 0; 
+  }
+  
+  .d-flex.flex-wrap.justify-content-center.mt-4 {
+    gap: 1rem; 
+  }
