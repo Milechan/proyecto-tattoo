@@ -22,7 +22,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				reviews: [],
 				posts: [],
 				notifications: [],
-
 			},
 			profile: {
 				id: '',
@@ -35,6 +34,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				social_media_x: '',
 				user_id: ''
 			},
+			notificationCount: 0, // 🔔 contador de notificaciones no leídas
 			demo: [
 				{
 					title: "FIRST",
@@ -46,86 +46,79 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-
 			]
 		},
 		actions: {
 			getCategory: async (categoryName) => {
 				try {
-					const request = await fetch(process.env.BACKEND_URL + "/api/category/" + categoryName, { method: "GET" })
-					if (request.status !== 200) {
-
-					}
-					const data = await request.json()
-
+					const request = await fetch(process.env.BACKEND_URL + "/api/category/" + categoryName, { method: "GET" });
+					if (request.status !== 200) { }
+					const data = await request.json();
 					setStore({
 						category: {
 							...data.category,
 							carousel: JSON.parse(data.category.carousel)
 						}
-					})
-					return data
-
+					});
+					return data;
 				} catch (error) {
-					console.error("hubo un error al obtener esta categoria")
-					console.error(error)
-					throw new Error(error)
+					console.error("hubo un error al obtener esta categoria");
+					console.error(error);
+					throw new Error(error);
 				}
 			},
-			// Use getActions to call a function within a fuction
-
 
 			changeColor: (index, color) => {
-				//get the store
 				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
 				const demo = store.demo.map((elm, i) => {
 					if (i === index) elm.background = color;
 					return elm;
 				});
-
-				//reset the global store
 				setStore({ demo: demo });
 			},
+
 			changeUser: (user) => {
-				setStore({ user })
+				setStore({ user });
 			},
+
 			changeProfile: (profile) => {
-				setStore({ profile })
+				setStore({ profile });
 			},
+
 			getUser: async (token) => {
 				try {
-					const actions = getActions()
+					const actions = getActions();
 					const response = await fetch(process.env.BACKEND_URL + '/api/user', {
 						method: 'GET',
 						headers: {
 							'Authorization': `Bearer ${token}`
 						}
-					})
-					const data = await response.json()
-					actions.changeUser(data.user)
+					});
+					const data = await response.json();
+					actions.changeUser(data.user);
 				} catch (error) {
-
+					console.error("Error al obtener el usuario:", error);
 				}
 			},
+
 			getProfile: async (userId) => {
 				try {
-					const actions = getActions()
+					const actions = getActions();
 					const response = await fetch(process.env.BACKEND_URL + '/api/profile/' + userId, {
 						method: "GET"
-					})
-					const data = await response.json()
+					});
+					const data = await response.json();
 					console.warn(data);
-
-					actions.changeProfile(data)
+					actions.changeProfile(data);
 				} catch (error) {
 					console.error("Error obteniendo el perfil");
-
 				}
-			}
+			},
 
+			// 🔔 NUEVA ACCIÓN: Actualizar el contador de notificaciones globalmente
+			updateNotificationCount: (count) => {
+				setStore({ notificationCount: count });
+			}
 		}
 	};
 };

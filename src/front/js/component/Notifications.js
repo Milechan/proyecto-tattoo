@@ -10,26 +10,21 @@ import { Context } from "../store/appContext";
 
 const getNotificationIcon = (type) => {
   const iconStyle = { color: "#ccd5dc", fontSize: "1.5rem", marginRight: "0.75rem" };
-
   switch (type) {
-    case "solicitud":
-      return <FaPaintBrush style={iconStyle} />;
-    case "actualizacion":
-      return <FaUserEdit style={iconStyle} />;
-    case "valoracion":
-      return <FaStar style={iconStyle} />;
-    default:
-      return <FaBell style={iconStyle} />;
+    case "solicitud": return <FaPaintBrush style={iconStyle} />;
+    case "actualizacion": return <FaUserEdit style={iconStyle} />;
+    case "valoracion": return <FaStar style={iconStyle} />;
+    default: return <FaBell style={iconStyle} />;
   }
 };
 
 export const Notifications = () => {
-  const { store } = useContext(Context);
+  const { store, actions } = useContext(Context);
   const [notifications, setNotifications] = useState([]);
 
   const markAsRead = async (id) => {
     try {
-      const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications/${id}/readed`, {
+      const resp = await fetch(`${process.env.BACKEND_URL}/api/notification/${id}/readed`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${store.token}`,
@@ -37,9 +32,14 @@ export const Notifications = () => {
         },
       });
       if (resp.ok) {
-        setNotifications((prev) =>
-          prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
+        const updatedList = notifications.map(n =>
+          n.id === id ? { ...n, is_read: true } : n
         );
+        setNotifications(updatedList);
+
+        // 🔄 Actualiza el contador global
+        const unreadCount = updatedList.filter(n => !n.is_read).length;
+        actions.updateNotificationCount(unreadCount);
       }
     } catch (error) {
       console.error("Error al marcar como leída:", error);
@@ -61,17 +61,14 @@ export const Notifications = () => {
   }, [store.user]);
 
   return (
-    <div
-      className="container mt-4"
-      style={{
-        maxWidth: "600px",
-        margin: "0 auto",
-        backgroundColor: "#f5f4f2", // blanco crema
-        padding: "20px",
-        borderRadius: "20px",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-      }}
-    >
+    <div className="container mt-4" style={{
+      maxWidth: "600px",
+      margin: "0 auto",
+      backgroundColor: "#f5f4f2",
+      padding: "20px",
+      borderRadius: "20px",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)"
+    }}>
       <h2 className="mb-4" style={{ color: "#6c282f" }}>
         🔔 Notificaciones
       </h2>
@@ -79,7 +76,7 @@ export const Notifications = () => {
         <p style={{ color: "#20292f" }}>No tienes notificaciones.</p>
       ) : (
         <ul className="list-group">
-          {notifications.map((notification) => (
+          {notifications.map(notification => (
             <li
               key={notification.id}
               className="list-group-item d-flex justify-content-between align-items-center"
@@ -89,7 +86,7 @@ export const Notifications = () => {
                 border: "none",
                 marginBottom: "10px",
                 borderRadius: "10px",
-                padding: "15px",
+                padding: "15px"
               }}
             >
               <div className="d-flex align-items-center">
