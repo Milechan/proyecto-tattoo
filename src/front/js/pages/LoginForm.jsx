@@ -64,7 +64,7 @@ const LoginForm = () => {
     mainBg: {
       backgroundColor: '#f8f9fa',
       minHeight: '100vh',
-      backgroundImage: 'url("https://i.gifer.com/RJHi.gif")',
+      backgroundImage: 'url("https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/gifs/8d6e67643888ba34335fdf8eb87052e4.gif")',
       backgroundSize: 'background-repeat', // define si es en mosaico o no
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed', // efecto parallax
