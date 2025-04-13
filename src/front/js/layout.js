@@ -36,7 +36,7 @@ const ContentWrapper = () => {
       <div style={{ flex: 1 }}>
         <Routes>
           <Route element={<Home />} path="/" />
-          <Route element={<Single />} path="/single/:theid" />
+
           <Route element={<LoginForm />} path="/login" />
           <Route element={<RegisterForm />} path="/register" />
           <Route element={<ForgotPasswordForm />} path="/login/forgotpass" />
@@ -60,7 +60,7 @@ const Layout = () => {
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <BrowserRouter basename={basename}>
+      <BrowserRouter>
         <ScrollToTop>
           <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <ContentWrapper />

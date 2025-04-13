@@ -526,7 +526,7 @@ const TattooerProfile = () => {
       backgroundColor: '#fff',
       borderRadius: '10px',
       boxShadow: '0 2px 15px rgba(0,0,0,0.08)',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         padding: '1rem'
       }
     },
@@ -536,7 +536,7 @@ const TattooerProfile = () => {
       borderRadius: '8px',
       padding: '1.5rem',
       marginBottom: '2rem',
-      '@media (max-width: 768px)': {
+      '@media (maxWidth: 768px)': {
         padding: '1rem'
       }
     },
@@ -582,7 +582,7 @@ const TattooerProfile = () => {
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: '0.5rem',
-      '@media (max-width: 480px)': {
+      '@media (maxWidth: 480px)': {
         flexDirection: 'column',
         alignItems: 'flex-start'
       }
