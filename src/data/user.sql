@@ -15,10 +15,10 @@ INSERT INTO user (name,username,password,email,notification_enabled,user_type_id
 ("Daisy", "daisydoestattoos", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "daisydoestattoos@gmail.com", true, 2, 3),
 ("Gime Femia", "gimefemia", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "gimefemia@gmail.com", true, 2, 3),
 --black-out
-("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,4),
-("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,4),
-("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,4),
-("","","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","",true,2,4),
+("Alejandro Alles", "allesink", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "allesink@gmail.com", true, 2, 4),
+("Carlos Guerrero", "carlos_tattooer1", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "carlos_tattooer1@gmail.com", true, 2, 4),
+("Valentina Brow", "bisnezbrow", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "bisnezbrow@gmail.com", true, 2, 4),
+("Proyecto OXO", "project_oxo", "scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81", "project_oxo@gmail.com", true, 2, 4),
 --realismo
 ("Javier Alvial","vieralvialtattoo","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","javieralvialtattoo@gmail.com",true,2,5),
 ("Realismo Tattoo","realismo.tattoo","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","realismo.tattoo@gmail.com",true,2,5),
