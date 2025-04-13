@@ -1,9 +1,9 @@
 INSERT INTO profile (user_id, bio, profile_picture, ranking, category_id, social_media_insta,social_media_wsp,social_media_x,social_media_facebook) VALUES
 --neotradicional
-(1,"bio user","",0,1,"","","",""),
-(2,"bio user","",0,1,"","","",""),
-(3,"bio user","",0,1,"","","",""),
-(4,"bio user","",0,1,"","","",""),
+(1,"Me dedico a realizar arte neotradicional desde hace años, me gusta el poder sobreexagerar los colores al momento de tatuar,y claramente los Onis son lo mas caracteristico que realizo","",0,1,"https://www.instagram.com/asmodeus_tattoo/?hl=es-la","","",""),
+(2,"Me identifico como una tatuadara extravagante, me gusta el poder tatuar con colores, siento que le da mas realismo en si mismo, al igual el que me permitan hacer tatuajes en mi estilo de dibujo,ya que tambien soy artista","",0,1,"https://www.instagram.com/ateskun_/?hl=es-la","","",""),
+(3,"No hay nada que me guste mas que tatuar en negro, siento que las lineas realmente resaltan y que uno puede identificarse con ello.Claramente usando el estilo neotradicional","",0,1,"https://www.instagram.com/krn.blvck/?hl=es-la","","",""),
+(4,"En lo personal me gusta tatuar animales en el estilo neotradicional, me es algo muy artistico y claramente que con mi estilo integrado, siento que queda GOD","",0,1,"https://www.instagram.com/pipakabuki/?hl=es-la","","",""),
 --geeks
 (5,"bio user","",0,2,"","","",""),
 (6,"bio user","",0,2,"","","",""),

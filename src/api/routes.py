@@ -303,11 +303,11 @@ def create_tattooer_profile():
     db.session.commit()
 
     ## CREAMOS CARPETA PARA PERFIL CON USERNAME DEL USUARIO
-    try:
-        bucket = s3.Bucket("matchtattoo")
-        bucket.Object(user.username).put() 
-    except Exception as e:
-        print(e)
+    # try:
+    #     bucket = s3.Bucket("matchtattoo")
+    #     bucket.Object(user.username).put() 
+    # except Exception as e:
+    #     print(e)
 
     return jsonify({
         'msg': 'Perfil creado exitosamente',
