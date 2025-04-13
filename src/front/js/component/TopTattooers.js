@@ -6,8 +6,8 @@ export const TopTattooers = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const images = [
-    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/home/top+likes/topLikes1.png",
-    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/home/top+likes/topLikes2.png",
+    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/black-out/tatuador4/DALL%C2%B7E+2025-04-12+20.30.29+-+Solid+black+blackout+tattoo+design+on+uncommon+body+parts+like+the+side+of+the+neck%2C+back+of+the+hand%2C+upper+thighs%2C+lower+calves%2C+abdomen%2C+or+shoulde.webp",
+    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/geeks/tatuador1/Captura+de+pantalla+2025-04-11+185746.png",
     "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/home/top+likes/topLikes3.png",
   ];
 
@@ -17,8 +17,8 @@ export const TopTattooers = () => {
   };
 
   return (
-    <div className="top-tattooers-container text-center">
-      <h1 style={{ marginTop: "3rem" }}>Top de tatuadores</h1>
+    <div className="top-tattooers-container text-center mt-3">
+      <h1 style={{ marginTop: "3rem" }}>Tatuadores mejor calificados</h1>
       <div
         id="carouselExampleAutoplaying"
         className="carousel slide mx-auto tattoo-carousel-container"
