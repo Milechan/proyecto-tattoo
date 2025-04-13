@@ -4,11 +4,31 @@ import "./AboutUs.css";
 
 const AboutUs = () => {
   const teamMembers = [
-    { name: "Milena", role: "Fullstack Developer", img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Milena.png" },
-    { name: "Alan", role: "Fullstack Developer", img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Alan.png" },
-    { name: "Samuel", role: "Fullstack Developer", img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Samuel.jpg" },
-    { name: "Damian", role: "Fullstack Developer", img: "https://via.placeholder.com/150" },
-    { name: "Ángela", role: "Fullstack Developer", img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Angela.png" }
+    {
+      name: "Milena",
+      role: "Fullstack Developer",
+      img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Milena.webp"
+    },
+    {
+      name: "Alan",
+      role: "Fullstack Developer",
+      img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Alan.webp"
+    },
+    {
+      name: "Samuel",
+      role: "Fullstack Developer",
+      img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Samuel.webp"
+    },
+    {
+      name: "Damian",
+      role: "Fullstack Developer",
+      img: "https://via.placeholder.com/150"
+    },
+    {
+      name: "Ángela",
+      role: "Fullstack Developer",
+      img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Angela.webp"
+    }
   ];
 
   return (
