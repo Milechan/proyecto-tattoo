@@ -5,6 +5,7 @@ import {
   FaUserEdit,
   FaStar,
   FaBell,
+  FaHeart
 } from "react-icons/fa";
 import { Context } from "../store/appContext";
 
@@ -14,6 +15,7 @@ const getNotificationIcon = (type) => {
     case "solicitud": return <FaPaintBrush style={iconStyle} />;
     case "actualizacion": return <FaUserEdit style={iconStyle} />;
     case "valoracion": return <FaStar style={iconStyle} />;
+    case "like": return <FaHeart style={iconStyle} />;
     default: return <FaBell style={iconStyle} />;
   }
 };
@@ -24,7 +26,7 @@ export const Notifications = () => {
 
   const markAsRead = async (id) => {
     try {
-      const resp = await fetch(`${process.env.BACKEND_URL}/api/notification/${id}/readed`, {
+      const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications/${id}/readed`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${store.token}`,
