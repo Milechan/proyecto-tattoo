@@ -124,6 +124,8 @@ const TattooerProfile = () => {
     description: '',
     rating: 5
   });
+  const [currentUserInfo, setCurrentUserInfo] = useState(null);
+  const [isLoadingUserInfo, setIsLoadingUserInfo] = useState(true);
   const [hoveredStar, setHoveredStar] = useState(null);
   const [isLoadingReviews, setIsLoadingReviews] = useState(true);
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
@@ -373,6 +375,39 @@ const TattooerProfile = () => {
     actions.getProfile(id)
   }, [showModal, id]);
 
+  // para saber que tipo de usuario es
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          setIsLoadingUserInfo(true);
+          const response = await fetch('http://localhost:3001/api/user', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const data = await response.json();
+
+          if (response.ok) {
+            // Obtenemos el tipo de usuario y el ID
+            setCurrentUserInfo({
+              id: data.user.id,
+              userTypeId: data.user.user_type_id
+            });
+          }
+        } catch (error) {
+          console.error('Error al obtener información del usuario:', error);
+        } finally {
+          setIsLoadingUserInfo(false);
+        }
+      } else {
+        setIsLoadingUserInfo(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   // para cargar reviews 
   useEffect(() => {
@@ -873,107 +908,125 @@ const TattooerProfile = () => {
             </h3>
 
             {/* Formulario para nueva reseña */}
-            {localStorage.getItem('token') ? (
-              <div style={styles.reviewFormCard}>
-                <h5 style={{ marginBottom: '1rem', color: '#333' }}>Deja tu reseña</h5>
-                <form onSubmit={handleSubmitReview}>
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{
-                      display: 'block',
-                      marginBottom: '0.5rem',
-                      fontWeight: '500'
-                    }}>
-                      Calificación
-                    </label>
-                    <div style={styles.starRatingContainer}>
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <span
-                          key={star}
-                          style={{
-                            ...styles.star,
-                            ...(star <= (hoveredStar || newReview.rating) && styles.filledStar
-                            )
-                          }}
-                          onClick={() => setNewReview({ ...newReview, rating: star })}
-                          onMouseEnter={() => setHoveredStar(star)}
-                          onMouseLeave={() => setHoveredStar(null)}
-                        >
-                          ★
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <textarea
-                      style={styles.reviewTextarea}
-                      rows="4"
-                      placeholder="Describe tu experiencia (mínimo 20 caracteres)..."
-                      value={newReview.description}
-                      onChange={(e) => setNewReview({ ...newReview, description: e.target.value })}
-                      required
-                      minLength="20"
-                      maxLength="500"
-                    />
-                    <div style={{
-                      fontSize: '0.8rem',
-                      color: '#666',
-                      textAlign: 'right'
-                    }}>
-                      {newReview.description.length}/500 caracteres
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    style={{
-                      backgroundColor: '#8c3d5b',
-                      border: 'none',
-                      borderRadius: '8px',
-                      padding: '0.75rem 1.5rem',
-                      color: 'white',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      transition: 'background-color 0.3s',
-                      opacity: isSubmittingReview || newReview.description.length < 20 ? 0.7 : 1,
-                      ':hover': {
-                        backgroundColor: '#5c2d42'
-                      }
-                    }}
-                    disabled={isSubmittingReview || newReview.description.length < 20}
-                  >
-                    {isSubmittingReview ? (
-                      <>
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            width: '1rem',
-                            height: '1rem',
-                            border: '2px solid transparent',
-                            borderTopColor: 'white',
-                            borderRadius: '50%',
-                            animation: 'spin 1s linear infinite',
-                            marginRight: '0.5rem'
-                          }}
-                        />
-                        Enviando...
-                      </>
-                    ) : 'Enviar Reseña'}
-                  </button>
-                </form>
+            {isLoadingUserInfo ? (
+              <div style={{ textAlign: 'center', padding: '1rem' }}>
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Cargando...</span>
+                </div>
               </div>
             ) : (
-              <div style={{
-                backgroundColor: '#f8f9fa',
-                padding: '1rem',
-                borderRadius: '8px',
-                textAlign: 'center',
-                marginBottom: '2rem'
-              }}>
-                <Link to="/login" style={{ color: '#8c3d5b', textDecoration: 'none' }}>
-                  Inicia sesión
-                </Link> para dejar una reseña
-              </div>
+              <>
+                {localStorage.getItem('token') && currentUserInfo?.userTypeId !== 1 && currentUserInfo?.id !== parseInt(id) ? (
+                  <div style={styles.reviewFormCard}>
+                    <h5 style={{ marginBottom: '1rem', color: '#333' }}>Deja tu reseña</h5>
+                    <form onSubmit={handleSubmitReview}>
+                      <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{
+                          display: 'block',
+                          marginBottom: '0.5rem',
+                          fontWeight: '500'
+                        }}>
+                          Calificación
+                        </label>
+                        <div style={styles.starRatingContainer}>
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <span
+                              key={star}
+                              style={{
+                                ...styles.star,
+                                ...(star <= (hoveredStar || newReview.rating) && styles.filledStar
+                                )
+                              }}
+                              onClick={() => setNewReview({ ...newReview, rating: star })}
+                              onMouseEnter={() => setHoveredStar(star)}
+                              onMouseLeave={() => setHoveredStar(null)}
+                            >
+                              ★
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div style={{ marginBottom: '1.5rem' }}>
+                        <textarea
+                          style={styles.reviewTextarea}
+                          rows="4"
+                          placeholder="Describe tu experiencia (mínimo 20 caracteres)..."
+                          value={newReview.description}
+                          onChange={(e) => setNewReview({ ...newReview, description: e.target.value })}
+                          required
+                          minLength="20"
+                          maxLength="500"
+                        />
+                        <div style={{
+                          fontSize: '0.8rem',
+                          color: '#666',
+                          textAlign: 'right'
+                        }}>
+                          {newReview.description.length}/500 caracteres
+                        </div>
+                      </div>
+
+                      <button
+                        type="submit"
+                        style={{
+                          backgroundColor: '#8c3d5b',
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '0.75rem 1.5rem',
+                          color: 'white',
+                          fontWeight: '600',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.3s',
+                          opacity: isSubmittingReview || newReview.description.length < 20 ? 0.7 : 1,
+                          ':hover': {
+                            backgroundColor: '#5c2d42'
+                          }
+                        }}
+                        disabled={isSubmittingReview || newReview.description.length < 20}
+                      >
+                        {isSubmittingReview ? (
+                          <>
+                            <span
+                              style={{
+                                display: 'inline-block',
+                                width: '1rem',
+                                height: '1rem',
+                                border: '2px solid transparent',
+                                borderTopColor: 'white',
+                                borderRadius: '50%',
+                                animation: 'spin 1s linear infinite',
+                                marginRight: '0.5rem'
+                              }}
+                            />
+                            Enviando...
+                          </>
+                        ) : 'Enviar Reseña'}
+                      </button>
+                    </form>
+                  </div>
+                ) : (
+                  <div style={{
+                    backgroundColor: '#f8f9fa',
+                    padding: '1rem',
+                    borderRadius: '8px',
+                    textAlign: 'center',
+                    marginBottom: '2rem'
+                  }}>
+                    {!localStorage.getItem('token') ? (
+                      <Link to="/login" style={{ color: '#8c3d5b', textDecoration: 'none' }}>
+                        Inicia sesión para dejar una reseña
+                      </Link>
+                    ) : currentUserInfo?.userTypeId === 2 ? (
+                      "🔒 Los tatuadores no pueden dejar reseñas"
+                    ) : currentUserInfo?.id === parseInt(id) ? (
+                      "🔒 No puedes dejar una reseña en tu propio perfil"
+                    ) : (
+                      "Debes ser un usuario registrado para dejar reseñas"
+                    )}
+                  </div>
+                )}
+              </>
             )}
 
             {/* Lista de reseñas */}

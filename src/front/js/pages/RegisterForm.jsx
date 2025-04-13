@@ -63,7 +63,20 @@ const RegisterForm = () => {
     mainBg: {
       backgroundColor: '#f8f9fa',
       minHeight: '100vh',
-      padding: '2rem 0'
+      backgroundImage: 'url("https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/gifs/tattoo.gif")',
+      backgroundSize: 'background-repeat',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      position: 'relative'
+    },
+    overlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+      zIndex: 1
     },
     card: {
       border: 'none',
@@ -116,125 +129,124 @@ const RegisterForm = () => {
 
   return (
     <Container fluid style={styles.mainBg} className="d-flex align-items-center">
-      <Row className="justify-content-center w-100">
-        <Col md={10} lg={8} xl={6}>
-          <Card style={styles.card}>
-            <Card.Header style={styles.header}>
-              <h2>CONECTA CON EL ARTE EN TU PIEL</h2>
-            </Card.Header>
-            <Card.Body className="p-4 p-md-5">
-              <Form>
-                <h4 style={styles.title}>Crea tu cuenta</h4>
+      <div style={styles.overlay} className="d-flex align-items-center" >
+        <Row className="justify-content-center w-100">
+          <Col md={10} lg={8} xl={6}>
+            <Card style={styles.card}>
+              <Card.Header style={styles.header}>
+                <h2>CONECTA CON EL ARTE EN TU PIEL</h2>
+              </Card.Header>
+              <Card.Body className="p-4 p-md-5">
+                <Form>
+                  <h4 style={styles.title}>Crea tu cuenta</h4>
 
-                <Row>
-                  <Col md={6} className="mb-3">
+                  <Row>
+                    <Col md={6} className="mb-3">
+                      <Form.Control
+                        name="name"
+                        placeholder="Nombre Completo"
+                        style={styles.input}
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                      />
+                    </Col>
+                    <Col md={6} className="mb-3">
+                      <Form.Control
+                        name="username"
+                        placeholder="Nombre de usuario"
+                        style={styles.input}
+                        required
+                        value={formData.username}
+                        onChange={handleChange}
+                      />
+                    </Col>
+                  </Row>
+
+                  <Form.Group className="mb-3">
                     <Form.Control
-                      name="name"
-                      placeholder="Nombre Completo"
+                      name="email"
+                      type="email"
+                      placeholder="Correo electrónico"
                       style={styles.input}
                       required
-                      value={formData.name}
+                      value={formData.email}
                       onChange={handleChange}
                     />
-                  </Col>
-                  <Col md={6} className="mb-3">
-                    <Form.Control
-                      name="username"
-                      placeholder="Nombre de usuario"
-                      style={styles.input}
-                      required
-                      value={formData.username}
-                      onChange={handleChange}
-                    />
-                  </Col>
-                </Row>
-
-                <Form.Group className="mb-3">
-                  <Form.Control
-                    name="email"
-                    type="email"
-                    placeholder="Correo electrónico"
-                    style={styles.input}
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Control
-                    name="password"
-                    type="password"
-                    placeholder="Contraseña"
-                    style={styles.input}
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    minLength="6"
-                  />
-                </Form.Group>
-
-                <Form.Check
-                  type="checkbox"
-                  id="tattooer-check"
-                  label="Soy tatuador"
-                  className="mb-3"
-                  checked={isTattooer}
-                  onChange={(e) => setIsTattooer(e.target.checked)}
-
-                >
-                  <Form.Check.Input type="checkbox" onClick={(e) => { console.log("Click en soy tatuador"); setIsTattooer(true) }} />
-                  <Form.Check.Label style={styles.checkboxLabel}>
-                    Soy tatuador
-                  </Form.Check.Label>
-                </Form.Check>
-
-                {isTattooer && (
-                  <Form.Group>
-                    <Form.Select
-                      name="categoryName"
-                      value={formData.categoryName}
-                      onChange={handleChange}
-                      style={styles.input}
-                      required={isTattooer}
-                    >
-                      <option value="">Selecciona tu especialidad</option>
-                      <option value="Minimalista">Minimalista</option>
-                      <option value="Realismo">Realismo</option>
-                      <option value="Black-Out">Black-Out</option>
-                      <option value="Geeks">Geeks</option>
-                      <option value="Neotradicional">Neotradicional</option>
-                    </Form.Select>
                   </Form.Group>
-                )}
 
-                <Form.Check
-                  type="checkbox"
-                  id="terms-check"
-                  className="mb-4"
-                  required
-                >
-                  <Form.Check.Input type="checkbox" />
-                  <Form.Check.Label style={styles.checkboxLabel}>
-                    Acepto los términos y condiciones
-                  </Form.Check.Label>
-                </Form.Check>
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      name="password"
+                      type="password"
+                      placeholder="Contraseña"
+                      style={styles.input}
+                      required
+                      value={formData.password}
+                      onChange={handleChange}
+                      minLength="6"
+                    />
+                  </Form.Group>
 
-                <Button
-                  type="submit"
-                  style={styles.button}
-                  className="text-white"
-                  onClick={(e) => handleSubmit(e)
+                  <Form.Check className="mb-3">
+                    <Form.Check.Input
+                      type="checkbox"
+                      id="tattooer-check"
+                      checked={isTattooer}
+                      onChange={(e) => setIsTattooer(e.target.checked)}
+                    />
+                    <Form.Check.Label style={styles.checkboxLabel}>
+                      Soy tatuador
+                    </Form.Check.Label>
+                  </Form.Check>
 
-                  }
-                >
-                  Registrarse
-                </Button>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+                  {isTattooer && (
+                    <Form.Group>
+                      <Form.Select
+                        name="categoryName"
+                        value={formData.categoryName}
+                        onChange={handleChange}
+                        style={styles.input}
+                        required={isTattooer}
+                      >
+                        <option value="">Selecciona tu especialidad</option>
+                        <option value="Minimalista">Minimalista</option>
+                        <option value="Realismo">Realismo</option>
+                        <option value="Black-Out">Black-Out</option>
+                        <option value="Geeks">Geeks</option>
+                        <option value="Neotradicional">Neotradicional</option>
+                      </Form.Select>
+                    </Form.Group>
+                  )}
+
+                  <Form.Check
+                    type="checkbox"
+                    id="terms-check"
+                    className="mb-4"
+                    required
+                  >
+                    <Form.Check.Input type="checkbox" />
+                    <Form.Check.Label style={styles.checkboxLabel}>
+                      Acepto los términos y condiciones
+                    </Form.Check.Label>
+                  </Form.Check>
+
+                  <Button
+                    type="submit"
+                    style={styles.button}
+                    className="text-white"
+                    onClick={(e) => handleSubmit(e)
+
+                    }
+                  >
+                    Registrarse
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </Container>
   );
 };
