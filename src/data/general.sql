@@ -1,3 +1,9 @@
+DELETE FROM user_type;
+DELETE FROM category;
+DELETE FROM user;
+DELETE FROM profile;
+DELETE FROM post;
+
 INSERT INTO user_type (name, description) VALUES 
 ('user', 'este es un usuario normal'),
 ('tattooer', 'este es un usuario tatuador');
@@ -28,8 +34,7 @@ INSERT INTO category (name, description, image, carousel) VALUES
  'https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/categorias/banners/image-realismo.png', 
  '["https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/categorias/carrusel/realismo/ChatGPT+Image+7+abr+2025%2C+19_16_40.png","https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/categorias/carrusel/realismo/ChatGPT+Image+7+abr+2025%2C+19_17_47.png","https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/categorias/carrusel/realismo/ChatGPT+Image+7+abr+2025%2C+19_28_23.png"]');
  
-
- INSERT INTO user (name,username,password,email,notification_enabled,user_type_id,category_id) VALUES
+INSERT INTO user (name,username,password,email,notification_enabled,user_type_id,category_id) VALUES
 --neotradicional
 ("Karen","krn.blvck","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","karen@gmail.com",true,2,1),
 ("Pipa Kabuki","pipakabuki","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","pipa.kabuki@gmail.com",true,2,1),
@@ -54,34 +59,34 @@ INSERT INTO category (name, description, image, carousel) VALUES
 ("Javier Alvial","vieralvialtattoo","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","javieralvialtattoo@gmail.com",true,2,5),
 ("Realismo Tattoo","realismo.tattoo","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","realismo.tattoo@gmail.com",true,2,5),
 ("Ivan Ignacio","ivanignacio07_inktattoo","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","ivanignacio07_inktattoo@gmail.com",true,2,5),
-("Ramon Nieves","ramonieves_","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","ramonieves_@gmail.com",true,2,5)
+("Ramon Nieves","ramonieves_","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","ramonieves_@gmail.com",true,2,5);
 
-INSERT INTO profile (user_id, bio, profile_picture, banner, ranking, category_id, social_media_insta, social_media_wsp, social_media_x, social_media_facebook) VALUES
+INSERT INTO profile (user_id, bio, profile_picture, ranking, category_id, social_media_insta,social_media_wsp,social_media_x,social_media_facebook) VALUES
 --neotradicional
-(1,"Me dedico a realizar arte neotradicional desde hace años, me gusta el poder sobreexagerar los colores al momento de tatuar,y claramente los Onis son lo mas caracteristico que realizo","","",0,1,"https://www.instagram.com/asmodeus_tattoo/?hl=es-la","","",""),
-(2,"Me identifico como una tatuadara extravagante, me gusta el poder tatuar con colores, siento que le da mas realismo en si mismo, al igual el que me permitan hacer tatuajes en mi estilo de dibujo,ya que tambien soy artista","","",0,1,"https://www.instagram.com/ateskun_/?hl=es-la","","",""),
-(3,"No hay nada que me guste mas que tatuar en negro, siento que las lineas realmente resaltan y que uno puede identificarse con ello.Claramente usando el estilo neotradicional","","",0,1,"https://www.instagram.com/krn.blvck/?hl=es-la","","",""),
-(4,"En lo personal me gusta tatuar animales en el estilo neotradicional, me es algo muy artistico y claramente que con mi estilo integrado, siento que queda GOD","","",0,1,"https://www.instagram.com/pipakabuki/?hl=es-la","","",""),
+(1,"Me dedico a realizar arte neotradicional desde hace años, me gusta el poder sobreexagerar los colores al momento de tatuar,y claramente los Onis son lo mas caracteristico que realizo","",0,1,"https://www.instagram.com/asmodeus_tattoo/?hl=es-la","","",""),
+(2,"Me identifico como una tatuadara extravagante, me gusta el poder tatuar con colores, siento que le da mas realismo en si mismo, al igual el que me permitan hacer tatuajes en mi estilo de dibujo,ya que tambien soy artista","",0,1,"https://www.instagram.com/ateskun_/?hl=es-la","","",""),
+(3,"No hay nada que me guste mas que tatuar en negro, siento que las lineas realmente resaltan y que uno puede identificarse con ello.Claramente usando el estilo neotradicional","",0,1,"https://www.instagram.com/krn.blvck/?hl=es-la","","",""),
+(4,"En lo personal me gusta tatuar animales en el estilo neotradicional, me es algo muy artistico y claramente que con mi estilo integrado, siento que queda GOD","",0,1,"https://www.instagram.com/pipakabuki/?hl=es-la","","",""),
 --geeks
-(5,"Aguja en mano y corazón geek, soy una tatuadora apasionada por el anime y los videojuegos. Mi tinta da vida a personajes y mundos favoritos en la piel de mis clientes, creando obras únicas llenas de color y detalle. Si amas el anime y buscas llevarlo contigo, ¡hablemos de tu próximo tatuaje!","","",0,2,"https://www.instagram.com/deadmermaid.tattoo/?hl=es-la","","",""),
-(6,"Tatuadora geek de corazón otaku. Mi pasión: convertir la piel en un lienzo vibrante de anime y videojuegos. Cada aguja traza historias y personajes amados, creando tatuajes únicos para verdaderos fans. ¿Listo para llevar tu fandom a otro nivel? ¡Conversemos!","","",0,2,"https://www.instagram.com/dr.etherink/?hl=es-la","","",""),
-(7,"Agujas frías sobre la piel, desvelando trazos de la noche y la melancolía. Mi arte en tinta explora la belleza en lo oscuro, lo etéreo y los susurros del alma. Si tus historias se tiñen de sombras y buscas un tatuaje que las recite en tu piel, aquí encontrarás un eco en cada línea.","","",0,2,"https://www.instagram.com/lissssalme/?hl=es-la","","",""),
-(8,"Mi arte en la piel es una explosión de color y líneas vivaces. Con cada tatuaje, celebro la alegría y los momentos que nos hacen sonreír. Si buscas plasmar esa chispa de felicidad en tu piel, creando un recuerdo vibrante y lleno de energía, ¡manos a la obra!","","",0,2,"https://www.instagram.com/aleinnk/?hl=es-la","","",""),
+(5,"Aguja en mano y corazón geek, soy una tatuadora apasionada por el anime y los videojuegos. Mi tinta da vida a personajes y mundos favoritos en la piel de mis clientes, creando obras únicas llenas de color y detalle. Si amas el anime y buscas llevarlo contigo, ¡hablemos de tu próximo tatuaje!","",0,2,"https://www.instagram.com/deadmermaid.tattoo/?hl=es-la","","",""),
+(6,"Tatuadora geek de corazón otaku. Mi pasión: convertir la piel en un lienzo vibrante de anime y videojuegos. Cada aguja traza historias y personajes amados, creando tatuajes únicos para verdaderos fans. ¿Listo para llevar tu fandom a otro nivel? ¡Conversemos!","",0,2,"https://www.instagram.com/dr.etherink/?hl=es-la","","",""),
+(7,"Agujas frías sobre la piel, desvelando trazos de la noche y la melancolía. Mi arte en tinta explora la belleza en lo oscuro, lo etéreo y los susurros del alma. Si tus historias se tiñen de sombras y buscas un tatuaje que las recite en tu piel, aquí encontrarás un eco en cada línea.","",0,2,"https://www.instagram.com/lissssalme/?hl=es-la","","",""),
+(8,"Mi arte en la piel es una explosión de color y líneas vivaces. Con cada tatuaje, celebro la alegría y los momentos que nos hacen sonreír. Si buscas plasmar esa chispa de felicidad en tu piel, creando un recuerdo vibrante y lleno de energía, ¡manos a la obra!","",0,2,"https://www.instagram.com/aleinnk/?hl=es-la","","",""),
 --minimalista
-(9,"El arte de la naturaleza, reducido a lo esencial. Tatuajes minimalistas que capturan la belleza de las plantas y flores.","","",0,3,"https://www.instagram.com/teffylines/?hl=es","wa.me/573125697412","","https://www.facebook.com/people/Teffy-Lines-Tatto/61573715077130/?ref=ig_profile_ac"),
-(10,"Tatuajes que combinan el minimalismo y la naturaleza. Cada diseño, una obra única inspirada en la serenidad de las plantas.","","",0,3,"https://www.instagram.com/jessicaduran_art/?hl=es-la","wa.me/573126013290","",""),
-(11,"Transformando la simplicidad en arte. Tatuajes botánicos que celebran las formas y detalles más sutiles de la naturaleza.","","",0,3,"https://www.instagram.com/daisydoestattoos/?utm_source=ig_embed&ig_rid=c271bf3e-98e0-4355-8d3b-1d1f33ea4c69","wa.me/573126013290","",""),
-(12,"Minimalismo y botánica en su máxima expresión. Diseños limpios y elegantes, inspirados en la flora que nos rodea.","","",0,3,"https://www.instagram.com/gimefemia/?hl=es","wa.me/573126013290","",""),
+(9,"El arte de la naturaleza, reducido a lo esencial. Tatuajes minimalistas que capturan la belleza de las plantas y flores.","",0,3,"https://www.instagram.com/teffylines/?hl=es","wa.me/573125697412","","https://www.facebook.com/people/Teffy-Lines-Tatto/61573715077130/?ref=ig_profile_ac"),
+(10,"Tatuajes que combinan el minimalismo y la naturaleza. Cada diseño, una obra única inspirada en la serenidad de las plantas.","",0,3,"https://www.instagram.com/jessicaduran_art/?hl=es-la","wa.me/573126013290","",""),
+(11,"Transformando la simplicidad en arte. Tatuajes botánicos que celebran las formas y detalles más sutiles de la naturaleza.","",0,3,"https://www.instagram.com/daisydoestattoos/?utm_source=ig_embed&ig_rid=c271bf3e-98e0-4355-8d3b-1d1f33ea4c69","wa.me/573126013290","",""),
+(12,"Minimalismo y botánica en su máxima expresión. Diseños limpios y elegantes, inspirados en la flora que nos rodea.","",0,3,"https://www.instagram.com/gimefemia/?hl=es","wa.me/573126013290","",""),
 --black-out
-(13,"Transformando el dolor en arte oscuro. Tatuajes black-out que cubren la piel con carácter, fuerza y elegancia minimalista.","","",0,4,"https://www.instagram.com/allesink/?hl=es-la","","",""),
-(14,"Negro profundo, trazos intensos. Cada diseño black-out redefine el cuerpo como un lienzo de poder visual absoluto.","","",0,4,"https://www.instagram.com/carlos_tattooer1/?hl=es-la","","",""),
-(15,"Arte conceptual y cobertura total. Diseños black-out que combinan simetría, geometría y expresión corporal radical.","","",0,4,"https://www.instagram.com/bisnezbrow/?hl=es-la","","",""),
-(16,"Minimalismo extremo y tinta sólida. Cada pieza black-out cubre el cuerpo con personalidad, audacia y belleza cruda.","","",0,4,"https://www.instagram.com/project.oxo/?hl=es-la","","",""),
+(13,"Transformando el dolor en arte oscuro. Tatuajes black-out que cubren la piel con carácter, fuerza y elegancia minimalista.","",0,4,"https://www.instagram.com/allesink/?hl=es-la","","",""),
+(14,"Negro profundo, trazos intensos. Cada diseño black-out redefine el cuerpo como un lienzo de poder visual absoluto.","",0,4,"https://www.instagram.com/carlos_tattooer1/?hl=es-la","","",""),
+(15,"Arte conceptual y cobertura total. Diseños black-out que combinan simetría, geometría y expresión corporal radical.","",0,4,"https://www.instagram.com/bisnezbrow/?hl=es-la","","",""),
+(16,"Minimalismo extremo y tinta sólida. Cada pieza black-out cubre el cuerpo con personalidad, audacia y belleza cruda.","",0,4,"https://www.instagram.com/project.oxo/?hl=es-la","","",""),
 --realismo
-(17,"El realismo cobra vida en la piel. Tatuajes que capturan cada detalle, sombra y textura, transformando imágenes en arte permanente.","","",0,5,"https://www.instagram.com/javieralvialtattoo/","","",""),
-(18,"Arte hiperrealista en tu piel. Cada tatuaje es un lienzo de precisión, donde la profundidad y los contrastes narran historias.","","",0,5,"https://www.instagram.com/realismo.tattoo/","","",""),
-(19,"Tatuajes realistas que desafían la percepción. Trabajando con sombras y volúmenes para crear piezas que respiran en tu piel.","","",0,5,"https://www.instagram.com/ivanignacio07_inktattoo/?hl=es-la","","",""),
-(20,"Realismo puro, emoción en cada trazo. Especializado en retratos y escenas que conservan la esencia de lo que amas.","","",0,5,"https://www.instagram.com/ramonieves_/","","","");
+(17,"El realismo cobra vida en la piel. Tatuajes que capturan cada detalle, sombra y textura, transformando imágenes en arte permanente.","",0,5,"https://www.instagram.com/javieralvialtattoo/","","",""),
+(18,"Arte hiperrealista en tu piel. Cada tatuaje es un lienzo de precisión, donde la profundidad y los contrastes narran historias.","",0,5,"https://www.instagram.com/realismo.tattoo/","","",""),
+(19,"Tatuajes realistas que desafían la percepción. Trabajando con sombras y volúmenes para crear piezas que respiran en tu piel.","",0,5,"https://www.instagram.com/ivanignacio07_inktattoo/?hl=es-la","","",""),
+(20,"Realismo puro, emoción en cada trazo. Especializado en retratos y escenas que conservan la esencia de lo que amas.","",0,5,"https://www.instagram.com/ramonieves_/","","","");
 
 INSERT INTO post (user_id,image,description) VALUES
 --neotradicional
@@ -236,4 +241,4 @@ INSERT INTO post (user_id,image,description) VALUES
 (20,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/realismo/tatuador4/Jack-Sparrow-Roma-1-1008x1024.jpg","Jack Sparrow (realismo) – Fidelidad al personaje, texturas en ropa."),
 (20,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/realismo/tatuador4/steel-of-doom-tony-black-tattoo-barcelona-realismo-2.jpg","Tatuaje Steel Doom – Estilo épico, metal y sombras dramáticas."),
 (20,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/realismo/tatuador4/tattoo-realismo-brazo-leon-1658395461pV8tm.jpg","León rugiendo (brazo) – Dinamismo y detalles en melena."),
-(20,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/realismo/tatuador4/tatuaje-realismo-black-and-grey-cebaztattoo9.jpg","Retrato B&G (hombre con gorra) – Profundidad en arrugas y mirada.")
+(20,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/realismo/tatuador4/tatuaje-realismo-black-and-grey-cebaztattoo9.jpg","Retrato B&G (hombre con gorra) – Profundidad en arrugas y mirada.");
