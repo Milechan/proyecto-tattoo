@@ -1,4 +1,4 @@
-/* Imagen de perfil */
+
 .img-profile {
   width: 40px;
   height: 40px;
@@ -7,7 +7,6 @@
   border: none;
 }
 
-/* Botón de perfil / hamburguesa */
 .profile-button {
   background: none;
   border: none;
@@ -18,16 +17,14 @@
   justify-content: center;
 }
 
-/* Ícono de hamburguesa */
 .hamburger-icon {
-  font-size: 40px; /* Tamaño grande */
+  font-size: 40px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Slide menu (menú lateral) */
 .slide-menu {
   position: fixed;
   top: 0;
@@ -47,7 +44,6 @@
   right: 0;
 }
 
-/* Botón cerrar (X) */
 .close-btn {
   align-self: flex-end;
   background: none;
@@ -57,7 +53,6 @@
   margin-bottom: 1rem;
 }
 
-/* Lista de opciones del menú */
 .menu-list {
   list-style: none;
   padding: 0;
@@ -86,7 +81,6 @@
   color: #007bff;
 }
 
-/* Submenú de categorías */
 .dropdown-menu {
   list-style: none;
   padding-left: 1rem;
@@ -116,13 +110,11 @@
   color: #007bff;
 }
 
-/* Logo */
 .navbar-logo {
   height: 70px;
   width: 70px;
 }
 
-/* Navbar con fondo gris */
 .navbar {
-  background-color: #e0e0e0 !important; /* Gris claro */
+  background-color: #e0e0e0 !important; 
 }
