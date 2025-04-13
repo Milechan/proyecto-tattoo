@@ -13,61 +13,58 @@ import { Category } from "./pages/Category.jsx";
 import TattooerProfile from "./pages/TattooerProfile.jsx";
 import injectContext from "./store/appContext";
 
-
 import { Navbar } from "./component/navbar";
 import Footer from './component/Footer.jsx';
 import { Notifications } from "./component/Notifications.js";
 import AboutUs from "./pages/AboutUs.js";
 import TermsAndConditions from "./pages/TermsAndConditions.js";
 
-
 // Página de Notificaciones (mock)
 export const NotificationsPage = () => {
   return <Notifications />;
 };
 
-//create your first component
+const hideUIPaths = ['/login', '/register', '/login/forgotpass'];
 
 const ContentWrapper = () => {
   const location = useLocation();
-  const hideNavbarPaths = ['/login', '/register', '/login/forgotpass'];
-
-  // esto es para saber donde mostrar el navbar
-  const shouldShowNavbar = !hideNavbarPaths.includes(location.pathname);
+  const shouldShowUI = !hideUIPaths.includes(location.pathname);
 
   return (
     <>
-      {shouldShowNavbar && <Navbar />}
-      <Routes>
-        <Route element={<Home />} path="/" />
-        <Route element={<Single />} path="/single/:theid" />
-        <Route element={<LoginForm />} path="/login" />
-        <Route element={<RegisterForm />} path="/register" />
-        <Route element={<ForgotPasswordForm />} path="/login/forgotpass" />
-        <Route element={<Category />} path="/category/:categoryName" />
-        <Route element={<TattooerProfile />} path="/tattooer/:id" />
-        <Route element={<Notifications />} path="/notifications" />
-        <Route element={<h1>Not found!</h1>} path="*" />
-        <Route element={<AboutUs />} path="/about" />
-        <Route element={<TermsAndConditions />} path="/terms-and-conditions" />
-      </Routes>
+      {shouldShowUI && <Navbar />}
+      <div style={{ flex: 1 }}>
+        <Routes>
+          <Route element={<Home />} path="/" />
+          <Route element={<Single />} path="/single/:theid" />
+          <Route element={<LoginForm />} path="/login" />
+          <Route element={<RegisterForm />} path="/register" />
+          <Route element={<ForgotPasswordForm />} path="/login/forgotpass" />
+          <Route element={<Category />} path="/category/:categoryName" />
+          <Route element={<TattooerProfile />} path="/tattooer/:id" />
+          <Route element={<Notifications />} path="/notifications" />
+          <Route element={<h1>Not found!</h1>} path="*" />
+          <Route element={<AboutUs />} path="/about" />
+          <Route element={<TermsAndConditions />} path="/terms-and-conditions" />
+        </Routes>
+      </div>
+      {shouldShowUI && <Footer />}
     </>
   );
 };
 
 const Layout = () => {
-  //the basename is used when your project is published in a subdirectory and not in the root of the domain
-  // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
   const basename = process.env.BASENAME || "";
 
-  if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
+  if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
   return (
-    <div className="h-100">
-      <BrowserRouter>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <BrowserRouter basename={basename}>
         <ScrollToTop>
-          <ContentWrapper />
-          {<Footer />}
+          <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+            <ContentWrapper />
+          </div>
         </ScrollToTop>
       </BrowserRouter>
     </div>
@@ -75,5 +72,3 @@ const Layout = () => {
 };
 
 export default injectContext(Layout);
-
-//prueba
