@@ -5,10 +5,10 @@ INSERT INTO profile (user_id, bio, profile_picture, ranking, category_id, social
 (3,"No hay nada que me guste mas que tatuar en negro, siento que las lineas realmente resaltan y que uno puede identificarse con ello.Claramente usando el estilo neotradicional","",0,1,"https://www.instagram.com/krn.blvck/?hl=es-la","","",""),
 (4,"En lo personal me gusta tatuar animales en el estilo neotradicional, me es algo muy artistico y claramente que con mi estilo integrado, siento que queda GOD","",0,1,"https://www.instagram.com/pipakabuki/?hl=es-la","","",""),
 --geeks
-(5,"bio user","",0,2,"","","",""),
-(6,"bio user","",0,2,"","","",""),
-(7,"bio user","",0,2,"","","",""),
-(8,"bio user","",0,2,"","","",""),
+(5,"bio user","",0,2,"https://www.instagram.com/deadmermaid.tattoo/?hl=es-la","","",""),
+(6,"bio user","",0,2,"https://www.instagram.com/dr.etherink/?hl=es-la","","",""),
+(7,"bio user","",0,2,"https://www.instagram.com/lissssalme/?hl=es-la","","",""),
+(8,"bio user","",0,2,"https://www.instagram.com/aleinnk/?hl=es-la","","",""),
 --minimalista
 (9,"El arte de la naturaleza, reducido a lo esencial. Tatuajes minimalistas que capturan la belleza de las plantas y flores.","",0,3,"https://www.instagram.com/teffylines/?hl=es","wa.me/573125697412","","https://www.facebook.com/people/Teffy-Lines-Tatto/61573715077130/?ref=ig_profile_ac"),
 (10,"Tatuajes que combinan el minimalismo y la naturaleza. Cada diseño, una obra única inspirada en la serenidad de las plantas.","",0,3,"https://www.instagram.com/jessicaduran_art/?hl=es-la","wa.me/573126013290","",""),
