@@ -20,7 +20,7 @@ INSERT INTO profile (user_id, bio, profile_picture, ranking, category_id, social
 (15,"bio user","",0,4,"","","",""),
 (16,"bio user","",0,4,"","","",""),
 --realismo
-(17,"bio user","",0,5,"","","",""),
-(18,"bio user","",0,5,"","","",""),
-(19,"bio user","",0,5,"","","",""),
-(20,"bio user","",0,5,"","","","")
+(17,"El realismo cobra vida en la piel. Tatuajes que capturan cada detalle, sombra y textura, transformando imágenes en arte permanente.","",0,5,"https://www.instagram.com/javieralvialtattoo/","","",""),
+(18,"Arte hiperrealista en tu piel. Cada tatuaje es un lienzo de precisión, donde la profundidad y los contrastes narran historias.","",0,5,"https://www.instagram.com/realismo.tattoo/","","",""),
+(19,"Tatuajes realistas que desafían la percepción. Trabajando con sombras y volúmenes para crear piezas que respiran en tu piel.","",0,5,"https://www.instagram.com/ivanignacio07_inktattoo/?hl=es-la","","",""),
+(20,"Realismo puro, emoción en cada trazo. Especializado en retratos y escenas que conservan la esencia de lo que amas.","",0,5,"https://www.instagram.com/ramonieves_/","","","")
