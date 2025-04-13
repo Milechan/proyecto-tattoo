@@ -4,11 +4,11 @@ import "./AboutUs.css";
 
 const AboutUs = () => {
   const teamMembers = [
-    { name: "Milena", role: "Frontend Developer", img: "https://via.placeholder.com/150" },
-    { name: "Alan", role: "Backend Developer", img: "https://via.placeholder.com/150" },
-    { name: "Samuel", role: "Fullstack Developer", img: "https://via.placeholder.com/150" },
-    { name: "Damian", role: "UX/UI Designer", img: "https://via.placeholder.com/150" },
-    { name: "Ángela", role: "Project Manager", img: "https://via.placeholder.com/150" }
+    { name: "Milena", role: "Fullstack Developer", img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Milena.png" },
+    { name: "Alan", role: "Fullstack Developer", img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Alan.png" },
+    { name: "Samuel", role: "Fullstack Developer", img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Samuel.jpg" },
+    { name: "Damian", role: "Fullstack Developer", img: "https://via.placeholder.com/150" },
+    { name: "Ángela", role: "Fullstack Developer", img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Angela.png" }
   ];
 
   return (
