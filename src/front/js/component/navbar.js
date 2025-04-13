@@ -89,10 +89,7 @@ export const Navbar = () => {
                   </span>
                 </Link>
               </li>
-
               <li><Link to={`/tattooer/${store.user.id}`} onClick={closeAll}>Perfil</Link></li>
-              <li><Link to="/notifications" onClick={closeAll}>Notificaciones</Link></li>
-              <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>
                   Categorías
