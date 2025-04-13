@@ -92,7 +92,6 @@ class Profile(db.Model):
     social_media_facebook: Mapped[str] = mapped_column(String)
     bio: Mapped[str] = mapped_column(String)
     profile_picture: Mapped[str] = mapped_column(String)
-    banner: Mapped[str] = mapped_column(String)
     ranking: Mapped[int] = mapped_column(Integer)
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'))
     user: Mapped['User'] = relationship('User', back_populates='profile')
@@ -110,7 +109,6 @@ class Profile(db.Model):
             "social_media_facebook": self.social_media_facebook,
             "bio": self.bio,
             "profile_picture": self.profile_picture,
-            "banner": self.banner,
             "ranking": self.ranking
         }
 
