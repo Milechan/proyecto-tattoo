@@ -15,10 +15,10 @@ INSERT INTO profile (user_id, bio, profile_picture, ranking, category_id, social
 (11,"Transformando la simplicidad en arte. Tatuajes botánicos que celebran las formas y detalles más sutiles de la naturaleza.","",0,3,"https://www.instagram.com/daisydoestattoos/?utm_source=ig_embed&ig_rid=c271bf3e-98e0-4355-8d3b-1d1f33ea4c69","wa.me/573126013290","",""),
 (12,"Minimalismo y botánica en su máxima expresión. Diseños limpios y elegantes, inspirados en la flora que nos rodea.","",0,3,"https://www.instagram.com/gimefemia/?hl=es","wa.me/573126013290","",""),
 --black-out
-(13,"bio user","",0,4,"","","",""),
-(14,"bio user","",0,4,"","","",""),
-(15,"bio user","",0,4,"","","",""),
-(16,"bio user","",0,4,"","","",""),
+(13,"Transformando el dolor en arte oscuro. Tatuajes black-out que cubren la piel con carácter, fuerza y elegancia minimalista.","",0,4,"https://www.instagram.com/allesink/?hl=es-la","","",""),
+(14,"Negro profundo, trazos intensos. Cada diseño black-out redefine el cuerpo como un lienzo de poder visual absoluto.","",0,4,"https://www.instagram.com/carlos_tattooer1/?hl=es-la","","",""),
+(15,"Arte conceptual y cobertura total. Diseños black-out que combinan simetría, geometría y expresión corporal radical.","",0,4,"https://www.instagram.com/bisnezbrow/?hl=es-la","","",""),
+(16,"Minimalismo extremo y tinta sólida. Cada pieza black-out cubre el cuerpo con personalidad, audacia y belleza cruda.","",0,4,"https://www.instagram.com/project.oxo/?hl=es-la","","",""),
 --realismo
 (17,"El realismo cobra vida en la piel. Tatuajes que capturan cada detalle, sombra y textura, transformando imágenes en arte permanente.","",0,5,"https://www.instagram.com/javieralvialtattoo/","","",""),
 (18,"Arte hiperrealista en tu piel. Cada tatuaje es un lienzo de precisión, donde la profundidad y los contrastes narran historias.","",0,5,"https://www.instagram.com/realismo.tattoo/","","",""),

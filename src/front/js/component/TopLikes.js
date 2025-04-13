@@ -39,7 +39,7 @@ export const TopLikes = () => {
         <h1>Top de Likes</h1>
         <div className="d-flex flex-wrap justify-content-center gap-3">
           {[1, 2, 3].map((index) => (
-            <div key={index} className="card" style={{ width: "18rem" }}>
+            <div key={index} className="card rounded-4" style={{ width: "18rem" }}>
               <img
                 src={images[index - 1]}
                 className="card-img-top"
@@ -102,6 +102,7 @@ export const TopLikes = () => {
                   >
                     <FaHeart /> {likesState[selectedImage]?.likes || 0}
                   </button>
+                  <button className="btn btn-primary mt-3 ms-3">Ver perfil</button>
                 </div>
               </div>
             </div>

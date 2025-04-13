@@ -6,6 +6,10 @@
     background-repeat: no-repeat;
     position: relative;
     object-fit: cover;
+
+}
+.container-category-image{
+    margin-top: 130px;
 }
 .category-name{
     position: absolute;
