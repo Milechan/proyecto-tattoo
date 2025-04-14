@@ -65,7 +65,8 @@ export const Category = () => {
                 {store.category.profiles.map((profile) => {
                     return (
                         <div className="container-profile">
-                            <div>{profile.name}</div>
+                            <div className="profile-name">{profile.profile_name}</div>
+                            <img className="image-profile" src={profile.profile_picture} alt="imagen de perfil" />
                         </div>
 
                     )
