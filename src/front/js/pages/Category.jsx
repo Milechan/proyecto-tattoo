@@ -55,13 +55,13 @@ export const Category = () => {
                         </div>
                         <div className="carousel-inner">
                             <div className="carousel-item active">
-                                <img src={store.category.carousel[0]} className="d-block " alt="..." />
+                                <img src={store.category.carousel[0]} className="carrousel-image " alt="..." />
                             </div>
                             <div className="carousel-item">
-                                <img src={store.category.carousel[1]} className="d-block " alt="..." />
+                                <img src={store.category.carousel[1]} className=" carrousel-image" alt="..." />
                             </div>
                             <div className="carousel-item">
-                                <img src={store.category.carousel[2]} className="d-block " alt="..." />
+                                <img src={store.category.carousel[2]} className="carrousel-image " alt="..." />
                             </div>
                         </div>
                         <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
