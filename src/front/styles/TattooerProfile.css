@@ -105,8 +105,10 @@
 }
 
 .profile-left {
-  position: relative;
-  z-index: 1;
+  flex: 1;
+  min-width: 250px;
+  max-width: 600px;
+  z-index: 2;
 }
 
 
@@ -296,19 +298,55 @@ body.modal-open {
 }
 
 
+.like-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
 
-
-.like-button {
-  background: none;
-  border: none;
-  font-size: 24px;
+.heart-icon {
+  font-size: 28px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  user-select: none;
+  border: none;
+  background: none;
+  outline: none;
+  animation: none;
 }
 
-.like-button:hover {
+.heart-icon:hover {
   transform: scale(1.2);
 }
+
+.heart-icon.liked {
+  animation: bounce 0.4s;
+  color: #ff4d4d;
+}
+
+.like-count {
+  font-size: 16px;
+  color: #333;
+  margin-top: 5px;
+}
+
+
+.modal-like-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+}
+
+
+@keyframes bounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.4); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
 
 .modal-overlay {
   position: fixed;
@@ -399,6 +437,7 @@ body.modal-open {
   color: #999;
   cursor: pointer;
   transition: color 0.3s ease;
+  
 }
 
 .edit-description-icon:hover {
@@ -527,8 +566,8 @@ body.modal-open {
   border-radius: 8px;
   border: 1px solid #ccc;
   resize: vertical;
-  z-index: 10; /* eleva el textarea por si algo está encima */
-  position: relative; /* necesario para que z-index funcione */
+  z-index: 10; 
+  position: relative; 
   background-color: white;
 }
 
@@ -570,3 +609,4 @@ body.modal-open {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
