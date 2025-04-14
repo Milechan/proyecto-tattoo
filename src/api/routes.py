@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Post, Profile, Review, Notification
+from api.models import db, User, Post, Profile, Review, Notification, Likes
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from api.models import db, User, Post, Profile, Review, Notification, UserType, Category
@@ -17,9 +17,8 @@ import json
 from flask_jwt_extended import jwt_required , get_jwt_identity, create_access_token
 api = Blueprint('api', __name__) 
 
-# Allow CORS requests to this API
-CORS(api)
 
+CORS(api, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 """POSTS"""
 
@@ -629,3 +628,40 @@ def send_email():
         return jsonify({"msg": "Correo enviado", "status": response.status_code}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+"""Likes"""
+
+@api.route('/posts/<int:post_id>/like', methods=['POST'])
+@jwt_required()
+def toggle_like(post_id):
+    current_user_id = int(get_jwt_identity())
+    post = db.session.query(Post).filter_by(id=post_id).first()
+
+    if not post:
+        return jsonify({"msg": "Post no encontrado"}), 404
+
+    existing_like = db.session.query(Likes).filter_by(user_id=current_user_id, post_id=post_id).first()
+
+    if existing_like:
+        db.session.delete(existing_like)
+        action = "dislike"
+    else:
+        new_like = Likes(user_id=current_user_id, post_id=post_id)
+        db.session.add(new_like)
+        action = "like"
+
+    db.session.commit()
+
+    like_count = db.session.query(Likes).filter_by(post_id=post_id).count()
+
+    return jsonify({"msg": f"{action} realizado", "likes": like_count}), 200
+
+
+
+@api.route('/posts/<int:post_id>/liked', methods=['GET'])
+@jwt_required()
+def check_if_liked(post_id):
+    current_user_id = int(get_jwt_identity())
+    like = db.session.query(Likes).filter_by(user_id=current_user_id, post_id=post_id).first()
+    return jsonify({"liked": like is not None}), 200

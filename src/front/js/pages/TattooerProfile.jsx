@@ -111,7 +111,8 @@ const TattooerProfile = () => {
 
 
   const [galleryImages, setGalleryImages] = useState([g1, g2, g3, g4, g5, g6, g7]);
-  const [likes, setLikes] = useState(Array(galleryImages.length).fill(false));
+  const [likes, setLikes] = useState({});
+
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(null);
@@ -132,11 +133,65 @@ const TattooerProfile = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const toggleLike = (index) => {
-    const updatedLikes = [...likes];
-    updatedLikes[index] = !updatedLikes[index];
-    setLikes(updatedLikes);
+  const toggleLike = async (index) => {
+    const postId = posts[index]?.id;
+    const token = localStorage.getItem("token");
+    if (!postId || !token) return;
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/posts/${postId}/like`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        const updatedPosts = [...posts];
+        updatedPosts[index].likes = data.likes;
+        setPosts(updatedPosts);
+
+        setLikes((prev) => ({
+          ...prev,
+          [postId]: !prev[postId]
+        }));
+      } else {
+        console.error("Error al dar like/dislike:", data.msg);
+      }
+    } catch (err) {
+      console.error("Error al conectar con backend:", err);
+    }
   };
+
+
+  useEffect(() => {
+    const checkLikes = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const newLikes = {};
+      await Promise.all(
+        posts.map(async (post) => {
+          try {
+            const response = await fetch(`http://localhost:3001/api/posts/${post.id}/liked`, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            const data = await response.json();
+            newLikes[post.id] = data.liked;
+          } catch (e) {
+            console.error("Error verificando likes:", e);
+          }
+        })
+      );
+      setLikes(newLikes);
+    };
+
+    if (posts.length > 0) checkLikes();
+  }, [posts]);
+
+
+
 
   const openModal = (index) => {
     setModalImageIndex(index);
@@ -439,7 +494,8 @@ const TattooerProfile = () => {
         const response = await fetch(`http://localhost:3001/api/posts`);
         const data = await response.json();
         if (response.ok) {
-          setPosts(data.filter(post => post.user_id == id));
+          const userPosts = data.filter(post => post.user_id == id);
+          setPosts(userPosts);
         } else {
           console.error("Error al obtener posts:", data.msg);
         }
@@ -450,6 +506,41 @@ const TattooerProfile = () => {
 
     fetchPosts();
   }, [id, showCreatePostModal]);
+
+  useEffect(() => {
+    if (posts.length === 0) return;
+
+    const fetchLikes = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const likesArray = await Promise.all(
+          posts.map(async (post) => {
+            const res = await fetch(`http://localhost:3001/api/posts/${post.id}/liked`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            return { postId: post.id, liked: data.liked };
+          })
+        );
+
+        const newLikes = {};
+        likesArray.forEach(({ postId, liked }) => {
+          newLikes[postId] = liked;
+        });
+
+        setLikes(newLikes);
+      } catch (error) {
+        console.error("Error al cargar likes:", error);
+      }
+    };
+
+    fetchLikes();
+  }, [posts]);
+
+
+
 
   useEffect(() => {
     if (store.profile) {
@@ -516,11 +607,11 @@ const TattooerProfile = () => {
 
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState("Descripción de la imagen o galería que quieras mostrar aquí."); // valor inicial
-  const isTattooer = true; //temporal hasta que se conecte con back
+
 
   const styles = {
     reviewsContainer: {
-      maxWidth: '800px',
+      width: '90%',
       margin: '2rem auto',
       padding: '1.5rem',
       backgroundColor: '#fff',
@@ -781,10 +872,20 @@ const TattooerProfile = () => {
 
               </div>
               <div className="card-body">
-                <button className="like-button" onClick={() => toggleLike(index)}>
-                  {likes[index] ? "❤️" : "🤍"}
-                </button>
+                <div className="like-wrapper">
+                  <span
+                    className={`heart-icon ${likes[post.id] ? "liked" : ""}`}
+                    onClick={() => toggleLike(index)}
+                  >
+                    {likes[post.id] ? "❤️" : "🤍"}
+                  </span>
+
+                  <span className="like-count">{post.likes}</span>
+                </div>
+
+
               </div>
+
             </div>
           ))}
 
@@ -857,12 +958,22 @@ const TattooerProfile = () => {
 
 
 
-                  <button
-                    className="like-button modal-like"
-                    onClick={() => toggleLike(modalImageIndex)}
-                  >
-                    {likes[modalImageIndex] ? "❤️" : "🤍"}
-                  </button>
+                  <div className="like-wrapper modal-like-wrapper">
+                    <div className="like-section-modal">
+                      <span
+                        className={`heart-icon ${likes[posts[modalImageIndex]?.id] ? "liked" : ""}`}
+                        onClick={() => toggleLike(modalImageIndex)}
+                      >
+                        {likes[posts[modalImageIndex]?.id] ? "❤️" : "🤍"}
+                      </span>
+
+                    </div>
+
+                    <span className="like-count">{posts[modalImageIndex]?.likes}</span>
+                  </div>
+
+
+
                 </div>
 
 
@@ -877,16 +988,19 @@ const TattooerProfile = () => {
               </div>
 
               <button className="close btn-close position-absolute top-0 end-0 m-3" onClick={closeModal}></button>
-              {store.user?.id == posts[modalImageIndex]?.user_id && !isEditingDescription && (
-                <FiEdit2
-                  className="edit-description-icon"
-                  title="Editar descripción"
-                  onClick={() => {
-                    setEditedDescription(posts[modalImageIndex]?.description || "");
-                    setIsEditingDescription(true);
-                  }}
-                />
-              )}
+              {modalImageIndex !== null &&
+                parseInt(currentUserInfo?.id) === parseInt(posts[modalImageIndex]?.user_id) &&
+                !isEditingDescription && (
+                  <FiEdit2
+                    className="edit-description-icon"
+                    title="Editar descripción"
+                    onClick={() => {
+                      setEditedDescription(posts[modalImageIndex]?.description || "");
+                      setIsEditingDescription(true);
+                    }}
+                  />
+                )}
+
 
 
 
