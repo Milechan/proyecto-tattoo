@@ -19,7 +19,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				notification_enabled: false,
 				user_type: {},
 				created_at: "",
-				profile: [],
+				profile: {
+					profile_picture: ""
+				},
 				reviews: [],
 				posts: [],
 				notifications: [],

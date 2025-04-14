@@ -50,7 +50,7 @@ export const Navbar = () => {
             {isLoggedIn ? (
               <div className="profile-wrapper" onClick={toggleMenu}>
                 <img
-                  src={store.user.profile.profile_picture && store.user.profile.profile_picture.trim() !== ""
+                  src={store.user.profile?.profile_picture && store.user.profile?.profile_picture.trim() !== ""
                     ? store.user.profile.profile_picture
                     : perfilDefault}
                   className="img-profile"
