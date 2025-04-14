@@ -5,7 +5,7 @@ import {
   FaUserEdit,
   FaStar,
   FaBell,
-  FaHeart
+  FaHeart,
 } from "react-icons/fa";
 import { Context } from "../store/appContext";
 
@@ -26,7 +26,7 @@ export const Notifications = () => {
 
   const markAsRead = async (id) => {
     try {
-      const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications/${id}/readed`, {
+      const resp = await fetch(`${process.env.BACKEND_URL}/api/notification/${id}/readed`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${store.token}`,
@@ -42,6 +42,10 @@ export const Notifications = () => {
         // 🔄 Actualiza el contador global
         const unreadCount = updatedList.filter(n => !n.is_read).length;
         actions.updateNotificationCount(unreadCount);
+      } else {
+        console.error("Estado del fetch:", resp.status);
+        const errorData = await resp.json();
+        console.error("Error del servidor:", errorData);
       }
     } catch (error) {
       console.error("Error al marcar como leída:", error);
