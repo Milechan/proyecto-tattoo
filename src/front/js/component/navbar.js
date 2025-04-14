@@ -1,18 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
-import profilePic from "../../img/foto_perfil.webp";
+import perfilDefault from "../../img/foto_perfil.webp";
 import logo_final from "../../img/logo_final.webp";
 import { Context } from "../store/appContext";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const { actions, store } = useContext(Context);
-  const notificationCount = store.notificationCount;
   const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
+  const notificationCount = store.notificationCount;
   const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -30,51 +29,35 @@ export const Navbar = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      actions.getUser(token);
-
-      const fetchNotifications = async () => {
-        try {
-          const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await resp.json();
-          if (data.success) {
-            const unread = data.notifications.filter(n => !n.is_read).length;
-            actions.updateNotificationCount(unread);
-          }
-        } catch (error) {
-          console.error("Error al cargar notificaciones:", error);
-        }
-      };
-
-      fetchNotifications();
+      actions.getUser(token); // Asegura que se cargue user y profile
     }
   }, [token]);
+
+  // Usamos la imagen de perfil del store, o una por defecto si no hay ninguna
+  const profilePicSrc =
+    store.profile?.profile_picture && store.profile.profile_picture.trim() !== ""
+      ? store.profile.profile_picture
+      : perfilDefault;
 
   return (
     <>
       <nav className="navbar navbar-light custom-navbar">
         <div className="container d-flex justify-content-between align-items-center w-100">
           <Link to="/">
-            <img
-              src={logo_final}
-              alt="Logo Tattoo Match"
-              className="navbar-logo"
-            />
+            <img src={logo_final} alt="Logo Tattoo Match" className="navbar-logo" />
           </Link>
+
           <input
             type="text"
             className="form-control w-50"
             placeholder="Buscar..."
           />
+
           <div>
             <button className="profile-button" onClick={toggleMenu}>
               {isLoggedIn ? (
                 <img
-                  src={profilePic}
+                  src={profilePicSrc}
                   className="img-profile"
                   alt="Foto de perfil"
                 />
@@ -105,7 +88,7 @@ export const Navbar = () => {
                 </Link>
               </li>
 
-              {store.user.user_type?.name === "tattooer" && (
+              {store.user?.user_type?.name === "tattooer" && (
                 <li>
                   <Link to={`/tattooer/${store.user.id}`} onClick={closeAll}>Perfil</Link>
                 </li>
