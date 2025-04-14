@@ -598,7 +598,7 @@ const TattooerProfile = () => {
     <div className="profile-page">
       <div className="container-central">
         <div className="banner">
-          <img src={newBanner || store.profile.banner || banner} alt="Banner" className="banner-img" />
+          <img src={newBanner || store.profile.image || store.category.image} alt="Banner" className="banner-img" />
 
           {isEditing && (
             <>
