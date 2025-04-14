@@ -3,7 +3,7 @@ import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import { useNavigate } from "react-router-dom";
-
+import Swal from 'sweetalert2';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -25,11 +25,22 @@ const LoginForm = () => {
       if (!response.ok) {
         // throw new Error(data.msg || 'Error al crear perfil')
       }
-      alert('Se creo el perfil')
-    } catch (error) {
-      console.error("error creando el perfil");
-      console.error(error);
+      Swal.fire({
+        icon: "success",
+        title: "¡Perfil creado!",
+        text: "El perfil ha sido creado exitosamente.",
+        confirmButtonColor: "#5c2d42"
+      });
 
+    } catch (error) {
+      console.error("Error creando el perfil:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error al crear perfil",
+        text: "Ocurrió un error al intentar crear el perfil. Intenta nuevamente.",
+        confirmButtonColor: "#5c2d42"
+      });
     }
   }
   const handleSubmit = async (e) => {
