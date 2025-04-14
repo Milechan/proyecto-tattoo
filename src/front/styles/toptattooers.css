@@ -47,7 +47,6 @@ body{
   transform: scale(1.02);
 }
 
-/* --- MODAL --- */
 .custom-modal-backdrop {
   position: fixed;
   top: 0;
