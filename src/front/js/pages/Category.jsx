@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/category.css"
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 
 export const Category = () => {
@@ -30,6 +30,20 @@ export const Category = () => {
 
             <div className="container-category-description">
                 <div className="description">{store.category.description}</div>
+            </div>
+            <div className="container-category-profiles">
+                {store.category.profiles.map((profile) => {
+                    return (
+                        <div className="container-profile">
+                            <div className="profile-name">{profile.profile_name}</div>
+                            <Link to={`/tattooer/${profile.user_id}`}>
+                                <img className="image-profile" src={profile.profile_picture} alt="imagen de perfil" />
+                            </Link>
+
+                        </div>
+                    )
+                })}
+
             </div>
             <div className="container-category-carousel">
                 <div className="container-carousel">
@@ -61,18 +75,7 @@ export const Category = () => {
                     </div>
                 </div>
             </div>
-            <div className="container-category-profiles">
-                {store.category.profiles.map((profile) => {
-                    return (
-                        <div className="container-profile">
-                            <div className="profile-name">{profile.profile_name}</div>
-                            <img className="image-profile" src={profile.profile_picture} alt="imagen de perfil" />
-                        </div>
 
-                    )
-                })}
-
-            </div>
 
         </div>
     )

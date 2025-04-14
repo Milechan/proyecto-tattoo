@@ -99,7 +99,7 @@ INSERT INTO post (user_id,image,description) VALUES
 (1,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador1/1.png","presente nuestro demonio tigre!"),
 --user 2
 (2,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador2/image.png","uno de los primeros dibujitos que he podido llegar a tatuar"),
-(2,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador2/image.png","gatito vaquitaaaa, muuu"),
+(2,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador2/7.png","gatito vaquitaaaa, muuu"),
 (2,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador2/6.png","nuestro precioso haku en su version de dragonsito uwu"),
 (2,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador2/4.png","hermosisimas peonias que se llevo una clienta el dia de hoy"),
 (2,"https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador2/3.png","este es el trigre mas bonito que me han pedido,gracias por dejarme hacer este tipo de trabajito"),
