@@ -40,7 +40,7 @@ export const TopLikes = () => {
 
   return (
     <div className="top-likes-container">
-      <h1 className="title">🔥 Top Tatuajes con Más Likes</h1>
+      <h1 className="title"> ❣️Top Tatuajes con Más Likes❣️</h1>
 
       <div className="card-wrapper">
         <div className="card-grid">
