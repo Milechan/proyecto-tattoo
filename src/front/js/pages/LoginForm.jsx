@@ -3,13 +3,46 @@ import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import { useNavigate } from "react-router-dom";
-
+import Swal from 'sweetalert2';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { actions } = useContext(Context)
   const navigate = useNavigate()
+
+  const handleCreateProfile = async (categoryName, token) => {
+    const userProfile = {
+      category_name: categoryName
+    }
+    try {
+      const response = await fetch('http://localhost:3001/api/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(userProfile)
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        // throw new Error(data.msg || 'Error al crear perfil')
+      }
+      Swal.fire({
+        icon: "success",
+        title: "¡Perfil creado!",
+        text: "El perfil ha sido creado exitosamente.",
+        confirmButtonColor: "#5c2d42"
+      });
+
+    } catch (error) {
+      console.error("Error creando el perfil:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error al crear perfil",
+        text: "Ocurrió un error al intentar crear el perfil. Intenta nuevamente.",
+        confirmButtonColor: "#5c2d42"
+      });
+    }
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -26,7 +59,12 @@ const LoginForm = () => {
       localStorage.setItem('token', data.token);
 
       actions.changeUser(data.user);
+      console.warn("datos recibidos: ", data.user);
 
+      if (data.user.user_type.name == "tattooer" && data.user.profile == null) {
+        await handleCreateProfile(data.user.category.name, data.token)
+      }
+      navigate("/");
     } catch (error) {
       alert(error.message);
     }
@@ -37,7 +75,7 @@ const LoginForm = () => {
     mainBg: {
       backgroundColor: '#f8f9fa',
       minHeight: '100vh',
-      backgroundImage: 'url("https://i.gifer.com/RJHi.gif")',
+      backgroundImage: 'url("https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/gifs/8d6e67643888ba34335fdf8eb87052e4.gif")',
       backgroundSize: 'background-repeat', // define si es en mosaico o no
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed', // efecto parallax

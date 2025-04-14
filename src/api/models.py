@@ -46,7 +46,7 @@ class User(db.Model):
     notification_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     user_type_id: Mapped[int] = mapped_column(Integer, ForeignKey('user_type.id'))
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'), nullable=True)
-    created_at: Mapped[DateTime] = mapped_column(DateTime)
+    created_at: Mapped[DateTime] = mapped_column(DateTime,nullable=True)
 
     category: Mapped['Category'] = relationship('Category', back_populates="users")
     user_type: Mapped['UserType'] = relationship('UserType', back_populates='users')
@@ -74,6 +74,7 @@ class User(db.Model):
             "notification_enabled": self.notification_enabled,
             "user_type": self.user_type.serialize() if self.user_type else None,
             "created_at": self.created_at,
+            "category": self.category.serialize() if self.category else None,
             "profile": self.profile.serialize() if self.profile else None,
             "reviews": [review.serialize() for review in self.reviews],
             "posts": [post.serialize() for post in self.posts],
@@ -85,12 +86,13 @@ class Profile(db.Model):
     __tablename__ = 'profile'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'), unique=True)
-    social_media_insta: Mapped[str] = mapped_column(String)
-    social_media_wsp: Mapped[str] = mapped_column(String)
-    social_media_x: Mapped[str] = mapped_column(String)
-    social_media_facebook: Mapped[str] = mapped_column(String)
+    social_media_insta: Mapped[str] = mapped_column(String, nullable=True)
+    social_media_wsp: Mapped[str] = mapped_column(String, nullable=True)
+    social_media_x: Mapped[str] = mapped_column(String, nullable=True)
+    social_media_facebook: Mapped[str] = mapped_column(String, nullable=True)
     bio: Mapped[str] = mapped_column(String)
     profile_picture: Mapped[str] = mapped_column(String)
+    banner: Mapped[str] = mapped_column(String, nullable=True)
     ranking: Mapped[int] = mapped_column(Integer)
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'))
     user: Mapped['User'] = relationship('User', back_populates='profile')
@@ -101,12 +103,16 @@ class Profile(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "profile_name":self.user.username,
+            "email": self.user.email,
             "social_media_insta": self.social_media_insta,
             "social_media_wsp": self.social_media_wsp,
             "social_media_x": self.social_media_x,
             "social_media_facebook": self.social_media_facebook,
             "bio": self.bio,
             "profile_picture": self.profile_picture,
+            "banner": self.banner,
+            "category_banner":self.category.image,
             "ranking": self.ranking
         }
 
@@ -141,7 +147,7 @@ class Post(db.Model):
     description: Mapped[str] = mapped_column(String)
     #likes: Mapped[int] = mapped_column(Integer, default=0)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
-    created_at: Mapped[DateTime] = mapped_column(DateTime)
+    created_at: Mapped[DateTime] = mapped_column(DateTime,nullable=True)
 
     user: Mapped['User'] = relationship('User', back_populates='posts')
     likes: Mapped[list['Likes']] = relationship('Likes', back_populates='post', cascade="all, delete-orphan")
@@ -173,7 +179,7 @@ class Notification(db.Model):
 
     def serialize(self):
         return {
-            "id": self.id,
+            "id": self.id, 
             "user_id": self.user_id,
             "sender_id": self.sender_id,
             "date": self.date,

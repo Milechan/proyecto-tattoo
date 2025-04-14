@@ -1,99 +1,130 @@
+.navbar {
+  background-color: #6c282f;
+  color: white;
+}
+
+.navbar-title {
+  color: white;
+  font-size: 42px;
+  margin: 0;
+}
+
+.navbar-logo {
+  height: 70px;
+  width: 70px;
+}
+
+.profile-wrapper {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .img-profile {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: none;
-  }
-  
-  .profile-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
-  
-  .slide-menu {
-    position: fixed;
-    top: 0;
-    right: -400px;
-    width: 400px;
-    height: 100vh;
-    background-color: #f8f9fa;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-    transition: right 0.3s ease;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    padding: 2rem 1.5rem;
-  }
-  
-  .slide-menu.open {
-    right: 0;
-  }
-  
-  .close-btn {
-    align-self: flex-end;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    margin-bottom: 1rem;
-  }
-  
-  .menu-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .menu-list li {
-    margin: 1rem 0;
-    position: relative; /* Añadimos position: relative al li contenedor */
-  }
-  
-  .menu-list a,
-  .dropdown-toggle {
-    text-decoration: none;
-    color: #333;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: block;
-    transition: color 0.2s;
-    position: relative; /* Aseguramos que el toggle esté sobre el dropdown */
-    z-index: 1;
-  }
-  
-  .menu-list a:hover,
-  .dropdown-toggle:hover {
-    color: #007bff;
-  }
-  
-  .dropdown-menu {
-    list-style: none;
-    padding-left: 1rem;
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    position: absolute; /* Cambiamos a position: absolute */
-    top: 100%; /* Lo posicionamos debajo del botón */
-    left: 0;
-    background-color: #f8f9fa; /* Añade un fondo para que no se vea transparente */
-    border: 1px solid #ccc; /* Opcional: añade un borde */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: añade una sombra */
-    z-index: 2; /* Aseguramos que esté por encima de otros elementos */
-  }
-  
-  .dropdown-menu li {
-    margin: 0.4rem 0;
-  }
-  
-  .dropdown-menu a {
-    color: #555;
-    font-size: 1rem;
-    text-decoration: none;
-  }
-  
-  .dropdown-menu a:hover {
-    color: #007bff;
-  }
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid transparent;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  pointer-events: none;
+}
+
+.profile-wrapper:hover .img-profile {
+  border-color: #b30000;
+  box-shadow: 0 0 10px rgba(179, 0, 0, 0.6);
+}
+
+.hamburger-icon {
+  font-size: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide-menu {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100vh;
+  background-color: #f8f9fa;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+}
+
+.slide-menu.open {
+  right: 0;
+}
+
+.close-btn {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-list li {
+  margin: 1rem 0;
+  position: relative;
+}
+
+.menu-list a,
+.dropdown-toggle {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: block;
+  transition: color 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.menu-list a:hover,
+.dropdown-toggle:hover {
+  color: #610b2f;
+}
+
+.dropdown-menu {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.dropdown-menu li {
+  margin: 0.4rem 0;
+}
+
+.dropdown-menu a {
+  color: #555;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+  color: #007bff;
+}

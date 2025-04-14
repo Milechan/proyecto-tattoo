@@ -1,19 +1,30 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import "../../styles/categories.css";
 
 export const Categories = () => {
-    return (
-        <div className="text-center mt-5">
-			<div className="container-flex">
-				<h1>categorias</h1>
-				<div className="d-flex justify-content-center">
-                    <button type="button" className="btn burdeo mx-4">Neotradicional</button>
-                    <button type="button" className="btn burdeo mx-4">Geecks</button>
-                    <button type="button" className="btn burdeo mx-4">Minimalista</button>
-                    <button type="button" className="btn burdeo mx-4">Black-Out</button>
-                    <button type="button" className="btn burdeo mx-4">Realismo</button>
-                </div>
+    const tattooCategories = [
+        "Neotradicional",
+        "Geeks",
+        "Minimalista",
+        "Black-Out",
+        "Realismo",
+    ];
 
-			</div>
-        </div>
-    )
+    return (
+        <section className="categories-section">
+            <h2 className="categories-title">Explora por Estilo🖋️</h2>
+            <div className="categories-container">
+                {tattooCategories.map((category) => (
+                    <Link
+                        key={category}
+                        to={`/category/${category}`}
+                        className="category-button"
+                    >
+                        {category}
+                    </Link>
+                ))}
+            </div>
+        </section>
+    );
 };

@@ -1,122 +1,93 @@
 import React, { useState } from "react";
-import g2 from "../../img/g2.webp";
-import g3 from "../../img/g3.webp";
-import g6 from "../../img/g6.webp";
-import "../../styles/TopTattooers.css";
+import { useNavigate } from "react-router-dom";
+import "../../styles/toptattooers.css";
 
 export const TopTattooers = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const navigate = useNavigate();
 
-  const images = [g2, g3, g6];
+  const images = [
+    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/black-out/tatuador4/DALL%C2%B7E+2025-04-12+20.30.29+-+Solid+black+blackout+tattoo+design+on+uncommon+body+parts+like+the+side+of+the+neck%2C+back+of+the+hand%2C+upper+thighs%2C+lower+calves%2C+abdomen%2C+or+shoulde.webp",
+    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/geeks/tatuador1/Captura+de+pantalla+2025-04-11+185746.png",
+    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador3/4.png",
+  ];
+
+  const profileLinks = ["/tattooer/16", "/tattooer/5", "/tattooer/3"];
+
+  const descriptions = [
+    "Minimalismo extremo y tinta sólida. Cada pieza black-out cubre el cuerpo con personalidad, audacia y belleza cruda.",
+    "Tatuador full time uwu",
+    "No hay nada que me guste más que tatuar en negro, siento que las líneas realmente resaltan y que uno puede identificarse con ello. Claramente usando el estilo neotradicional."
+  ];
 
   const handleImageClick = (image) => {
-    setSelectedImage(images.indexOf(image) + 1);
+    setSelectedImage(images.indexOf(image));
     setShowModal(true);
   };
 
+  const handleProfileClick = () => {
+    navigate(profileLinks[selectedImage]);
+  };
+
   return (
-    <div className="top-tattooers-container text-center">
-      <h1>Top de tatuadores</h1>
-      <div
-        id="carouselExampleAutoplaying"
-        className="carousel slide mx-auto tattoo-carousel-container"
-        data-bs-ride="carousel"
-        style={{
-          maxWidth: "700px",
-          height: "500px",
-        }}
-      >
-        <div className="carousel-inner" style={{ height: "100%" }}>
-          <div className="carousel-item active" style={{ height: "100%" }}>
-            <img
-              src={g2}
-              className="d-block w-100 carousel-image"
-              alt="Tatuaje g2"
-              onClick={() => handleImageClick(g2)}
-              style={{ height: "100%", objectFit: "cover" }} 
-            />
-          </div>
-          <div className="carousel-item" style={{ height: "100%" }}>
-            <img
-              src={g3}
-              className="d-block w-100 carousel-image"
-              alt="Tatuaje g3"
-              onClick={() => handleImageClick(g3)}
-              style={{ height: "100%", objectFit: "cover" }}
-            />
-          </div>
-          <div className="carousel-item" style={{ height: "100%" }}>
-            <img
-              src={g6}
-              className="d-block w-100 carousel-image"
-              alt="Tatuaje g6"
-              onClick={() => handleImageClick(g6)}
-              style={{ height: "100%", objectFit: "cover" }}
-            />
-          </div>
+    <div className="top-tattooers-container">
+      <h1 className="tattooers-title">🔥Tatuadores mejor calificados🔥</h1>
+
+      <div id="carouselExample" className="carousel slide tattoo-carousel" data-bs-ride="carousel">
+        <div className="carousel-inner">
+          {images.map((image, idx) => (
+            <div
+              key={idx}
+              className={`carousel-item ${idx === 0 ? "active" : ""}`}
+            >
+              <img
+                src={image}
+                alt={`Tatuaje ${idx + 1}`}
+                className="carousel-image"
+                onClick={() => handleImageClick(image)}
+              />
+            </div>
+          ))}
         </div>
+
         <button
           className="carousel-control-prev"
           type="button"
-          data-bs-target="#carouselExampleAutoplaying"
+          data-bs-target="#carouselExample"
           data-bs-slide="prev"
         >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
+          <span className="carousel-control-prev-icon"></span>
+          <span className="visually-hidden">Anterior</span>
         </button>
         <button
           className="carousel-control-next"
           type="button"
-          data-bs-target="#carouselExampleAutoplaying"
+          data-bs-target="#carouselExample"
           data-bs-slide="next"
         >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
+          <span className="carousel-control-next-icon"></span>
+          <span className="visually-hidden">Siguiente</span>
         </button>
       </div>
 
       {showModal && (
-        <div
-          className="modal fade show d-block"
-          tabIndex="-1"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        >
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <button
-                type="button"
-                className="btn-close"
-                onClick={() => setShowModal(false)}
-                style={{
-                  position: "absolute",
-                  top: "10px",
-                  right: "10px",
-                  zIndex: 10,
-                }}
-              ></button>
+        <div className="custom-modal-backdrop" onClick={() => setShowModal(false)}>
+          <div className="custom-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="btn-close custom-close" onClick={() => setShowModal(false)}></button>
 
-              <div className="modal-header">
-                <h5 className="modal-title text-white">Detalle del Tatuaje</h5>
-              </div>
-
-              <div className="modal-body d-flex">
-                <img
-                  src={images[selectedImage - 1]}
-                  alt={`Tatuaje ${selectedImage}`}
-                  className="img-fluid w-100"
-                  style={{ maxHeight: "70vh", objectFit: "contain" }}
-                />
-                <div className="ms-3">
-                  <p className="text-white">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum.
-                  </p>
-                  <button
-                    className="btn btn-danger mt-3"
-                  >
-                    Ver perfil
-                  </button>
-                </div>
+            <div className="custom-modal-body">
+              <img
+                src={images[selectedImage]}
+                alt={`Tatuaje ${selectedImage + 1}`}
+                className="custom-modal-img"
+              />
+              <div className="custom-modal-description">
+                <h5>Detalle del Tatuador</h5>
+                <p>{descriptions[selectedImage]}</p>
+                <button className="btn btn-profile mt-3" onClick={handleProfileClick}>
+                  Ver perfil
+                </button>
               </div>
             </div>
           </div>

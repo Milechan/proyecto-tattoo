@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const ForgotPasswordForm = () => {
-
   const [email, setEmail] = useState('');
 
   const handleSubmit = async (e) => {
@@ -33,18 +32,36 @@ const ForgotPasswordForm = () => {
     }
   };
 
-
   // Paleta de colores 
   const styles = {
-    mainBg: { backgroundColor: '#f8f9fa', minHeight: '100vh' },
+    mainBg: {
+      backgroundColor: '#f8f9fa',
+      minHeight: '100vh',
+      backgroundImage: 'url("https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/gifs/tatuaje-arcoiris.gif")',
+      backgroundSize: 'background-repeat',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      position: 'relative'
+    },
+    overlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+      zIndex: 1
+    },
     card: {
       border: 'none',
       borderRadius: '15px',
       boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-      maxWidth: '450px'
+      maxWidth: '450px',
+      position: 'relative',
+      zIndex: 2
     },
     header: {
-      backgroundColor: '#5c2d42', // Vinotinto oscuro
+      backgroundColor: '#5c2d42',
       color: 'white',
       borderTopLeftRadius: '15px',
       borderTopRightRadius: '15px',
@@ -57,7 +74,7 @@ const ForgotPasswordForm = () => {
       marginBottom: '1.5rem'
     },
     button: {
-      backgroundColor: '#8c3d5b', // Vinotinto claro
+      backgroundColor: '#8c3d5b',
       border: 'none',
       borderRadius: '10px',
       padding: '12px',
@@ -80,6 +97,7 @@ const ForgotPasswordForm = () => {
 
   return (
     <Container fluid style={styles.mainBg} className="d-flex align-items-center justify-content-center">
+      <div style={styles.overlay}></div>
       <Row className="w-100 justify-content-center">
         <Col md={8} lg={6} xl={4}>
           <Card style={styles.card}>

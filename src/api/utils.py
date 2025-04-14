@@ -1,4 +1,11 @@
 from flask import jsonify, url_for
+import boto3
+import os
+
+s3 = boto3.resource("s3")
+
+
+
 
 class APIException(Exception):
     status_code = 400
