@@ -32,10 +32,6 @@ const LoginForm = () => {
         icon: "success",
         draggable: true
       });
-    } catch (error) {
-      console.error("error creando el perfil");
-      console.error(error);
-
 
     } catch (error) {
       console.error("Error creando el perfil:", error);

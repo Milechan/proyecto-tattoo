@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const RegisterForm = () => {
   const [isTattooer, setIsTattooer] = useState(false);
