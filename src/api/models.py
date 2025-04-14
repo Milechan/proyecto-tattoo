@@ -111,6 +111,7 @@ class Profile(db.Model):
             "bio": self.bio,
             "profile_picture": self.profile_picture,
             "banner": self.banner,
+            "category_banner":self.category.image,
             "ranking": self.ranking
         }
 
