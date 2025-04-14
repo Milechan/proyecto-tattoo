@@ -104,6 +104,7 @@ class Profile(db.Model):
             "id": self.id,
             "user_id": self.user_id,
             "profile_name":self.user.username,
+            "email": self.user.email,
             "social_media_insta": self.social_media_insta,
             "social_media_wsp": self.social_media_wsp,
             "social_media_x": self.social_media_x,

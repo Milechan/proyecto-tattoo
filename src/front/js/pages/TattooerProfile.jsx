@@ -466,8 +466,22 @@ const TattooerProfile = () => {
         body: JSON.stringify({
           to: store.profile.email,
           subject: `Nuevo mensaje de ${contactEmail}`,
-          message: contactMessage
+          message: `
+        ¡Hola!
+        
+        Has recibido un nuevo mensaje a través de MatchTattoo 📩
+        
+        🧑 Nombre de quien escribe: ${contactEmail}
+        💬 Mensaje:
+        ${contactMessage}
+        
+        Puedes responder directamente a este correo para ponerte en contacto con la persona interesada.
+        
+        —
+        Este mensaje fue enviado automáticamente desde la plataforma MatchTattoo.
+        `
         })
+
       });
 
       const data = await response.json();

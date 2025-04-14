@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const RegisterForm = () => {
   const [isTattooer, setIsTattooer] = useState(false);
@@ -45,14 +46,31 @@ const RegisterForm = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Registro exitoso! Por favor inicia sesión");
-        navigate("/login");
+        Swal.fire({
+          icon: "success",
+          title: "¡Registro exitoso!",
+          text: "Por favor inicia sesión para comenzar.",
+          confirmButtonColor: "#5c2d42"
+        }).then(() => {
+          navigate("/login");
+        });
       } else {
-        alert(data.msg || "Error al registrar");
+        Swal.fire({
+          icon: "error",
+          title: "Error al registrar",
+          text: data.msg || "Ocurrió un problema durante el registro.",
+          confirmButtonColor: "#5c2d42"
+        });
       }
     } catch (error) {
-      alert("Error de conexión");
+      Swal.fire({
+        icon: "error",
+        title: "Error de conexión",
+        text: "No se pudo conectar con el servidor. Intenta nuevamente.",
+        confirmButtonColor: "#5c2d42"
+      });
     }
+
   };
 
 
