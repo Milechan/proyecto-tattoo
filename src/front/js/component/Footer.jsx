@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import "../../styles/footer.css"
 
 const Footer = () => {
     return (
@@ -18,13 +19,13 @@ const Footer = () => {
                     </Col>
 
                     <Col md={4} className="text-center mb-3 mb-md-0">
-                        <a href="/about" className="d-block text-light text-decoration-none">Quiénes somos</a>
-                        <a href="/terms-and-conditions" className="d-block text-light text-decoration-none">Términos y condiciones</a>
+                        <a href="/about" className="d-block text-light text-decoration-none footer-text">Quiénes somos</a>
+                        <a href="/terms-and-conditions" className="d-block text-light text-decoration-none footer-text">Términos y condiciones</a>
                     </Col>
 
-                    <Col md={4} className="text-center">
-                        <h5>MatchTattoo © 2025</h5>
-                        <p className="mb-0">Todos los derechos reservados.</p>
+                    <Col md={4} className="text-center footer-text">
+                        <h5 className="footer-text">MatchTattoo © 2025</h5>
+                        <p className="mb-0 footer-text">Todos los derechos reservados.</p>
                     </Col>
                 </Row>
             </Container>
