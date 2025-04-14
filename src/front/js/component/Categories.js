@@ -13,7 +13,7 @@ export const Categories = () => {
 
     return (
         <section className="categories-section">
-            <h2 className="categories-title">Explora por Estilo</h2>
+            <h2 className="categories-title">Explora por Estilo🖋️</h2>
             <div className="categories-container">
                 {tattooCategories.map((category) => (
                     <Link
