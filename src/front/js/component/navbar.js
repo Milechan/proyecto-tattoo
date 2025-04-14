@@ -13,13 +13,15 @@ export const Navbar = () => {
   const isLoggedIn = !!token;
   const notificationCount = store.notificationCount;
   const navigate = useNavigate();
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const closeAll = () => {
     setIsMenuOpen(false);
     setIsDropdownOpen(false);
   };
+
+
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -29,15 +31,10 @@ export const Navbar = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      actions.getUser(token); // Asegura que se cargue user y profile
+      actions.getUser(token);
     }
   }, [token]);
 
-  // Usamos la imagen de perfil del store, o una por defecto si no hay ninguna
-  const profilePicSrc =
-    store.profile?.profile_picture && store.profile.profile_picture.trim() !== ""
-      ? store.profile.profile_picture
-      : perfilDefault;
 
   return (
     <>
@@ -47,24 +44,22 @@ export const Navbar = () => {
             <img src={logo_final} alt="Logo Tattoo Match" className="navbar-logo" />
           </Link>
 
-          <input
-            type="text"
-            className="form-control w-50"
-            placeholder="Buscar..."
-          />
+          <h1 className="navbar-title">MATCH TATTOO</h1>
 
           <div>
-            <button className="profile-button" onClick={toggleMenu}>
-              {isLoggedIn ? (
+            {isLoggedIn ? (
+              <div className="profile-wrapper" onClick={toggleMenu}>
                 <img
-                  src={profilePicSrc}
+                  src={store.user.profile.profile_picture && store.user.profile.profile_picture.trim() !== ""
+                    ? store.user.profile.profile_picture
+                    : perfilDefault}
                   className="img-profile"
                   alt="Foto de perfil"
                 />
-              ) : (
-                <span className="hamburger-icon">☰</span>
-              )}
-            </button>
+              </div>
+            ) : (
+              <div className="hamburger-icon" onClick={toggleMenu}>☰</div>
+            )}
           </div>
         </div>
       </nav>
@@ -93,8 +88,6 @@ export const Navbar = () => {
                   <Link to={`/tattooer/${store.user.id}`} onClick={closeAll}>Perfil</Link>
                 </li>
               )}
-
-              <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
 
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>Categorías</div>
