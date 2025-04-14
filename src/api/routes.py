@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Post, Profile, Review, Notification
+from api.models import db, User, Post, Profile, Review, Notification, Likes
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from api.models import db, User, Post, Profile, Review, Notification, UserType, Category
@@ -17,9 +17,8 @@ import json
 from flask_jwt_extended import jwt_required , get_jwt_identity, create_access_token
 api = Blueprint('api', __name__) 
 
-# Allow CORS requests to this API
-CORS(api)
 
+CORS(api, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 """POSTS"""
 
@@ -355,36 +354,52 @@ def update_tattooer_profile(tattooer_id):
         profile.social_media_x=data['social_media_x']
     if 'social_media_facebook' in data:
         profile.social_media_facebook=data['social_media_facebook']
-    if 'profile_picture' in data and data['profile_picture'] != "": # si detecta que le enviamos la foto
+    if 'profile_picture' in data and data['profile_picture'] != "":
         try:
             b64_image = data["profile_picture"]
-            # validamos formato
-            match = re.match(r"data:(image/\w+);base64,(.+)",b64_image) 
+            match = re.match(r"data:(image/\w+);base64,(.+)", b64_image) 
             if not match:
                 return jsonify({"msg":"error, profile_picture tiene un formato invalido"}),400
-            # obtenemos informacion
-            mime_type = match.group(1) # tipo de archivo
-            image_data = match.group(2) # imagen en base64
-            extension = mime_type.split('/')[-1] # extension de archivo
 
-            filename = f"profiles/{user.username}/profile_picture.{extension}" # definimos nombre del archivo
-            image_bytes = base64.b64decode(image_data) # decodificamos imagen
+            mime_type = match.group(1)
+            image_data = match.group(2)
+            extension = mime_type.split('/')[-1]
 
-            # subimos imagen
+            filename = f"profiles/{user.username}/profile_picture.{extension}"
+            image_bytes = base64.b64decode(image_data)
+
             bucket = s3.Bucket("matchtattoo")
-            bucket.put_object(
-                Key=filename,
-                Body=image_bytes,
-                ContentType=mime_type
-            )
-            # guardamos en perfil la url
-            profile.profile_picture = f"https://matchtattoo.s3.us-east-2.amazonaws.com/profiles/{user.username}/profile_picture.{extension}"
-            
+            bucket.put_object(Key=filename, Body=image_bytes, ContentType=mime_type)
 
+            profile.profile_picture = f"https://matchtattoo.s3.us-east-2.amazonaws.com/profiles/{user.username}/profile_picture.{extension}"
 
         except Exception as e:
             print(e)
             return jsonify({"msg":"error subiendo la foto de perfil"}),500
+
+
+    if 'banner' in data and data['banner'] != "":
+        try:
+            match = re.match(r"data:(image/\w+);base64,(.+)", data['banner']) 
+            if not match:
+                return jsonify({"msg":"error, banner tiene un formato invalido"}),400
+
+            mime_type = match.group(1)
+            image_data = match.group(2)
+            extension = mime_type.split('/')[-1]
+
+            filename = f"profiles/{user.username}/banner.{extension}"
+            image_bytes = base64.b64decode(image_data)
+
+            bucket = s3.Bucket("matchtattoo")
+            bucket.put_object(Key=filename, Body=image_bytes, ContentType=mime_type)
+
+            profile.banner = f"https://matchtattoo.s3.us-east-2.amazonaws.com/profiles/{user.username}/banner.{extension}"
+
+        except Exception as e:
+            print(e)
+            return jsonify({"msg":"error subiendo el banner"}),500
+
 
     # Guardar los cambios en la base de datos
     db.session.commit()
@@ -613,3 +628,40 @@ def send_email():
         return jsonify({"msg": "Correo enviado", "status": response.status_code}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+"""Likes"""
+
+@api.route('/posts/<int:post_id>/like', methods=['POST'])
+@jwt_required()
+def toggle_like(post_id):
+    current_user_id = int(get_jwt_identity())
+    post = db.session.query(Post).filter_by(id=post_id).first()
+
+    if not post:
+        return jsonify({"msg": "Post no encontrado"}), 404
+
+    existing_like = db.session.query(Likes).filter_by(user_id=current_user_id, post_id=post_id).first()
+
+    if existing_like:
+        db.session.delete(existing_like)
+        action = "dislike"
+    else:
+        new_like = Likes(user_id=current_user_id, post_id=post_id)
+        db.session.add(new_like)
+        action = "like"
+
+    db.session.commit()
+
+    like_count = db.session.query(Likes).filter_by(post_id=post_id).count()
+
+    return jsonify({"msg": f"{action} realizado", "likes": like_count}), 200
+
+
+
+@api.route('/posts/<int:post_id>/liked', methods=['GET'])
+@jwt_required()
+def check_if_liked(post_id):
+    current_user_id = int(get_jwt_identity())
+    like = db.session.query(Likes).filter_by(user_id=current_user_id, post_id=post_id).first()
+    return jsonify({"liked": like is not None}), 200

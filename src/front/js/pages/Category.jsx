@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/category.css"
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 
 export const Category = () => {
@@ -31,6 +31,20 @@ export const Category = () => {
             <div className="container-category-description">
                 <div className="description">{store.category.description}</div>
             </div>
+            <div className="container-category-profiles">
+                {store.category.profiles.map((profile) => {
+                    return (
+                        <div className="container-profile">
+                            <div className="profile-name">{profile.profile_name}</div>
+                            <Link to={`/tattooer/${profile.user_id}`}>
+                                <img className="image-profile" src={profile.profile_picture} alt="imagen de perfil" />
+                            </Link>
+
+                        </div>
+                    )
+                })}
+
+            </div>
             <div className="container-category-carousel">
                 <div className="container-carousel">
                     <div id="carouselExampleIndicators" className="carousel slide">
@@ -41,13 +55,13 @@ export const Category = () => {
                         </div>
                         <div className="carousel-inner">
                             <div className="carousel-item active">
-                                <img src={store.category.carousel[0]} className="d-block " alt="..." />
+                                <img src={store.category.carousel[0]} className="carrousel-image " alt="..." />
                             </div>
                             <div className="carousel-item">
-                                <img src={store.category.carousel[1]} className="d-block " alt="..." />
+                                <img src={store.category.carousel[1]} className=" carrousel-image" alt="..." />
                             </div>
                             <div className="carousel-item">
-                                <img src={store.category.carousel[2]} className="d-block " alt="..." />
+                                <img src={store.category.carousel[2]} className="carrousel-image " alt="..." />
                             </div>
                         </div>
                         <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -61,17 +75,7 @@ export const Category = () => {
                     </div>
                 </div>
             </div>
-            <div className="container-category-profiles">
-                {store.category.profiles.map((profile) => {
-                    return (
-                        <div className="container-profile">
-                            <div>{profile.name}</div>
-                        </div>
 
-                    )
-                })}
-
-            </div>
 
         </div>
     )

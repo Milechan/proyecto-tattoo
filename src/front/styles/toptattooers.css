@@ -1,43 +1,105 @@
+body{
+  background-color: #292727;
+}
 .top-tattooers-container {
-    text-align: center;
-    margin-bottom: 30px;
+  background-color: #292727;
+  color: #fff;
+  padding: 3rem 1rem;
+  height: 650px;
+  text-align: center;
+}
+
+.tattooers-title {
+  color: #fff;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.btn-profile{
+  color: white;
+  background-color: #6c282f;
+}
+
+.tattoo-carousel {
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.carousel-inner {
+  height: 500px;
+}
+
+.carousel-item {
+  height: 100%;
+}
+
+.carousel-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.carousel-image:hover {
+  transform: scale(1.02);
+}
+
+.custom-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1055;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-modal {
+  background: #1e1e1e;
+  color: white;
+  border-radius: 16px;
+  max-width: 900px;
+  width: 90%;
+  padding: 2rem;
+  position: relative;
+}
+
+.custom-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  filter: invert(1);
+  z-index: 10;
+}
+
+.custom-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .custom-modal-body {
+    flex-direction: row;
+    align-items: center;
   }
-  
-  .top-tattooers-container h1 {
-    margin-bottom: 20px;
-  }
-  
-  .carousel-image {
-    height: 250px;
-    object-fit: cover;
-    cursor: pointer;
-  }
-  
-  .modal-img-container {
-    padding-bottom: 20px; 
-  }
-  
-  .modal-img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    margin-bottom: 20px; 
-  }
-  
-  .modal-dialog {
-    max-width: 80%;
-    width: 90%;
-  }
-  
-  .modal-content {
-    padding-bottom: 20px; 
-  }
-  
-  .tattoo-carousel-container {
-    margin-bottom: 30px;
-  }
-  
-  .carousel-inner {
-    padding-bottom: 20px;
-  }
-  
+}
+
+.custom-modal-img {
+  width: 100%;
+  max-width: 400px;
+  max-height: 60vh;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.custom-modal-description {
+  flex: 1;
+  text-align: left;
+}

@@ -92,6 +92,7 @@ class Profile(db.Model):
     social_media_facebook: Mapped[str] = mapped_column(String, nullable=True)
     bio: Mapped[str] = mapped_column(String)
     profile_picture: Mapped[str] = mapped_column(String)
+    banner: Mapped[str] = mapped_column(String, nullable=True)
     ranking: Mapped[int] = mapped_column(Integer)
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'))
     user: Mapped['User'] = relationship('User', back_populates='profile')
@@ -103,12 +104,15 @@ class Profile(db.Model):
             "id": self.id,
             "user_id": self.user_id,
             "profile_name":self.user.username,
+            "email": self.user.email,
             "social_media_insta": self.social_media_insta,
             "social_media_wsp": self.social_media_wsp,
             "social_media_x": self.social_media_x,
             "social_media_facebook": self.social_media_facebook,
             "bio": self.bio,
             "profile_picture": self.profile_picture,
+            "banner": self.banner,
+            "category_banner":self.category.image,
             "ranking": self.ranking
         }
 
@@ -175,7 +179,7 @@ class Notification(db.Model):
 
     def serialize(self):
         return {
-            "id": self.id,
+            "id": self.id, 
             "user_id": self.user_id,
             "sender_id": self.sender_id,
             "date": self.date,

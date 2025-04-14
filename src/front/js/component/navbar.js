@@ -1,26 +1,27 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
-import profilePic from "../../img/foto_perfil.webp";
+import perfilDefault from "../../img/foto_perfil.webp";
 import logo_final from "../../img/logo_final.webp";
 import { Context } from "../store/appContext";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const { actions, store } = useContext(Context);
-  const notificationCount = store.notificationCount;
   const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
+  const notificationCount = store.notificationCount;
   const navigate = useNavigate();
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const closeAll = () => {
     setIsMenuOpen(false);
     setIsDropdownOpen(false);
   };
+
+
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -31,57 +32,34 @@ export const Navbar = () => {
   useEffect(() => {
     if (isLoggedIn) {
       actions.getUser(token);
-
-      const fetchNotifications = async () => {
-        try {
-          const resp = await fetch(`${process.env.BACKEND_URL}/api/notifications`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await resp.json();
-          if (data.success) {
-            const unread = data.notifications.filter(n => !n.is_read).length;
-            actions.updateNotificationCount(unread);
-          }
-        } catch (error) {
-          console.error("Error al cargar notificaciones:", error);
-        }
-      };
-
-      fetchNotifications();
     }
   }, [token]);
+
 
   return (
     <>
       <nav className="navbar navbar-light custom-navbar">
         <div className="container d-flex justify-content-between align-items-center w-100">
           <Link to="/">
-            <img
-              src={logo_final}
-              alt="Logo Tattoo Match"
-              className="navbar-logo"
-            />
+            <img src={logo_final} alt="Logo Tattoo Match" className="navbar-logo" />
           </Link>
-          <input
-            type="text"
-            className="form-control w-50"
-            placeholder="Buscar..."
-          />
+
+          <h1 className="navbar-title">MATCH TATTOO</h1>
+
           <div>
-            <button className="profile-button" onClick={toggleMenu}>
-              {isLoggedIn ? (
+            {isLoggedIn ? (
+              <div className="profile-wrapper" onClick={toggleMenu}>
                 <img
-                  src={profilePic}
+                  src={store.user.profile?.profile_picture && store.user.profile?.profile_picture.trim() !== ""
+                    ? store.user.profile.profile_picture
+                    : perfilDefault}
                   className="img-profile"
                   alt="Foto de perfil"
                 />
-              ) : (
-                <span className="hamburger-icon">☰</span>
-              )}
-            </button>
+              </div>
+            ) : (
+              <div className="hamburger-icon" onClick={toggleMenu}>☰</div>
+            )}
           </div>
         </div>
       </nav>
@@ -105,13 +83,11 @@ export const Navbar = () => {
                 </Link>
               </li>
 
-              {store.user.user_type?.name === "tattooer" && (
+              {store.user?.user_type?.name === "tattooer" && (
                 <li>
                   <Link to={`/tattooer/${store.user.id}`} onClick={closeAll}>Perfil</Link>
                 </li>
               )}
-
-              <li><Link to="/configuracion" onClick={closeAll}>Configuración</Link></li>
 
               <li className="dropdown-container">
                 <div className="dropdown-toggle" onClick={toggleDropdown}>Categorías</div>

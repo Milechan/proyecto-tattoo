@@ -5,6 +5,7 @@ import {
   FaUserEdit,
   FaStar,
   FaBell,
+  FaHeart,
 } from "react-icons/fa";
 import { Context } from "../store/appContext";
 
@@ -14,6 +15,7 @@ const getNotificationIcon = (type) => {
     case "solicitud": return <FaPaintBrush style={iconStyle} />;
     case "actualizacion": return <FaUserEdit style={iconStyle} />;
     case "valoracion": return <FaStar style={iconStyle} />;
+    case "like": return <FaHeart style={iconStyle} />;
     default: return <FaBell style={iconStyle} />;
   }
 };
@@ -40,6 +42,10 @@ export const Notifications = () => {
         // 🔄 Actualiza el contador global
         const unreadCount = updatedList.filter(n => !n.is_read).length;
         actions.updateNotificationCount(unreadCount);
+      } else {
+        console.error("Estado del fetch:", resp.status);
+        const errorData = await resp.json();
+        console.error("Error del servidor:", errorData);
       }
     } catch (error) {
       console.error("Error al marcar como leída:", error);
