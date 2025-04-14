@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import "../../styles/TopLikes.css";
 
@@ -11,6 +12,8 @@ export const TopLikes = () => {
     3: { liked: false, likes: 4323 },
   });
 
+  const navigate = useNavigate();
+
   const images = [
     "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/minimalista/tatuador4/botanico+4.jpeg",
     "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/geeks/tatuador4/Captura+de+pantalla+2025-04-11+190226.png",
@@ -22,6 +25,8 @@ export const TopLikes = () => {
     "Inspirado en el mundo geek, este diseño destaca referencias icónicas de la gran serie anime 'Neon Genesis Evangelion' en una magnifica composición moderna.",
     "Realismo puro: cada detalle de este tatuaje parece cobrar vida gracias a una técnica impresionante.",
   ];
+
+  const profileLinks = ["/tattooer/12", "/tattooer/8", "/tattooer/17"];
 
   const handleImageClick = (index) => {
     setSelectedImage(index);
@@ -36,6 +41,10 @@ export const TopLikes = () => {
         likes: prev[index].liked ? prev[index].likes - 1 : prev[index].likes + 1,
       },
     }));
+  };
+
+  const handleProfileClick = () => {
+    navigate(profileLinks[selectedImage - 1]);
   };
 
   return (
@@ -90,7 +99,9 @@ export const TopLikes = () => {
                   >
                     <FaHeart /> {likesState[selectedImage].likes}
                   </button>
-                  <button className="profile-button px-3 ps-3">Ver perfil</button>
+                  <button className="profile-button px-3 ps-3" onClick={handleProfileClick}>
+                    Ver perfil
+                  </button>
                 </div>
               </div>
             </div>
