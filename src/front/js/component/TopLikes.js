@@ -17,6 +17,12 @@ export const TopLikes = () => {
     "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/realismo/tatuador1/70f41ede5296246189fc7c711e04871c.jpg",
   ];
 
+  const descriptions = [
+    "Este tatuaje botánico minimalista es perfecto para quienes aman la naturaleza con un toque sutil y elegante.",
+    "Inspirado en el mundo geek, este diseño destaca referencias icónicas de la gran serie anime 'Neon Genesis Evangelion' en una magnifica composición moderna.",
+    "Realismo puro: cada detalle de este tatuaje parece cobrar vida gracias a una técnica impresionante.",
+  ];
+
   const handleImageClick = (index) => {
     setSelectedImage(index);
     setShowModal(true);
@@ -36,31 +42,38 @@ export const TopLikes = () => {
     <div className="top-likes-container">
       <h1 className="title">🔥 Top Tatuajes con Más Likes</h1>
 
-      <div className="card-grid">
-        {[1, 2, 3].map((index) => (
-          <div key={index} className="tattoo-card">
-            <div className="image-container" onClick={() => handleImageClick(index)}>
-              <img src={images[index - 1]} alt={`Tatuaje ${index}`} />
+      <div className="card-wrapper">
+        <div className="card-grid">
+          {[1, 2, 3].map((index) => (
+            <div key={index} className="tattoo-card">
+              <div className="image-container" onClick={() => handleImageClick(index)}>
+                <img src={images[index - 1]} alt={`Tatuaje ${index}`} />
+              </div>
+              <div className="card-body">
+                <p>Tatuaje #{index}</p>
+                <button
+                  className={`like-button ${likesState[index].liked ? "liked" : ""}`}
+                  onClick={() => toggleLike(index)}
+                >
+                  <FaHeart /> {likesState[index].likes}
+                </button>
+              </div>
             </div>
-            <div className="card-body">
-              <p>Tatuaje #{index}</p>
-              <button
-                className={`like-button ${likesState[index].liked ? "liked" : ""}`}
-                onClick={() => toggleLike(index)}
-              >
-                <FaHeart /> {likesState[index].likes}
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-button" onClick={() => setShowModal(false)}>
-              &times;
+            <button
+              className="close-button"
+              onClick={() => setShowModal(false)}
+              aria-label="Cerrar"
+            >
+              ×
             </button>
+
             <div className="modal-body">
               <img
                 src={images[selectedImage - 1]}
@@ -68,10 +81,8 @@ export const TopLikes = () => {
                 className="modal-image"
               />
               <div className="modal-details">
-                <h2>Detalle del Tatuaje #{selectedImage}</h2>
-                <p>
-                  Este diseño ha sido uno de los más votados por nuestra comunidad. Ideal para quienes buscan un estilo único y detallado.
-                </p>
+                <h2>Detalle del Tatuaje {selectedImage}</h2>
+                <p>{descriptions[selectedImage - 1]}</p>
                 <div className="modal-actions">
                   <button
                     className={`like-button ${likesState[selectedImage].liked ? "liked" : ""}`}
@@ -79,7 +90,7 @@ export const TopLikes = () => {
                   >
                     <FaHeart /> {likesState[selectedImage].likes}
                   </button>
-                  <button className="profile-button">Ver perfil</button>
+                  <button className="profile-button px-3 ps-3">Ver perfil</button>
                 </div>
               </div>
             </div>
