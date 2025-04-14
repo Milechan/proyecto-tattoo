@@ -838,9 +838,13 @@ const TattooerProfile = () => {
 
 
 
-            <button className="edit-button" onClick={toggleEdit}>
-              {isEditing ? "Guardar Cambios" : "Editar perfil"}
-            </button>
+            {parseInt(currentUserInfo?.id) === parseInt(id) && (
+              <button className="edit-button" onClick={toggleEdit}>
+                {isEditing ? "Guardar Cambios" : "Editar perfil"}
+              </button>
+            )}
+
+
             {isEditing && (
               <button
                 className="create-post-button"
