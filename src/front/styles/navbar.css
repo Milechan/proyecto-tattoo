@@ -1,20 +1,39 @@
-
-.img-profile {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: none;
+.navbar {
+  background-color: #6c282f;
+  color: white;
 }
 
-.profile-button {
-  background: none;
-  border: none;
-  padding: 0;
+.navbar-title {
+  color: white;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.navbar-logo {
+  height: 70px;
+  width: 70px;
+}
+
+.profile-wrapper {
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.img-profile {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid transparent;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  pointer-events: none;
+}
+
+.profile-wrapper:hover .img-profile {
+  border-color: #b30000;
+  box-shadow: 0 0 10px rgba(179, 0, 0, 0.6);
 }
 
 .hamburger-icon {
@@ -78,7 +97,7 @@
 
 .menu-list a:hover,
 .dropdown-toggle:hover {
-  color: #007bff;
+  color: #610b2f;
 }
 
 .dropdown-menu {
@@ -108,13 +127,4 @@
 
 .dropdown-menu a:hover {
   color: #007bff;
-}
-
-.navbar-logo {
-  height: 70px;
-  width: 70px;
-}
-
-.navbar {
-  background-color: #e0e0e0 !important; 
 }
