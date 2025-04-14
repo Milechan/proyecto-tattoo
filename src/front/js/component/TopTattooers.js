@@ -1,19 +1,33 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/toptattooers.css";
 
 export const TopTattooers = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const navigate = useNavigate();
 
   const images = [
     "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/black-out/tatuador4/DALL%C2%B7E+2025-04-12+20.30.29+-+Solid+black+blackout+tattoo+design+on+uncommon+body+parts+like+the+side+of+the+neck%2C+back+of+the+hand%2C+upper+thighs%2C+lower+calves%2C+abdomen%2C+or+shoulde.webp",
     "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/geeks/tatuador1/Captura+de+pantalla+2025-04-11+185746.png",
-    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/home/top+likes/topLikes3.png",
+    "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador3/4.png",
+  ];
+
+  const profileLinks = ["/tattooer/16", "/tattooer/5", "/tattooer/3"];
+
+  const descriptions = [
+    "Minimalismo extremo y tinta sólida. Cada pieza black-out cubre el cuerpo con personalidad, audacia y belleza cruda.",
+    "Tatuador full time uwu",
+    "No hay nada que me guste más que tatuar en negro, siento que las líneas realmente resaltan y que uno puede identificarse con ello. Claramente usando el estilo neotradicional."
   ];
 
   const handleImageClick = (image) => {
     setSelectedImage(images.indexOf(image));
     setShowModal(true);
+  };
+
+  const handleProfileClick = () => {
+    navigate(profileLinks[selectedImage]);
   };
 
   return (
@@ -58,8 +72,8 @@ export const TopTattooers = () => {
       </div>
 
       {showModal && (
-        <div className="custom-modal-backdrop">
-          <div className="custom-modal">
+        <div className="custom-modal-backdrop" onClick={() => setShowModal(false)}>
+          <div className="custom-modal" onClick={(e) => e.stopPropagation()}>
             <button className="btn-close custom-close" onClick={() => setShowModal(false)}></button>
 
             <div className="custom-modal-body">
@@ -70,10 +84,10 @@ export const TopTattooers = () => {
               />
               <div className="custom-modal-description">
                 <h5>Detalle del Tatuador</h5>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum.
-                </p>
-                <button className="btn btn-danger mt-3">Ver perfil</button>
+                <p>{descriptions[selectedImage]}</p>
+                <button className="btn btn-profile mt-3" onClick={handleProfileClick}>
+                  Ver perfil
+                </button>
               </div>
             </div>
           </div>

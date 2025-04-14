@@ -16,6 +16,11 @@ body{
   font-weight: bold;
 }
 
+.btn-profile{
+  color: white;
+  background-color: #6c282f;
+}
+
 .tattoo-carousel {
   max-width: 800px;
   margin: 0 auto 3rem;
@@ -42,7 +47,6 @@ body{
   transform: scale(1.02);
 }
 
-/* --- MODAL --- */
 .custom-modal-backdrop {
   position: fixed;
   top: 0;

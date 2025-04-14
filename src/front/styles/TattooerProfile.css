@@ -99,8 +99,8 @@
   margin: 0 auto;         
   border-radius: 15px;    
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
-  padding: 20px 30px 40px 30px; /* arriba, derecha, abajo, izquierda */
-  margin-top: -145px; /* Este empuja hacia arriba y lo pega al banner */
+  padding: 20px 30px 40px 30px; 
+  margin-top: -145px; 
   
 }
 
@@ -262,25 +262,28 @@ body.modal-open {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
   
   
+  
 }
 
 .gallery {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 40px; 
+  gap: 65px; 
   padding: 40px 20px;
   width: 100%;
   box-sizing: border-box;
+  
 }
 
 .tattoo-card {
-  max-width: 250px;
+  max-width: 268px;
   width: 100%;
   background-color: transparent;
   border: none;
   box-shadow: none;
   background-color: transparent;
+  box-shadow: 0 4px 10px rgba(214, 19, 19, 0.493); 
 }
 
 .tattoo-card img {
@@ -327,8 +330,15 @@ body.modal-open {
 
 .like-count {
   font-size: 16px;
-  color: #333;
+  color: white;
   margin-top: 5px;
+  
+}
+.like-count-modal {
+  font-size: 16px;
+  color: black;
+  margin-top: 5px;
+  
 }
 
 
