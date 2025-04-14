@@ -18,7 +18,7 @@ export const TopTattooers = () => {
 
   return (
     <div className="top-tattooers-container">
-      <h1 className="tattooers-title">Tatuadores mejor calificados</h1>
+      <h1 className="tattooers-title">🔥Tatuadores mejor calificados🔥</h1>
 
       <div id="carouselExample" className="carousel slide tattoo-carousel" data-bs-ride="carousel">
         <div className="carousel-inner">
