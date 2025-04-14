@@ -15,6 +15,12 @@ export const TopTattooers = () => {
 
   const profileLinks = ["/tattooer/16", "/tattooer/5", "/tattooer/3"];
 
+  const descriptions = [
+    "Minimalismo extremo y tinta sólida. Cada pieza black-out cubre el cuerpo con personalidad, audacia y belleza cruda.",
+    "Tatuador full time uwu",
+    "No hay nada que me guste más que tatuar en negro, siento que las líneas realmente resaltan y que uno puede identificarse con ello. Claramente usando el estilo neotradicional."
+  ];
+
   const handleImageClick = (image) => {
     setSelectedImage(images.indexOf(image));
     setShowModal(true);
@@ -78,9 +84,7 @@ export const TopTattooers = () => {
               />
               <div className="custom-modal-description">
                 <h5>Detalle del Tatuador</h5>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum.
-                </p>
+                <p>{descriptions[selectedImage]}</p>
                 <button className="btn btn-profile mt-3" onClick={handleProfileClick}>
                   Ver perfil
                 </button>
