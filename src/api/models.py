@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, Text
+from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, Text, Float
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
@@ -95,6 +95,9 @@ class Profile(db.Model):
     banner: Mapped[str] = mapped_column(String, nullable=True)
     ranking: Mapped[int] = mapped_column(Integer)
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'))
+    latitude: Mapped[float] = mapped_column(Float, nullable=True)
+    longitude: Mapped[float] = mapped_column(Float, nullable=True)
+    location_text: Mapped[str] = mapped_column(String, nullable=True)
     user: Mapped['User'] = relationship('User', back_populates='profile')
     category: Mapped['Category'] = relationship('Category', back_populates="profiles")
 
@@ -113,7 +116,10 @@ class Profile(db.Model):
             "profile_picture": self.profile_picture,
             "banner": self.banner,
             "category_banner":self.category.image,
-            "ranking": self.ranking
+            "ranking": self.ranking,
+             "latitude": self.latitude,
+            "longitude": self.longitude,
+            "location_text": self.location_text
         }
 
 
