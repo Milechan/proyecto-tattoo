@@ -46,14 +46,8 @@ const RegisterForm = () => {
       const data = await response.json();
 
       if (response.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "¡Registro exitoso!",
-          text: "Por favor inicia sesión para comenzar.",
-          confirmButtonColor: "#5c2d42"
-        }).then(() => {
-          navigate("/login");
-        });
+        alert("Registro exitoso! Por favor inicia sesión");
+        navigate("/login");
       } else {
         Swal.fire({
           icon: "error",
@@ -246,6 +240,7 @@ const RegisterForm = () => {
                     <Form.Check.Input type="checkbox" />
                     <Form.Check.Label style={styles.checkboxLabel}>
                       Acepto los términos y condiciones
+                      <a href="/terms-and-conditions" className="d-block text-decoration-none">Términos y condiciones</a>
                     </Form.Check.Label>
                   </Form.Check>
 

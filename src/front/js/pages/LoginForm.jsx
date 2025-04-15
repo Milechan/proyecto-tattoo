@@ -5,6 +5,7 @@ import { Context } from '../store/appContext';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 
+
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,10 +27,10 @@ const LoginForm = () => {
         // throw new Error(data.msg || 'Error al crear perfil')
       }
       Swal.fire({
+
+        title: "Inicio exitoso!",
         icon: "success",
-        title: "¡Perfil creado!",
-        text: "El perfil ha sido creado exitosamente.",
-        confirmButtonColor: "#5c2d42"
+        draggable: true
       });
 
     } catch (error) {
@@ -75,7 +76,7 @@ const LoginForm = () => {
     mainBg: {
       backgroundColor: '#f8f9fa',
       minHeight: '100vh',
-      backgroundImage: 'url("https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/gifs/8d6e67643888ba34335fdf8eb87052e4.gif")',
+      backgroundImage: 'url("https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/gifs/RJHi.gif")',
       backgroundSize: 'background-repeat', // define si es en mosaico o no
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed', // efecto parallax

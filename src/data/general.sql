@@ -61,7 +61,7 @@ INSERT INTO user (name,username,password,email,notification_enabled,user_type_id
 ("Ivan Ignacio","ivanignacio07_inktattoo","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","ivanignacio07_inktattoo@gmail.com",true,2,5),
 ("Ramon Nieves","ramonieves_","scrypt:32768:8:1$YIds4JWIXsmbVHTD$a7400517853410c14e8227988a778cb46044ac0d8daafc048ccf58ec2fec6d03ffa5cecb699cbffb3e25b056e94cd730480f8ab0f329a904b9ad127b10468d81","ramonieves_@gmail.com",true,2,5);
 
-INSERT INTO profile (user_id, bio, profile_picture, ranking, category_id, social_media_insta,social_media_wsp,social_media_x,social_media_facebook) VALUES
+INSERT INTO profile (user_id, bio, profile_picture, banner, ranking, category_id, social_media_insta,social_media_wsp,social_media_x,social_media_facebook) VALUES
 --neotradicional
 (1,"Me dedico a realizar arte neotradicional desde hace años, me gusta el poder sobreexagerar los colores al momento de tatuar,y claramente los Onis son lo mas caracteristico que realizo","https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador1/1.png","",0,1,"https://www.instagram.com/asmodeus_tattoo/?hl=es-la","","",""),
 (2,"Me identifico como una tatuadara extravagante, me gusta el poder tatuar con colores, siento que le da mas realismo en si mismo, al igual el que me permitan hacer tatuajes en mi estilo de dibujo,ya que tambien soy artista","https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/perfiles+de+tatuadores/neotradicional/tatuador2/7.png","",0,1,"https://www.instagram.com/ateskun_/?hl=es-la","","",""),
