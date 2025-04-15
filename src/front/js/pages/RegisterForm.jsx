@@ -240,6 +240,7 @@ const RegisterForm = () => {
                     <Form.Check.Input type="checkbox" />
                     <Form.Check.Label style={styles.checkboxLabel}>
                       Acepto los términos y condiciones
+                      <a href="/terms-and-conditions" className="d-block text-decoration-none">Términos y condiciones</a>
                     </Form.Check.Label>
                   </Form.Check>
 
