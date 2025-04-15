@@ -4,7 +4,7 @@ import '../../styles/termsandconditions.css';
 const TermsAndConditions = () => {
     return (
         <div className="terms-page-container">
-            <h1>Términos y Condiciones</h1>
+            <h1 style={{ color: "#f5f4f2" }}>Términos y Condiciones</h1>
 
             <div className="terms-content">
                 <section className="terms-section">
