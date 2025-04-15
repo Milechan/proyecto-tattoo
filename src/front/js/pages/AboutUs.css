@@ -17,7 +17,7 @@
 }
 
 .about-text {
-  color: #20292f; /* Gris oscuro */
+  color: #050505; /* Gris oscuro */
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -52,4 +52,11 @@
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   display: block;
+}
+
+.team-card .card-text {
+  color: #000;
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-top: 0.3rem;
 }

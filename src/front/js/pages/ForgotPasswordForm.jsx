@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState('');
@@ -25,7 +26,11 @@ const ForgotPasswordForm = () => {
         throw new Error(data.msg || 'Error al enviar el correo');
       }
 
-      alert('Se ha enviado un correo con instrucciones para restablecer tu contraseña');
+      Swal.fire({
+        title: "Se ha enviado un correo con instrucciones para restablecer tu contraseña",
+        icon: "success",
+        draggable: true
+      });
 
     } catch (error) {
       alert(error.message);
