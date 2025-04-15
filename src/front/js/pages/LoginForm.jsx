@@ -54,9 +54,18 @@ const LoginForm = () => {
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.msg || 'Error al iniciar sesión')
-        navigate("/RegisterForm");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.msg || "Error al iniciar sesión",
+          confirmButtonText: "Reintentar",
+          confirmButtonColor: "#5c2d42"
+        }).then(() => {
+          navigate("/Login");
+        });
+        return;
       }
+
       localStorage.setItem('token', data.token);
 
       actions.changeUser(data.user);

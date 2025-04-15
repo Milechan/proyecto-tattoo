@@ -354,6 +354,12 @@ def update_tattooer_profile(tattooer_id):
         profile.social_media_x=data['social_media_x']
     if 'social_media_facebook' in data:
         profile.social_media_facebook=data['social_media_facebook']
+    if  'latitude' in data:
+        profile.latitude = data['latitude']
+    if 'longitude' in data:
+        profile.longitude = data['longitude']
+    if  'location_text' in data:
+        profile.location_text = data['location_text']
     if 'profile_picture' in data and data['profile_picture'] != "":
         try:
             b64_image = data["profile_picture"]
