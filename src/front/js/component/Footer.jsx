@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import "../../styles/footer.css"
 
 const Footer = () => {
     return (
@@ -49,6 +50,13 @@ const Footer = () => {
                         <p className="mb-0" style={{ fontSize: "1.5rem" }}>
                             Todos los derechos reservados.
                         </p>
+                        <a href="/about" className="d-block text-light text-decoration-none footer-text">Quiénes somos</a>
+                        <a href="/terms-and-conditions" className="d-block text-light text-decoration-none footer-text">Términos y condiciones</a>
+                    </Col>
+
+                    <Col md={4} className="text-center footer-text">
+                        <h5 className="footer-text">MatchTattoo © 2025</h5>
+                        <p className="mb-0 footer-text">Todos los derechos reservados.</p>
                     </Col>
                 </Row>
             </Container>
