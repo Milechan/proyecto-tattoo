@@ -5,25 +5,25 @@
 }
 
 .about-title {
-  color: #6c282f; /* Borgoña oscuro */
+  color: #6c282f; 
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
 .about-subtitle {
-  color: #9a5762; /* Rosa viejo */
+  color: #9a5762; 
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .about-text {
-  color: #050505; /* Gris oscuro */
+  color: #050505; 
   font-size: 1rem;
   line-height: 1.6;
 }
 
 .about-section {
-  background-color: #f5f4f2; /* Blanco crema */
+  background-color: #f5f4f2;
   padding: 2rem;
   border-radius: 1rem;
 }

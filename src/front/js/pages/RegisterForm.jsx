@@ -25,14 +25,14 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //setError(null);
+
 
     const userData = {
       name: formData.name,
       username: formData.username,
       email: formData.email,
       password: formData.password,
-      isTattooer: isTattooer,  // aqui se diferencia el 1 o el 2 de las tablas
+      isTattooer: isTattooer,
       categoryName: isTattooer ? formData.categoryName : null
     };
 
@@ -70,7 +70,7 @@ const RegisterForm = () => {
 
 
 
-  // Paleta de colores
+
   const styles = {
     mainBg: {
       backgroundColor: '#f8f9fa',
