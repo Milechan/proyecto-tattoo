@@ -489,7 +489,7 @@ const TattooerProfile = () => {
   }
 
   const handleSendEmail = async () => {
-    if (!contactEmail || !contactMessage) {
+    if (!contactMessage) {
       Swal.fire({
         icon: "warning",
         title: "Campos incompletos",
@@ -515,13 +515,13 @@ const TattooerProfile = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: store.profile.email,
-          subject: `Nuevo mensaje de ${contactEmail}`,
+          subject: `Nuevo mensaje de ${store.user.email}`,
           message: `
         ¡Hola!
         
         Has recibido un nuevo mensaje a través de MatchTattoo 📩
         
-        🧑 Nombre de quien escribe: ${contactEmail}
+        🧑 Nombre de quien escribe: ${store.user.email}
         💬 Mensaje:
         ${contactMessage}
         
@@ -1130,7 +1130,7 @@ const TattooerProfile = () => {
                                 className="form-control"
                                 id="contactEmail"
                                 placeholder="tucorreo@correo.com"
-                                value={contactEmail}
+                                value={store.user.email}
                                 onChange={(e) => setContactEmail(e.target.value)}
                               />
                             </div>
