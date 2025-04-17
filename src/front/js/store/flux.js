@@ -1,7 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			token: localStorage.getItem("token") || null, // 🔐 Guarda el token en el store
+			token: localStorage.getItem("token") || null,
 			category: {
 				description: "",
 				id: "",
