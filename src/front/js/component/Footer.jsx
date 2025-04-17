@@ -14,7 +14,6 @@ const linkHoverStyle = {
 };
 
 const Footer = () => {
-
     return (
         <footer
             style={{
@@ -27,18 +26,7 @@ const Footer = () => {
         >
             <Container>
                 <Row>
-
-                    <Col md={4} className="text-center mb-3 mb-md-0">
-                        <a href="https://facebook.com" className="text-light me-3">
-                            <i className="fab fa-facebook fa-3x"></i>
-                        </a>
-                        <a href="https://instagram.com" className="text-light me-3">
-                            <i className="fab fa-instagram fa-3x"></i>
-                        </a>
-                    </Col>
-
-
-                    <Col md={4} className="text-center mb-3 mb-md-0">
+                    <Col md={4} className="text-center text-md-start mb-3 mb-md-0">
                         <a
                             href="/about"
                             style={linkStyle}
@@ -48,6 +36,18 @@ const Footer = () => {
                         >
                             Quiénes somos
                         </a>
+                    </Col>
+
+                    <Col md={4} className="text-center mb-3 mb-md-0">
+                        <p className="mb-0" style={{ fontWeight: "600", fontSize: "1.5rem" }}>
+                            MatchTattoo © 2025
+                        </p>
+                        <p className="mb-0" style={{ fontSize: "1.5rem" }}>
+                            Todos los derechos reservados.
+                        </p>
+                    </Col>
+
+                    <Col md={4} className="text-center text-md-end">
                         <a
                             href="/terms-and-conditions"
                             style={linkStyle}
@@ -57,16 +57,6 @@ const Footer = () => {
                         >
                             Términos y condiciones
                         </a>
-                    </Col>
-
-
-                    <Col md={4} className="text-center">
-                        <p className="mb-0" style={{ fontWeight: "600", fontSize: "1.5rem" }}>
-                            MatchTattoo © 2025
-                        </p>
-                        <p className="mb-0" style={{ fontSize: "1.5rem" }}>
-                            Todos los derechos reservados.
-                        </p>
                     </Col>
                 </Row>
             </Container>

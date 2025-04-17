@@ -97,10 +97,53 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const data = await response.json();
 					if (data.success) {
-						setStore({ user: data.user });
+						const unreadCount = data.user.notifications?.filter(n => !n.is_read).length || 0;
+						setStore({
+							user: data.user,
+							notificationCount: unreadCount
+						});
 					}
 				} catch (error) {
 					console.error("Error al obtener el usuario:", error);
+				}
+			},
+
+			markNotificationAsRead: async (id) => {
+				try {
+					const store = getStore();
+
+					// 👇 Agrega estos console.log justo aquí
+					console.log("Marcando notificación como leída con ID:", id);
+					console.log("Token usado:", store.token);
+
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/notification/readed`, {
+						method: "POST",
+						headers: {
+							Authorization: `Bearer ${store.token}`,
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({ notification_id: id })
+					});
+
+					if (resp.ok) {
+						const updatedUser = {
+							...store.user,
+							notifications: store.user.notifications.map(n =>
+								n.id === id ? { ...n, is_read: true } : n
+							)
+						};
+
+						const updatedCount = updatedUser.notifications.filter(n => !n.is_read).length;
+
+						setStore({
+							user: updatedUser,
+							notificationCount: updatedCount
+						});
+					} else {
+						console.error("Error al marcar como leída:", resp.status);
+					}
+				} catch (error) {
+					console.error("Error al marcar como leída:", error);
 				}
 			},
 

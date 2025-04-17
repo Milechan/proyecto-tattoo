@@ -1,6 +1,3 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Post, Profile, Review, Notification, Likes
 from api.utils import generate_sitemap, APIException
@@ -525,18 +522,23 @@ def get_notification_by_id(notification_id):
         return jsonify(notification.serialize()), 200
 
 
-@api.route('/notification/<int:notification_id>/readed',methods=['PUT'])
+@api.route('/notification/<int:notification_id>/readed', methods=['PUT'])
 @jwt_required()
 def set_notification_readed(notification_id):
     current_id = get_jwt_identity()
-    notification = db.session.query(Notification).filter_by(id=notification_id,user_id=current_id).one_or_none()
-        
+    notification = db.session.query(Notification).filter_by(id=notification_id, user_id=current_id).one_or_none()
+
     if notification is None:
         return jsonify({"msg": f"No se encontró la notificación con el ID {notification_id}"}), 404
-    
+
     notification.is_read = True
     db.session.commit()
-    return jsonify({"success": True, "msg": "Notificación marcada como leída","notification":notification.serialize()}), 200
+    return jsonify({
+        "success": True,
+        "msg": "Notificación marcada como leída",
+        "notification": notification.serialize()
+    }), 200
+
 
 
 @api.route('/notification',methods=['POST'])

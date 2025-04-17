@@ -24,34 +24,6 @@ export const Notifications = () => {
   const { store, actions } = useContext(Context);
   const [notifications, setNotifications] = useState([]);
 
-  const markAsRead = async (id) => {
-    try {
-      const resp = await fetch(`${process.env.BACKEND_URL}/api/notification/${id}/readed`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${store.token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (resp.ok) {
-        const updatedList = notifications.map(n =>
-          n.id === id ? { ...n, is_read: true } : n
-        );
-        setNotifications(updatedList);
-
-
-        const unreadCount = updatedList.filter(n => !n.is_read).length;
-        actions.updateNotificationCount(unreadCount);
-      } else {
-        console.error("Estado del fetch:", resp.status);
-        const errorData = await resp.json();
-        console.error("Error del servidor:", errorData);
-      }
-    } catch (error) {
-      console.error("Error al marcar como leída:", error);
-    }
-  };
-
   const formatDate = (isoString) => {
     const date = new Date(isoString);
     return date.toLocaleString("es-ES", {
@@ -99,13 +71,19 @@ export const Notifications = () => {
                 {getNotificationIcon(notification.type)}
                 <div>
                   <p className="mb-1">{notification.message}</p>
+                  {notification.sender && (
+                    <small>
+                      Enviado por: <strong>{notification.sender.username}</strong>
+                    </small>
+                  )}
+                  <br />
                   <small>{formatDate(notification.date)}</small>
                 </div>
               </div>
               {!notification.is_read && (
                 <button
                   className="btn btn-sm btn-light"
-                  onClick={() => markAsRead(notification.id)}
+                  onClick={() => actions.markNotificationAsRead(notification.id)}
                 >
                   <FaCheckCircle className="me-1" /> Marcar como leída
                 </button>
