@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import "../../styles/TattooerProfile.css";
-import banner from "../../img/banner.webp";
 import perfil from "../../img/perfil.webp";
 import g1 from "../../img/g1.webp";
 import g2 from "../../img/g2.webp";
