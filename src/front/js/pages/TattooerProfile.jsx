@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import "../../styles/TattooerProfile.css";
-import perfil from "../../img/perfil.webp";
-import g1 from "../../img/g1.webp";
-import g2 from "../../img/g2.webp";
-import g3 from "../../img/g3.webp";
-import g4 from "../../img/g4.webp";
-import g5 from "../../img/g5.webp";
-import g6 from "../../img/g6.webp";
-import g7 from "../../img/g7.webp";
+import perfil from "../../img/fperfil.webp";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -225,7 +218,8 @@ const TattooerProfile = () => {
 
 
 
-  const [galleryImages, setGalleryImages] = useState([g1, g2, g3, g4, g5, g6, g7]);
+  const [galleryImages, setGalleryImages] = useState([]);
+
   const [likes, setLikes] = useState({});
 
 
