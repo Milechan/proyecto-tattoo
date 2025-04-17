@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import "../../styles/TattooerProfile.css";
-import banner from "../../img/banner.webp";
 import perfil from "../../img/perfil.webp";
 import g1 from "../../img/g1.webp";
 import g2 from "../../img/g2.webp";
@@ -48,15 +47,6 @@ const TattooerProfile = () => {
       console.error("Error al obtener dirección desde coordenadas:", error);
     }
   };
-
-
-
-
-
-
-
-
-
 
 
   useEffect(() => {
@@ -616,7 +606,6 @@ const TattooerProfile = () => {
           confirmButtonColor: "#5c2d42"
         });
 
-
         await actions.getProfile(userId);
       } else {
         Swal.fire({
@@ -929,14 +918,7 @@ const TattooerProfile = () => {
   };
 
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const [editedDescription, setEditedDescription] = useState("Descripción de la imagen o galería que quieras mostrar aquí."); // valor inicial
-
-  const mapContainerStyle = {
-    width: "90%",
-    height: "300px",
-    borderRadius: "12px",
-    marginTop: "20px",
-  };
+  const [editedDescription, setEditedDescription] = useState("Descripción de la imagen o galería que quieras mostrar aquí.");
 
 
   const styles = {
@@ -1013,9 +995,6 @@ const TattooerProfile = () => {
       letterSpacing: '2px',
       fontSize: '1.2rem'
     }
-
-
-
 
   };
 
@@ -1591,7 +1570,6 @@ const TattooerProfile = () => {
                   </>
                 )}
 
-
                 {isLoadingReviews ? (
                   <div style={{ textAlign: 'center', padding: '2rem' }}>
                     <div
@@ -1651,7 +1629,6 @@ const TattooerProfile = () => {
                     </div>
                   ))
                 )}
-
 
                 {reviews.length >= 5 && (
                   <div style={{
