@@ -119,10 +119,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/notification/${id}/readed`, {
 						method: "PUT",
 						headers: {
-							Authorization: `Bearer ${store.token}`,
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify({ notification_id: id })
+							Authorization: `Bearer ${store.token}`
+						}
 					});
 
 					if (resp.ok) {
