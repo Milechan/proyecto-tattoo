@@ -46,9 +46,16 @@ const RegisterForm = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Registro exitoso! Por favor inicia sesión");
-        navigate("/login");
-      } else {
+        Swal.fire({
+          icon: "success",
+          title: "¡Registro exitoso!",
+          text: "Por favor inicia sesión para continuar.",
+          confirmButtonColor: "#5c2d42"
+        }).then(() => {
+          navigate("/login");
+        });
+      }
+      else {
         Swal.fire({
           icon: "error",
           title: "Error al registrar",

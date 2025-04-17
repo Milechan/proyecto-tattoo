@@ -50,15 +50,6 @@ const TattooerProfile = () => {
   };
 
 
-
-
-
-
-
-
-
-
-
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -616,7 +607,6 @@ const TattooerProfile = () => {
           confirmButtonColor: "#5c2d42"
         });
 
-        // ✅ Refresca el perfil desde el backend para forzar re-render completo con nueva ubicación
         await actions.getProfile(userId);
       } else {
         Swal.fire({
@@ -929,14 +919,7 @@ const TattooerProfile = () => {
   };
 
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const [editedDescription, setEditedDescription] = useState("Descripción de la imagen o galería que quieras mostrar aquí."); // valor inicial
-
-  const mapContainerStyle = {
-    width: "90%",
-    height: "300px",
-    borderRadius: "12px",
-    marginTop: "20px",
-  };
+  const [editedDescription, setEditedDescription] = useState("Descripción de la imagen o galería que quieras mostrar aquí.");
 
 
   const styles = {
@@ -1013,9 +996,6 @@ const TattooerProfile = () => {
       letterSpacing: '2px',
       fontSize: '1.2rem'
     }
-
-
-
 
   };
 
@@ -1468,8 +1448,6 @@ const TattooerProfile = () => {
                 }}>
                   Reseñas
                 </h3>
-
-                {/* Formulario para nueva reseña */}
                 {isLoadingUserInfo ? (
                   <div style={{ textAlign: 'center', padding: '1rem' }}>
                     <div className="spinner-border text-primary" role="status">
@@ -1591,7 +1569,6 @@ const TattooerProfile = () => {
                   </>
                 )}
 
-                {/* Lista de reseñas */}
                 {isLoadingReviews ? (
                   <div style={{ textAlign: 'center', padding: '2rem' }}>
                     <div
@@ -1652,7 +1629,6 @@ const TattooerProfile = () => {
                   ))
                 )}
 
-                {/* Paginación */}
                 {reviews.length >= 5 && (
                   <div style={{
                     display: 'flex',

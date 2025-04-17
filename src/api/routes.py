@@ -22,7 +22,7 @@ CORS(api, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_
 
 """POSTS"""
 
-#Ruta para obtener todos los post
+
 @api.route('/posts', methods=['GET'])  
 def get_all_posts():
     posts = db.session.query(Post).order_by(Post.created_at.desc()).all()
@@ -30,7 +30,7 @@ def get_all_posts():
     return jsonify(result), 200
 
 
-#Ruta crear nuevo post
+
 @api.route('/posts', methods=['POST'])
 @jwt_required()
 def create_post():
@@ -61,11 +61,10 @@ def create_post():
         return jsonify({"error": str(e)}), 500
 
 
-#Ruta eliminar un post
 @api.route('/posts/<int:post_id>', methods=['DELETE'])
 @jwt_required()
 def delete_post(post_id):
-    # Buscar el post en la bd
+
     post = db.session.query(Post).filter_by(id=post_id).one_or_none()
 
     if post is None:
@@ -78,7 +77,7 @@ def delete_post(post_id):
         return jsonify({"msg": "No tienes permiso para eliminar este post"}), 403
    
     try:
-        # Eliminar el post y confirmar
+       
         db.session.delete(post)
         db.session.commit()
         return jsonify({"msg": "Post eliminado correctamente"}), 200
@@ -87,13 +86,13 @@ def delete_post(post_id):
         return jsonify({"error": str(e)}), 500
 
 
-#Ruta editar post
+
 @api.route('/posts/<int:post_id>', methods=['PUT'])
 @jwt_required()
 def update_post(post_id):
     data = request.get_json()
 
-    #Buscar el post por su ID
+    
     post = db.session.query(Post).filter_by(id=post_id).one_or_none()
     if post is None:
         return jsonify({"msg": "Post no encontrado"}), 404
@@ -115,7 +114,7 @@ def update_post(post_id):
         return jsonify({"error": str(e)}), 500
 
 
-#Ruta para ver un post por su id
+
 @api.route('/posts/<int:post_id>', methods=['GET'])
 def get_post_by_id(post_id):
     post = db.session.query(Post).filter_by(id=post_id).one_or_none()
