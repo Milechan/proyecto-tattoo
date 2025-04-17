@@ -116,8 +116,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Marcando notificación como leída con ID:", id);
 					console.log("Token usado:", store.token);
 
-					const resp = await fetch(`${process.env.BACKEND_URL}/api/notification/readed`, {
-						method: "POST",
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/notification/${id}/readed`, {
+						method: "PUT",
 						headers: {
 							Authorization: `Bearer ${store.token}`,
 							"Content-Type": "application/json"
