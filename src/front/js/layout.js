@@ -19,7 +19,7 @@ import { Notifications } from "./component/Notifications.js";
 import AboutUs from "./pages/AboutUs.js";
 import TermsAndConditions from "./pages/TermsAndConditions.js";
 
-// Página de Notificaciones (mock)
+
 export const NotificationsPage = () => {
   return <Notifications />;
 };

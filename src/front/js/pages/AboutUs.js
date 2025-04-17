@@ -5,34 +5,34 @@ import "./AboutUs.css";
 const AboutUs = () => {
   const teamMembers = [
     {
-      name: "Milena",
+      name: "Milena Concha",
       role: "Fullstack Developer",
       img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Milena.webp"
     },
     {
-      name: "Alan",
+      name: "Alan Rojas",
       role: "Fullstack Developer",
       img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Alan.webp"
     },
     {
-      name: "Samuel",
+      name: "Samuel González",
       role: "Fullstack Developer",
       img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Samuel.webp"
     },
     {
-      name: "Damian",
+      name: "Damian Ramirez",
       role: "Fullstack Developer",
-      img: "https://via.placeholder.com/150"
+      img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/dami.png"
     },
     {
-      name: "Ángela",
+      name: "Ángela Montoya",
       role: "Fullstack Developer",
       img: "https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/equipo/Angela.webp"
     }
   ];
 
   return (
-    <Container className="about-section mt-5">
+    <Container className="about-section mt-5 mb-5">
       <h1 className="text-center about-title">Sobre Nosotros</h1>
       <Row>
         <Col md={6}>
@@ -59,7 +59,6 @@ const AboutUs = () => {
         </Col>
       </Row>
 
-      {/* Sección equipo */}
       <h2 className="text-center mt-5 about-title">Nuestro Equipo</h2>
       <Row className="mt-4">
         {teamMembers.map((member, index) => (
@@ -79,6 +78,9 @@ const AboutUs = () => {
           </Col>
         ))}
       </Row>
+
+
+      <div style={{ margin: "100px" }}></div>
     </Container>
   );
 };

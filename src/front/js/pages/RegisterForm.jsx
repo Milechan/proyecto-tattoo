@@ -25,14 +25,14 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //setError(null);
+
 
     const userData = {
       name: formData.name,
       username: formData.username,
       email: formData.email,
       password: formData.password,
-      isTattooer: isTattooer,  // aqui se diferencia el 1 o el 2 de las tablas
+      isTattooer: isTattooer,
       categoryName: isTattooer ? formData.categoryName : null
     };
 
@@ -49,12 +49,13 @@ const RegisterForm = () => {
         Swal.fire({
           icon: "success",
           title: "¡Registro exitoso!",
-          text: "Por favor inicia sesión para comenzar.",
+          text: "Por favor inicia sesión para continuar.",
           confirmButtonColor: "#5c2d42"
         }).then(() => {
           navigate("/login");
         });
-      } else {
+      }
+      else {
         Swal.fire({
           icon: "error",
           title: "Error al registrar",
@@ -76,7 +77,7 @@ const RegisterForm = () => {
 
 
 
-  // Paleta de colores
+
   const styles = {
     mainBg: {
       backgroundColor: '#f8f9fa',
@@ -246,6 +247,7 @@ const RegisterForm = () => {
                     <Form.Check.Input type="checkbox" />
                     <Form.Check.Label style={styles.checkboxLabel}>
                       Acepto los términos y condiciones
+                      <a href="/terms-and-conditions" className="d-block text-decoration-none">Términos y condiciones</a>
                     </Form.Check.Label>
                   </Form.Check>
 

@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import "../../styles/TattooerProfile.css";
-import banner from "../../img/banner.webp";
-import perfil from "../../img/perfil.webp";
-import g1 from "../../img/g1.webp";
-import g2 from "../../img/g2.webp";
-import g3 from "../../img/g3.webp";
-import g4 from "../../img/g4.webp";
-import g5 from "../../img/g5.webp";
-import g6 from "../../img/g6.webp";
-import g7 from "../../img/g7.webp";
+import perfil from "../../img/fperfil.webp";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { FaInstagram, FaFacebookF, FaXTwitter, FaWhatsapp } from "react-icons/fa6";
 import Swal from 'sweetalert2';
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+
+
 
 
 const TattooerProfile = () => {
@@ -26,6 +21,26 @@ const TattooerProfile = () => {
   const [newPostDescription, setNewPostDescription] = useState("");
   const [isSubmittingPost, setIsSubmittingPost] = useState(false);
   const [profileNotFound, setProfileNotFound] = useState(false);
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+  });
+  const [tempLat, setTempLat] = useState(null);
+  const [tempLng, setTempLng] = useState(null);
+  const [locationText, setLocationText] = useState(store.profile.location_text || "");
+  const getAddressFromCoordinates = async (lat, lng) => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
+      );
+      const data = await response.json();
+      if (data.status === "OK" && data.results.length > 0) {
+        setLocationText(data.results[0].formatted_address);
+      }
+    } catch (error) {
+      console.error("Error al obtener dirección desde coordenadas:", error);
+    }
+  };
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -35,6 +50,7 @@ const TattooerProfile = () => {
           headers: {
             "Authorization": `Bearer ${token}`
           }
+
         });
 
         const data = await response.json();
@@ -63,6 +79,10 @@ const TattooerProfile = () => {
     };
 
     fetchProfile();
+  }, [id]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, [id]);
 
 
@@ -198,7 +218,8 @@ const TattooerProfile = () => {
 
 
 
-  const [galleryImages, setGalleryImages] = useState([g1, g2, g3, g4, g5, g6, g7]);
+  const [galleryImages, setGalleryImages] = useState([]);
+
   const [likes, setLikes] = useState({});
 
 
@@ -374,6 +395,29 @@ const TattooerProfile = () => {
   };
 
 
+  const handleContactClick = () => {
+    if (!currentUserInfo) {
+      Swal.fire({
+        title: "🔐 Necesitas iniciar sesión",
+        text: "Debes iniciar sesión o registrarte para contactar al tatuador.",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Iniciar sesión",
+        cancelButtonText: "Registrarse",
+        confirmButtonColor: "#5c2d42",
+        cancelButtonColor: "#8c3d5b",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "/login";
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          window.location.href = "/register";
+        }
+      });
+    } else {
+      setShowModal(true);
+    }
+  };
+
   const handleBannerChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -439,7 +483,7 @@ const TattooerProfile = () => {
   }
 
   const handleSendEmail = async () => {
-    if (!contactEmail || !contactMessage) {
+    if (!contactMessage) {
       Swal.fire({
         icon: "warning",
         title: "Campos incompletos",
@@ -465,13 +509,13 @@ const TattooerProfile = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: store.profile.email,
-          subject: `Nuevo mensaje de ${contactEmail}`,
+          subject: `Nuevo mensaje de ${store.user.email}`,
           message: `
         ¡Hola!
         
         Has recibido un nuevo mensaje a través de MatchTattoo 📩
         
-        🧑 Nombre de quien escribe: ${contactEmail}
+        🧑 Nombre de quien escribe: ${store.user.email}
         💬 Mensaje:
         ${contactMessage}
         
@@ -516,6 +560,7 @@ const TattooerProfile = () => {
   };
 
 
+
   const handleEditProfile = async (userId) => {
     try {
       const token = localStorage.getItem("token");
@@ -532,11 +577,39 @@ const TattooerProfile = () => {
           social_media_x: socialMedia.x,
           social_media_facebook: socialMedia.facebook,
           profile_picture: tattooer.profile_picture,
-          banner: newBannerBase64
+          banner: newBannerBase64,
+          latitude: tempLat ?? null,
+          longitude: tempLng ?? null,
+          location_text: locationText?.trim() || null
         })
+
       });
+
       const data = await response.json();
-      actions.getProfile(id);
+
+      if (response.ok) {
+        actions.changeProfile(data);
+        setTempLat(parseFloat(data.latitude));
+        setTempLng(parseFloat(data.longitude));
+        setLocationText(data.location_text || "");
+
+        Swal.fire({
+          icon: "success",
+          title: "Perfil actualizado",
+          text: "Tu perfil fue actualizado correctamente.",
+          confirmButtonColor: "#5c2d42"
+        });
+
+        await actions.getProfile(userId);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error al guardar",
+          text: data.msg || "No se pudo guardar el perfil.",
+          confirmButtonColor: "#5c2d42"
+        });
+      }
+
     } catch (error) {
       console.error("Error al actualizar el perfil:", error);
       Swal.fire({
@@ -546,8 +619,9 @@ const TattooerProfile = () => {
         confirmButtonColor: "#5c2d42"
       });
     }
-
   };
+
+
 
   const renderSocialIcons = () => {
     return (
@@ -768,6 +842,7 @@ const TattooerProfile = () => {
       });
     }
   }, [store.profile]);
+
   useEffect(() => {
     if (!isEditing) return;
 
@@ -779,6 +854,10 @@ const TattooerProfile = () => {
       whatsapp: store.profile.social_media_wsp || "",
       x: store.profile.social_media_x || ""
     });
+    setTempLat(store.profile.latitude ? parseFloat(store.profile.latitude) : null);
+    setTempLng(store.profile.longitude ? parseFloat(store.profile.longitude) : null);
+    setLocationText(store.profile.location_text || "");
+
   }, [isEditing]);
 
 
@@ -833,7 +912,7 @@ const TattooerProfile = () => {
   };
 
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const [editedDescription, setEditedDescription] = useState("Descripción de la imagen o galería que quieras mostrar aquí."); // valor inicial
+  const [editedDescription, setEditedDescription] = useState("Descripción de la imagen o galería que quieras mostrar aquí.");
 
 
   const styles = {
@@ -910,7 +989,9 @@ const TattooerProfile = () => {
       letterSpacing: '2px',
       fontSize: '1.2rem'
     }
+
   };
+
 
   return (
     <div className="profile-page">
@@ -1015,9 +1096,10 @@ const TattooerProfile = () => {
 
 
               <div className="contact-section">
-                <button className="contact-button" onClick={() => setShowModal(true)}>
+                <button className="contact-button" onClick={handleContactClick}>
                   Contáctame aquí
                 </button>
+
 
                 {showModal && (
                   <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
@@ -1042,7 +1124,7 @@ const TattooerProfile = () => {
                                 className="form-control"
                                 id="contactEmail"
                                 placeholder="tucorreo@correo.com"
-                                value={contactEmail}
+                                value={store.user.email}
                                 onChange={(e) => setContactEmail(e.target.value)}
                               />
                             </div>
@@ -1132,18 +1214,7 @@ const TattooerProfile = () => {
               ))}
 
 
-              {isEditing && (
-                <div className="card tattoo-card add-card">
-                  <label htmlFor="add-image" className="add-image-label">+</label>
-                  <input
-                    type="file"
-                    id="add-image"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleAddImage}
-                  />
-                </div>
-              )}
+
             </div>
 
 
@@ -1250,6 +1321,114 @@ const TattooerProfile = () => {
               </div>
             )}
 
+            {(isEditing || (store.profile.latitude && store.profile.longitude)) && (
+              localStorage.getItem("token") || isEditing ? (
+                <div style={styles.reviewsContainer}>
+                  <h4 style={{ textAlign: "center", marginBottom: "1rem", color: "#5c2d42" }}>
+                    {isEditing ? "📍 Selecciona la ubicación del tatuador" : "📍 Ubicación del tatuador"}
+                  </h4>
+
+                  {isLoaded ? (
+                    <GoogleMap
+                      mapContainerStyle={{ width: "100%", height: "300px", borderRadius: "12px" }}
+                      center={{
+                        lat: tempLat !== null
+                          ? tempLat
+                          : store.profile.latitude
+                            ? parseFloat(store.profile.latitude)
+                            : -33.4489,
+                        lng: tempLng !== null
+                          ? tempLng
+                          : store.profile.longitude
+                            ? parseFloat(store.profile.longitude)
+                            : -70.6693
+                      }}
+                      zoom={
+                        (tempLat && tempLng) || (store.profile.latitude && store.profile.longitude)
+                          ? 14
+                          : 4
+                      }
+                      onClick={(e) => {
+                        if (!isEditing) return;
+                        const lat = e.latLng.lat();
+                        const lng = e.latLng.lng();
+                        setTempLat(lat);
+                        setTempLng(lng);
+                        getAddressFromCoordinates(lat, lng);
+                      }}
+                    >
+                      {(tempLat && tempLng) || (store.profile.latitude && store.profile.longitude) ? (
+                        <Marker
+                          position={{
+                            lat: isEditing ? tempLat : parseFloat(store.profile.latitude),
+                            lng: isEditing ? tempLng : parseFloat(store.profile.longitude)
+                          }}
+                          title="Ubicación del tatuador"
+                          draggable={isEditing}
+                          onDragEnd={(e) => {
+                            if (!isEditing) return;
+                            const lat = e.latLng.lat();
+                            const lng = e.latLng.lng();
+                            setTempLat(lat);
+                            setTempLng(lng);
+                            getAddressFromCoordinates(lat, lng);
+                          }}
+                        />
+                      ) : null}
+                    </GoogleMap>
+                  ) : (
+                    <p style={{ textAlign: "center", color: "#999" }}>Cargando mapa...</p>
+                  )}
+
+                  {(tempLat && tempLng && isEditing) || (!isEditing && store.profile.location_text) ? (
+                    <div style={{ textAlign: "center", marginTop: "1rem", color: "#5c2d42" }}>
+                      <p style={{ fontWeight: "bold" }}>
+                        {isEditing
+                          ? locationText || "Obteniendo dirección..."
+                          : store.profile.location_text}
+                      </p>
+                    </div>
+                  ) : null}
+
+                  {isEditing && tempLat !== null && tempLng !== null && (
+                    <div style={{ textAlign: "center", marginTop: "1rem" }}>
+                      <button
+                        className="btn"
+                        onClick={() => {
+                          setTempLat(null);
+                          setTempLng(null);
+                          setLocationText("");
+                        }}
+                        style={{
+                          backgroundColor: "#dc3545",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "6px",
+                          padding: "0.5rem 1rem",
+                          cursor: "pointer"
+                        }}
+                      >
+                        Eliminar ubicación
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div style={styles.reviewsContainer}>
+                  <h4 style={{ textAlign: "center", marginBottom: "1rem", color: "#5c2d42" }}>
+                    📍 Ubicación del tatuador
+                  </h4>
+                  <p style={{ textAlign: "center", color: "#666" }}>
+                    Para ver la ubicación del tatuador debes{" "}
+                    <Link to="/login" style={{ color: "#5c2d42", fontWeight: "bold" }}>iniciar sesión</Link> o{" "}
+                    <Link to="/register" style={{ color: "#5c2d42", fontWeight: "bold" }}>registrarte</Link>.
+                  </p>
+                </div>
+              )
+            )}
+
+
+
 
 
             <div className="extras">
@@ -1263,7 +1442,7 @@ const TattooerProfile = () => {
                   Reseñas
                 </h3>
 
-                {/* Formulario para nueva reseña */}
+
                 {isLoadingUserInfo ? (
                   <div style={{ textAlign: 'center', padding: '1rem' }}>
                     <div className="spinner-border text-primary" role="status">
@@ -1385,7 +1564,6 @@ const TattooerProfile = () => {
                   </>
                 )}
 
-                {/* Lista de reseñas */}
                 {isLoadingReviews ? (
                   <div style={{ textAlign: 'center', padding: '2rem' }}>
                     <div
@@ -1446,7 +1624,6 @@ const TattooerProfile = () => {
                   ))
                 )}
 
-                {/* Paginación */}
                 {reviews.length >= 5 && (
                   <div style={{
                     display: 'flex',

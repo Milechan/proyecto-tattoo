@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, Text
+from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, Text, Float
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
@@ -34,8 +34,6 @@ class Likes(db.Model):
             "post_id": self.post_id
         }
 
-
-
 class User(db.Model):
     __tablename__ = 'user'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -56,14 +54,11 @@ class User(db.Model):
     notifications: Mapped[list['Notification']] = relationship('Notification', back_populates='user', foreign_keys='Notification.user_id')
     likes: Mapped[list['Likes']] = relationship('Likes', back_populates='user', cascade="all, delete-orphan")
 
-    #genera un hash para contraseña
     def set_password(self, password):
         self.password = generate_password_hash(password)
     
-    #verifica si la contraseña coincide con el hash que se gaurdo
     def check_password(self, password):
         return check_password_hash(self.password, password)
-
 
     def serialize(self):
         return {
@@ -80,8 +75,14 @@ class User(db.Model):
             "posts": [post.serialize() for post in self.posts],
             "notifications": [notification.serialize() for notification in self.notifications]
         }
-    
-    
+
+    def serialize_basic(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "username": self.username
+        }
+
 class Profile(db.Model):
     __tablename__ = 'profile'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -95,9 +96,11 @@ class Profile(db.Model):
     banner: Mapped[str] = mapped_column(String, nullable=True)
     ranking: Mapped[int] = mapped_column(Integer)
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey('category.id'))
+    latitude: Mapped[float] = mapped_column(Float, nullable=True)
+    longitude: Mapped[float] = mapped_column(Float, nullable=True)
+    location_text: Mapped[str] = mapped_column(String, nullable=True)
     user: Mapped['User'] = relationship('User', back_populates='profile')
     category: Mapped['Category'] = relationship('Category', back_populates="profiles")
-
 
     def serialize(self):
         return {
@@ -113,9 +116,11 @@ class Profile(db.Model):
             "profile_picture": self.profile_picture,
             "banner": self.banner,
             "category_banner":self.category.image,
-            "ranking": self.ranking
+            "ranking": self.ranking,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "location_text": self.location_text
         }
-
 
 class Review(db.Model):
     __tablename__ = 'review'
@@ -136,16 +141,15 @@ class Review(db.Model):
             "rating": self.rating,
             "user_id": self.user_id,
             "tattooer_id": self.tattooer_id,
-            "created_at": self.created_at
+            "created_at": self.created_at,
+            "user": self.user.serialize_basic() if self.user else None
         }
-
 
 class Post(db.Model):
     __tablename__ = 'post'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     image: Mapped[str] = mapped_column(String)
     description: Mapped[str] = mapped_column(String)
-    #likes: Mapped[int] = mapped_column(Integer, default=0)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
     created_at: Mapped[DateTime] = mapped_column(DateTime,nullable=True)
 
@@ -161,7 +165,6 @@ class Post(db.Model):
             "user_id": self.user_id,
             "created_at": self.created_at
         }
-
 
 class Notification(db.Model):
     __tablename__ = 'notification'
@@ -182,13 +185,14 @@ class Notification(db.Model):
             "id": self.id, 
             "user_id": self.user_id,
             "sender_id": self.sender_id,
+            "sender": self.sender.serialize_basic() if self.sender else None,  # ✅ Agregado
             "date": self.date,
             "is_read": self.is_read,
             "message": self.message,
             "type": self.type,
             "created_at": self.created_at
         }
-    
+
 class Category(db.Model):
     __tablename__ = 'category' 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -197,9 +201,7 @@ class Category(db.Model):
     image: Mapped[str] =mapped_column(String, nullable=True)
     carousel: Mapped[str] = mapped_column(String, nullable=True)
     profiles: Mapped[list['Profile']] = relationship('Profile', back_populates="category")
-
     users: Mapped[list['User']] = relationship('User', back_populates="category")
-
 
     def serialize(self):
         return{
@@ -209,5 +211,4 @@ class Category(db.Model):
             "image": self.image,
             "profiles":[profile.serialize() for profile in self.profiles],
             "carousel":self.carousel
-
         }
