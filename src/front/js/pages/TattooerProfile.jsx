@@ -1448,6 +1448,8 @@ const TattooerProfile = () => {
                 }}>
                   Reseñas
                 </h3>
+
+
                 {isLoadingUserInfo ? (
                   <div style={{ textAlign: 'center', padding: '1rem' }}>
                     <div className="spinner-border text-primary" role="status">

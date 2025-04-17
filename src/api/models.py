@@ -56,11 +56,11 @@ class User(db.Model):
     notifications: Mapped[list['Notification']] = relationship('Notification', back_populates='user', foreign_keys='Notification.user_id')
     likes: Mapped[list['Likes']] = relationship('Likes', back_populates='user', cascade="all, delete-orphan")
 
-    #genera un hash para contraseña
+    
     def set_password(self, password):
         self.password = generate_password_hash(password)
     
-    #verifica si la contraseña coincide con el hash que se gaurdo
+    
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
@@ -151,7 +151,7 @@ class Post(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     image: Mapped[str] = mapped_column(String)
     description: Mapped[str] = mapped_column(String)
-    #likes: Mapped[int] = mapped_column(Integer, default=0)
+    
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'))
     created_at: Mapped[DateTime] = mapped_column(DateTime,nullable=True)
 

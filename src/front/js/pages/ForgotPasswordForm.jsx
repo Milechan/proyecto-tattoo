@@ -37,7 +37,7 @@ const ForgotPasswordForm = () => {
     }
   };
 
-  // Paleta de colores 
+
   const styles = {
     mainBg: {
       backgroundColor: '#f8f9fa',
