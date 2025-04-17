@@ -39,7 +39,7 @@ export const Notifications = () => {
         );
         setNotifications(updatedList);
 
-        // 🔄 Actualiza el contador global
+
         const unreadCount = updatedList.filter(n => !n.is_read).length;
         actions.updateNotificationCount(unreadCount);
       } else {

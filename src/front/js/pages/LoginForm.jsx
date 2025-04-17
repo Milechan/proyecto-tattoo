@@ -24,7 +24,7 @@ const LoginForm = () => {
       })
       const data = await response.json()
       if (!response.ok) {
-        // throw new Error(data.msg || 'Error al crear perfil')
+
       }
       Swal.fire({
 
@@ -80,16 +80,16 @@ const LoginForm = () => {
     }
   };
 
-  // Paleta de colores
+
   const styles = {
     mainBg: {
       backgroundColor: '#f8f9fa',
       minHeight: '100vh',
       backgroundImage: 'url("https://matchtattoo.s3.us-east-2.amazonaws.com/imagenes-estaticas/gifs/RJHi.gif")',
-      backgroundSize: 'background-repeat', // define si es en mosaico o no
+      backgroundSize: 'background-repeat',
       backgroundPosition: 'center',
-      backgroundAttachment: 'fixed', // efecto parallax
-      position: 'relative' // esto es para el overlay
+      backgroundAttachment: 'fixed',
+      position: 'relative'
     },
 
     overlay: {
@@ -109,7 +109,7 @@ const LoginForm = () => {
       boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
     },
     header: {
-      backgroundColor: '#5c2d42', // Vinotinto oscuro
+      backgroundColor: '#5c2d42',
       color: 'white',
       borderTopLeftRadius: '15px',
       borderTopRightRadius: '15px',
@@ -121,7 +121,7 @@ const LoginForm = () => {
       padding: '12px 15px'
     },
     button: {
-      backgroundColor: '#8c3d5b', // Vinotinto claro
+      backgroundColor: '#8c3d5b',
       border: 'none',
       borderRadius: '10px',
       padding: '12px',

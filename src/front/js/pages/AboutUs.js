@@ -79,7 +79,7 @@ const AboutUs = () => {
         ))}
       </Row>
 
-      {/* Espaciador para que el contenido no quede pegado al footer */}
+
       <div style={{ margin: "100px" }}></div>
     </Container>
   );

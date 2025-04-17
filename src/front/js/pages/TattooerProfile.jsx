@@ -616,7 +616,7 @@ const TattooerProfile = () => {
           confirmButtonColor: "#5c2d42"
         });
 
-        // ✅ Refresca el perfil desde el backend para forzar re-render completo con nueva ubicación
+
         await actions.getProfile(userId);
       } else {
         Swal.fire({
@@ -1469,7 +1469,7 @@ const TattooerProfile = () => {
                   Reseñas
                 </h3>
 
-                {/* Formulario para nueva reseña */}
+
                 {isLoadingUserInfo ? (
                   <div style={{ textAlign: 'center', padding: '1rem' }}>
                     <div className="spinner-border text-primary" role="status">
@@ -1591,7 +1591,7 @@ const TattooerProfile = () => {
                   </>
                 )}
 
-                {/* Lista de reseñas */}
+
                 {isLoadingReviews ? (
                   <div style={{ textAlign: 'center', padding: '2rem' }}>
                     <div
@@ -1652,7 +1652,7 @@ const TattooerProfile = () => {
                   ))
                 )}
 
-                {/* Paginación */}
+
                 {reviews.length >= 5 && (
                   <div style={{
                     display: 'flex',

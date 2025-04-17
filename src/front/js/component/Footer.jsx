@@ -14,7 +14,7 @@ const linkHoverStyle = {
 };
 
 const Footer = () => {
-    // Estado para manejar el hover (opcional si quieres hacerlo más dinámico por elemento)
+
     return (
         <footer
             style={{
@@ -27,7 +27,7 @@ const Footer = () => {
         >
             <Container>
                 <Row>
-                    {/* Redes sociales */}
+
                     <Col md={4} className="text-center mb-3 mb-md-0">
                         <a href="https://facebook.com" className="text-light me-3">
                             <i className="fab fa-facebook fa-3x"></i>
@@ -37,7 +37,7 @@ const Footer = () => {
                         </a>
                     </Col>
 
-                    {/* Links */}
+
                     <Col md={4} className="text-center mb-3 mb-md-0">
                         <a
                             href="/about"
@@ -59,7 +59,7 @@ const Footer = () => {
                         </a>
                     </Col>
 
-                    {/* Derechos */}
+
                     <Col md={4} className="text-center">
                         <p className="mb-0" style={{ fontWeight: "600", fontSize: "1.5rem" }}>
                             MatchTattoo © 2025

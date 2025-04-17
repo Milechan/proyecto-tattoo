@@ -2,8 +2,8 @@
 .terms-page-container {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 40px); /* Subtract footer height plus its margins */
-    padding-bottom: 40px; /* Space for footer */
+    min-height: calc(100vh - 40px); 
+    padding-bottom: 40px; 
   }
   
   
@@ -22,7 +22,7 @@
     box-sizing: border-box;
   }
   
-  /* Títulos principales */
+  
   h1 {
     color: #6c282f; 
     text-align: center;

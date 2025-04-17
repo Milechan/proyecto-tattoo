@@ -22,7 +22,7 @@ CORS(api, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_
 
 """POSTS"""
 
-#Ruta para obtener todos los post
+
 @api.route('/posts', methods=['GET'])  
 def get_all_posts():
     posts = db.session.query(Post).order_by(Post.created_at.desc()).all()
@@ -30,7 +30,7 @@ def get_all_posts():
     return jsonify(result), 200
 
 
-#Ruta crear nuevo post
+
 @api.route('/posts', methods=['POST'])
 @jwt_required()
 def create_post():
@@ -61,11 +61,11 @@ def create_post():
         return jsonify({"error": str(e)}), 500
 
 
-#Ruta eliminar un post
+
 @api.route('/posts/<int:post_id>', methods=['DELETE'])
 @jwt_required()
 def delete_post(post_id):
-    # Buscar el post en la bd
+    
     post = db.session.query(Post).filter_by(id=post_id).one_or_none()
 
     if post is None:
@@ -78,7 +78,7 @@ def delete_post(post_id):
         return jsonify({"msg": "No tienes permiso para eliminar este post"}), 403
    
     try:
-        # Eliminar el post y confirmar
+        
         db.session.delete(post)
         db.session.commit()
         return jsonify({"msg": "Post eliminado correctamente"}), 200
@@ -87,13 +87,13 @@ def delete_post(post_id):
         return jsonify({"error": str(e)}), 500
 
 
-#Ruta editar post
+
 @api.route('/posts/<int:post_id>', methods=['PUT'])
 @jwt_required()
 def update_post(post_id):
     data = request.get_json()
 
-    #Buscar el post por su ID
+    
     post = db.session.query(Post).filter_by(id=post_id).one_or_none()
     if post is None:
         return jsonify({"msg": "Post no encontrado"}), 404
@@ -115,7 +115,7 @@ def update_post(post_id):
         return jsonify({"error": str(e)}), 500
 
 
-#Ruta para ver un post por su id
+
 @api.route('/posts/<int:post_id>', methods=['GET'])
 def get_post_by_id(post_id):
     post = db.session.query(Post).filter_by(id=post_id).one_or_none()
@@ -133,11 +133,11 @@ def get_post_by_id(post_id):
 def register():
     data = request.json
     
-    # Validar datos requeridos
+    
     if not data.get('email') or not data.get('password'):
         return jsonify({"msg": "Email y contraseña son requeridos"}), 400
     
-    # Verificar si el usuario ya existe
+    
     if db.session.query(User).filter_by(email=data['email']).first():
         return jsonify({"msg": "El usuario ya existe"}), 400
     
@@ -150,7 +150,7 @@ def register():
     else:
         category = None
 
-    # Crear nuevo usuario
+   
     new_user = User(
         email=data['email'],
         name=data.get('name'),
@@ -172,17 +172,17 @@ def register():
 def login():
     data = request.json
     
-    # Validar datos requeridos
+    
     if not data.get('email') or not data.get('password'):
         return jsonify({"msg": "Email y contraseña son requeridos"}), 400
     
-    # Buscar usuario
+    
     user = db.session.query(User).filter_by(email=data['email']).first()
     
     if not user or not user.check_password(data['password']):
         return jsonify({"msg": "Email o contraseña incorrectos"}), 401
     
-    # Crear token de acceso
+    
     access_token = create_access_token(identity=str(user.id), expires_delta= False)
     
     return jsonify({
@@ -216,11 +216,11 @@ def update_user():
     
     data = request.json
     
-    # Actualizar campos permitidos
+    
     if 'name' in data:
         user.name = data['name']
     if 'email' in data:
-        # Verificar si el nuevo email ya está en uso
+        
         if db.session.query(User).filter(User.email == data['email'], User.id != current_user_id).first():
             return jsonify({"msg": "El email ya está en uso"}), 400
         user.email = data['email']
@@ -250,24 +250,24 @@ def delete_user():
 """PERFIL"""
 @api.route('/profile/<int:tattooer_id>', methods=['GET'])
 def get_tattooer_profile(tattooer_id):
-    # Buscar al usuario en la base de datos
+    
     tattooer = db.session.query(User).filter_by(id=tattooer_id).one_or_none()
 
     if tattooer is None:
         return jsonify({'msg': f'No se encontró un usuario con el ID {tattooer_id}'}), 404
 
-    # Verificar que el usuario sea un tatuador
+    
     if tattooer.user_type is None or tattooer.user_type.name.lower() != 'tattooer':
         return jsonify({'msg': f'El usuario con ID {tattooer_id} no es un tatuador'}), 400
 
-    # Verificar si el usuario tiene un perfil asociado
+    
     if tattooer.profile is None:
         return jsonify({'msg': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
 
     return jsonify(tattooer.profile.serialize()), 200
 
 
-#Ruta para crear perfil:
+
 @api.route('/profile', methods=['POST'])
 @jwt_required()
 def create_tattooer_profile():
@@ -287,7 +287,7 @@ def create_tattooer_profile():
         return jsonify({"msg":"Solo puede crear perfil un tatuador"}),402
     
 
-    # Crear perfil asociado
+    
     new_profile = Profile(
         user_id=user_id,
         bio="",
@@ -303,13 +303,6 @@ def create_tattooer_profile():
     db.session.add(new_profile)
     db.session.commit()
 
-    ## CREAMOS CARPETA PARA PERFIL CON USERNAME DEL USUARIO
-    # try:
-    #     bucket = s3.Bucket("matchtattoo")
-    #     bucket.Object(user.username).put() 
-    # except Exception as e:
-    #     print(e)
-
     return jsonify({
         'msg': 'Perfil creado exitosamente',
         'user': new_profile.serialize()
@@ -320,30 +313,30 @@ def test_s3():
         print(bucket)
     return jsonify({"msg": "tested ok." })
 
-#Ruta para actualizar perfil por ID:
+
 @api.route('/profile/<int:tattooer_id>', methods=['PUT'])
 @jwt_required()
 def update_tattooer_profile(tattooer_id):
     data = request.get_json()
     current_user = get_jwt_identity()
-    # Buscar al usuario en la base de datos
+    
     tattooer = db.session.query(User).filter_by(id=tattooer_id).one_or_none()
     if tattooer is None:
         return jsonify({'msg': f'No se encontró un tatuador con el ID {tattooer_id}'}), 404
 
-    # Verificar si el usuario tiene un perfil
+    
     if tattooer.profile is None:
         return jsonify({'msg': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
 
-    # Obtener el perfil asociado
+    
     profile = tattooer.profile
 
-    # verificar si current_user es el propietario del perfil antes de editar
+    
     user = db.session.query(User).filter_by(id=current_user).one_or_none()
     if user is None:
         return jsonify({'msg': f'El usuario con ID {current_user} no tiene permisos para editar este perfil'}), 403
 
-    # Actualizar los campos si están en la solicitud
+    
     if 'bio' in data:
         profile.bio = data['bio']
     if 'social_media_insta' in data:
@@ -407,7 +400,7 @@ def update_tattooer_profile(tattooer_id):
             return jsonify({"msg":"error subiendo el banner"}),500
 
 
-    # Guardar los cambios en la base de datos
+    
     db.session.commit()
 
     return jsonify({
@@ -415,29 +408,29 @@ def update_tattooer_profile(tattooer_id):
         'profile': profile.serialize()
     }), 200
 
-#Ruta para eliminar el perfil por ID:
+
 @api.route('/profile/<int:tattooer_id>', methods=['DELETE'])
 @jwt_required()
 def delete_tattooer_profile(tattooer_id):
     current_user = get_jwt_identity()
-    # Buscar al usuario en la base de datos
+    
     tattooer = db.session.query(User).filter_by(id=tattooer_id).one_or_none()
     if tattooer is None:
         return jsonify({'msg': f'No se encontró un tatuador con el ID {tattooer_id}'}), 404
 
-    # Verificar si el usuario tiene un perfil
+    
     if tattooer.profile is None:
         return jsonify({'msg': f'El usuario con ID {tattooer_id} no tiene un perfil registrado'}), 404
 
-    # verificar si current_user es el propietario del perfil antes de editar
+    
     user = db.session.query(User).filter_by(id=current_user).one_or_none()
     if user is None:
         return jsonify({'msg': f'El usuario con ID {current_user} no tiene permisos para eliminar este perfil'}), 403
 
-    # Obtener el perfil asociado
+    
     profile = tattooer.profile
 
-    # Eliminar el perfil de la base de datos
+    
     db.session.delete(profile)
     db.session.commit()
 
@@ -446,18 +439,18 @@ def delete_tattooer_profile(tattooer_id):
 
 """REVIEWS"""
 
-#obtener las reviews de un tatuador
+
 @api.route('/review/<int:tattooer_id>', methods=['GET']) 
 def get_review_by_tattooer(tattooer_id):
-#validar que exista un usuario con el tattooer_id que es el parametro que nos entregan
-    tattooer= db.session.query(User).filter_by(id=tattooer_id).one_or_none() #consulta si existe un usuario o no y lo guarda en la variable tattooer
+
+    tattooer= db.session.query(User).filter_by(id=tattooer_id).one_or_none()
     if tattooer is None :
         return jsonify({'msg':f'no se encontro un usuario con el user_id {tattooer_id}'}),404
     reviews = db.session.query(Review).filter_by(tattooer_id=tattooer_id).all() 
     review_list = [review.serialize() for review in reviews]
     return jsonify(review_list),200
 
-#para que un usuario cree una  review a un tatuador
+
 @api.route('/review', methods=['POST'])
 @jwt_required()
 def create_review():
@@ -485,11 +478,11 @@ def create_review():
 
     db.session.add(new_review)
 
-    # 🔔 Crear notificación automática al tatuador
+    
     notification = Notification(
         message=f"{user.username} dejó una valoración en tu perfil",
-        user_id=data['tattooer_id'],       # destinatario: el tatuador
-        sender_id=current_user,            # quien deja la review
+        user_id=data['tattooer_id'],       
+        sender_id=current_user,            
         is_read=False,
         type="valoracion",
         date=datetime.utcnow(),
@@ -498,7 +491,7 @@ def create_review():
 
     db.session.add(notification)
 
-    # Commit de ambas cosas juntas
+    
     db.session.commit()
 
     return jsonify(new_review.serialize()), 201
@@ -506,73 +499,73 @@ def create_review():
 
 """NOTIFICACIONES"""
 
-#para obtener todas las notificaciones
+
 @api.route('/notifications',methods=['GET'])
 @jwt_required()
 def get_all_notifications():
         current_user = get_jwt_identity()
         notifications = db.session.query(Notification).filter_by(user_id=current_user).all()
-         # Si no hay notificaciones, devolver un mensaje vacío
+         
         if not notifications:
             return jsonify({"msg": "No hay notificaciones disponibles",'notifications':[]}), 404
-    # Convertir la lista de notificaciones en JSON
+    
         notifications_json = [notification.serialize() for notification in notifications]
         return jsonify({"success": True, "notifications": notifications_json}), 200
 
-#obtener una notificacion por id 
+
 @api.route('/notification/<int:notification_id>',methods= ['GET'])
 @jwt_required()
 def get_notification_by_id(notification_id):
         current_user= get_jwt_identity()
         notification = db.session.query(Notification).filter_by(id=notification_id,user_id=current_user).one_or_none()
-    # Si no se encuentra, devolver un error 404
+    
         if notification is None:
             return jsonify({"msg": f"No se encontró la notificación con el ID {notification_id}"}), 404
-    # Si se encuentra, devolver la notificación en formato JSON
+    
         return jsonify(notification.serialize()), 200
 
-#para marcar como leida una notificacion
+
 @api.route('/notification/<int:notification_id>/readed',methods=['PUT'])
 @jwt_required()
 def set_notification_readed(notification_id):
     current_id = get_jwt_identity()
     notification = db.session.query(Notification).filter_by(id=notification_id,user_id=current_id).one_or_none()
-        # Si la notificación no existe, devolver un error 404
+        
     if notification is None:
         return jsonify({"msg": f"No se encontró la notificación con el ID {notification_id}"}), 404
-    # Marcar la notificación como leída (suponiendo que tiene un campo `readed`)
+    
     notification.is_read = True
     db.session.commit()
     return jsonify({"success": True, "msg": "Notificación marcada como leída","notification":notification.serialize()}), 200
 
-#para crear una notificacion, asignandola al usuario que se especifica en el body
+
 @api.route('/notification',methods=['POST'])
 @jwt_required()
 def create_notification():
     current_user= get_jwt_identity()
-    # Obtener datos del cuerpo de la petición
+    
     data = request.json
-    # Validar que los datos requeridos estén presentes
+    
     if "msg" not in data or "user_id" not in data:
         return jsonify({"msg": "Faltan datos requeridos (msg, user_id)"}), 400
-    # Crear una nueva instancia de Notificación
+    
     new_notification = Notification(
         message=data["msg"],
         user_id=data["user_id"],
-        is_read=False, # Inicialmente la notificación no está leída
+        is_read=False, 
         date =datetime.utcnow(),
         sender_id =current_user,
         type=data["type"],
         created_at =datetime.now()
     )
-    # Guardar en la base de datos
+    
     db.session.add(new_notification)
     db.session.commit()
     return jsonify({"success": True, "msg": "Notificación creada con éxito", "notification": new_notification.serialize()}), 201
  
 """HOME"""
 
-# Categorías: obtiene todos los perfiles de una categoría determinada.
+
 @api.route('/profiles/category/<string:category>', methods=['GET'])
 def get_profiles_by_category(category):
 
@@ -583,19 +576,19 @@ def get_profiles_by_category(category):
     return jsonify(result), 200
 
 
-# Top Likes: obtiene los posts con más likes.
+
 @api.route('/posts/top-likes', methods=['GET'])
 def get_top_likes_posts():
-    # Se obtienen los posts ordenados por likes en forma descendente
+    
     posts = db.session.query(Post).order_by(Post.likes.desc()).limit(5).all()
     result = [post.serialize() for post in posts]
     return jsonify(result), 200
 
 
-# Top Tatuadores: obtiene los perfiles con mejores evaluaciones.
+
 @api.route('/profiles/top-tattooer', methods=['GET'])
 def get_top_tattooer():
-    # Se obtienen los perfiles ordenados por ranking en forma descendente, limitando a 10 resultados
+    
     profiles = db.session.query(Profile).order_by(Profile.ranking.desc()).limit(10).all()
     result = [profile.serialize() for profile in profiles]
     return jsonify(result), 200
