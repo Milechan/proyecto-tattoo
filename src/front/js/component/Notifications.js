@@ -36,7 +36,7 @@ export const Notifications = () => {
     if (store.user && store.user.notifications) {
       setNotifications(store.user.notifications);
     }
-  }, [store.user]);
+  }, [store.user, store.notifications]);
 
   return (
     <div className="container mt-4" style={{
