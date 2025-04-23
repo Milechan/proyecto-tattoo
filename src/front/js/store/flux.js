@@ -111,7 +111,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			markNotificationAsRead: async (id) => {
 				try {
 					const store = getStore();
-
+					const action = getActions();
 					// 👇 Agrega estos console.log justo aquí
 					console.log("Marcando notificación como leída con ID:", id);
 					console.log("Token usado:", store.token);
@@ -137,6 +137,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							user: updatedUser,
 							notificationCount: updatedCount
 						});
+						action.getUser();
 					} else {
 						console.error("Error al marcar como leída:", resp.status);
 					}
