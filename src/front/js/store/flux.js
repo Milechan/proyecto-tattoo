@@ -111,7 +111,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			markNotificationAsRead: async (id) => {
 				try {
 					const store = getStore();
-
+					const action = getActions();
 					// 👇 Agrega estos console.log justo aquí
 					console.log("Marcando notificación como leída con ID:", id);
 					console.log("Token usado:", store.token);
@@ -119,10 +119,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/notification/${id}/readed`, {
 						method: "PUT",
 						headers: {
-							Authorization: `Bearer ${store.token}`,
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify({ notification_id: id })
+							Authorization: `Bearer ${store.token}`
+						}
 					});
 
 					if (resp.ok) {
@@ -139,6 +137,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							user: updatedUser,
 							notificationCount: updatedCount
 						});
+						action.getUser();
 					} else {
 						console.error("Error al marcar como leída:", resp.status);
 					}

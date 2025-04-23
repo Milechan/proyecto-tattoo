@@ -525,20 +525,23 @@ def get_notification_by_id(notification_id):
 @api.route('/notification/<int:notification_id>/readed', methods=['PUT'])
 @jwt_required()
 def set_notification_readed(notification_id):
-    current_id = get_jwt_identity()
-    notification = db.session.query(Notification).filter_by(id=notification_id, user_id=current_id).one_or_none()
+    try:
+        current_id = int(get_jwt_identity())
+        print(current_id)
+        notification = db.session.query(Notification).filter_by(id=notification_id, user_id=current_id).one_or_none()
 
-    if notification is None:
-        return jsonify({"msg": f"No se encontró la notificación con el ID {notification_id}"}), 404
+        if notification is None:
+            return jsonify({"msg": f"No se encontró la notificación con el ID {notification_id}"}), 404
 
-    notification.is_read = True
-    db.session.commit()
-    return jsonify({
-        "success": True,
-        "msg": "Notificación marcada como leída",
-        "notification": notification.serialize()
-    }), 200
-
+        notification.is_read = True
+        db.session.commit()
+        return jsonify({
+            "success": True,
+            "msg": "Notificación marcada como leída",
+            "notification": notification.serialize()
+        }), 200
+    except Exception as e:
+        print(e)
 
 
 @api.route('/notification',methods=['POST'])
