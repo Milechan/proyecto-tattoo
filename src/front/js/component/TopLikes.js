@@ -90,7 +90,7 @@ export const TopLikes = () => {
                 className="modal-image"
               />
               <div className="modal-details">
-                <h2>Detalle del Tatuaje {selectedImage}</h2>
+                <h2>Descripción del Tattoo {selectedImage}</h2>
                 <p>{descriptions[selectedImage - 1]}</p>
                 <div className="modal-actions">
                   <button

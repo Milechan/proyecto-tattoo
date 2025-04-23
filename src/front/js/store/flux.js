@@ -112,7 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const store = getStore();
 					const action = getActions();
-					// 👇 Agrega estos console.log justo aquí
+
 					console.log("Marcando notificación como leída con ID:", id);
 					console.log("Token usado:", store.token);
 
