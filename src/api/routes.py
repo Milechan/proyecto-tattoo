@@ -12,7 +12,10 @@ from api.utils import s3
 from datetime import datetime
 import json
 from flask_jwt_extended import jwt_required , get_jwt_identity, create_access_token
+from sqlalchemy import func
 api = Blueprint('api', __name__) 
+
+
 
 
 CORS(api, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
@@ -581,13 +584,25 @@ def get_profiles_by_category(category):
     return jsonify(result), 200
 
 
-
 @api.route('/posts/top-likes', methods=['GET'])
 def get_top_likes_posts():
-    
-    posts = db.session.query(Post).order_by(Post.likes.desc()).limit(5).all()
-    result = [post.serialize() for post in posts]
-    return jsonify(result), 200
+    results = (
+        db.session.query(Post, func.count(Likes.id).label("like_count"))
+        .outerjoin(Likes)
+        .group_by(Post.id)
+        .order_by(func.count(Likes.id).desc())
+        .limit(4)
+        .all()
+    )
+
+    serialized = []
+    for post, like_count in results:
+        post_data = post.serialize()
+        post_data["likes"] = like_count
+        serialized.append(post_data)
+
+    return jsonify(serialized), 200
+
 
 
 

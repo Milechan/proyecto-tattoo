@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import "./AboutUs.css";
+import "../../styles/AboutUs.css";
 
 const AboutUs = () => {
   const teamMembers = [
