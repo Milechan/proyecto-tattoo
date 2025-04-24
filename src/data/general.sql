@@ -1,9 +1,9 @@
+DELETE FROM LIKES;
 DELETE FROM post;
 DELETE FROM profile;
-DELETE FROM category;
 DELETE FROM user;
+DELETE FROM category;
 DELETE FROM user_type;
-
 
 INSERT INTO user_type (name, description) VALUES 
 ('user', 'este es un usuario normal'),
